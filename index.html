@@ -125,6 +125,151 @@
         // ==================== LIBRARY OF UNIVERSAL LAWS ====================
 
         const universalLaws = {
+
+            
+    // === FUNDAMENTAL PHYSICS ===
+    "newtons_third_law": {
+        "name": "Newton's Third Law of Motion",
+        "category": "fundamental_physics",
+        "domains": ["mechanics", "force", "interaction"],
+        "statement": "For every action, there is an equal and opposite reaction",
+        "statement_latex": "\\vec{F}_{12} = -\\vec{F}_{21}",
+        "formulation": "The force exerted by object 1 on object 2 is equal in magnitude and opposite in direction to the force exerted by object 2 on object 1",
+        "implications": [
+            "Conservation of momentum",
+            "Reciprocity in physical interactions",
+            "Rocket propulsion mechanics"
+        ],
+        "proofs": [
+            "Experimental observations of collisions",
+            "Rocket launch dynamics",
+            "Balance of forces in static systems"
+        ],
+        "confidence": 0.99,
+        "discovery_date": "1687",
+        "discoverers": ["Isaac Newton"],
+        "revolutions": ["classical_mechanics"]
+    },
+
+    "pauli_exclusion_principle": {
+        "name": "Pauli Exclusion Principle",
+        "category": "fundamental_physics",
+        "domains": ["quantum", "matter", "fermions"],
+        "statement": "No two fermions can occupy the same quantum state simultaneously",
+        "statement_latex": null,
+        "formulation": "Fermions (e.g., electrons) obey antisymmetric wave functions, preventing identical quantum states",
+        "implications": [
+            "Structure of atoms and electron shells",
+            "Stability of matter",
+            "Behavior of neutron stars and white dwarfs"
+        ],
+        "proofs": [
+            "Atomic spectra",
+            "Periodic table structure",
+            "Degenerate matter in astrophysics"
+        ],
+        "confidence": 0.98,
+        "discovery_date": "1925",
+        "discoverers": ["Wolfgang Pauli"],
+        "revolutions": ["quantum_mechanics"]
+    },
+
+    // === COSMOLOGY ===
+    "dark_energy_dominance": {
+        "name": "Dark Energy Dominance",
+        "category": "cosmology",
+        "domains": ["cosmology", "dark_energy", "expansion"],
+        "statement": "Dark energy drives the accelerated expansion of the universe",
+        "statement_latex": "\\Omega_{\\Lambda} \\approx 0.68",
+        "formulation": "The cosmological constant or equivalent dark energy component dominates the universe's energy density, causing accelerated expansion",
+        "implications": [
+            "Accelerated cosmic expansion",
+            "Future dilution of matter",
+            "Ultimate fate of the universe"
+        ],
+        "proofs": [
+            "Type Ia supernova observations (1998)",
+            "Cosmic microwave background (Planck)",
+            "Large-scale structure surveys"
+        ],
+        "confidence": 0.94,
+        "discovery_date": "1998",
+        "discoverers": ["Saul Perlmutter", "Brian Schmidt", "Adam Riess"],
+        "revolutions": ["cosmology"]
+    },
+
+    // === INFORMATION AND COMPLEXITY ===
+    "shannon_entropy": {
+        "name": "Shannon's Information Entropy",
+        "category": "information",
+        "domains": ["information", "communication", "probability"],
+        "statement": "The entropy of a message quantifies its information content or uncertainty",
+        "statement_latex": "H(X) = -\\sum_{i} p(x_i) \\log p(x_i)",
+        "formulation": "Information entropy measures the average amount of information required to describe a random variable",
+        "implications": [
+            "Foundation of information theory",
+            "Limits of data compression",
+            "Error correction in communication systems"
+        ],
+        "proofs": [
+            "Communication channel experiments",
+            "Data compression algorithms",
+            "Error-correcting codes"
+        ],
+        "confidence": 0.97,
+        "discovery_date": "1948",
+        "discoverers": ["Claude Shannon"],
+        "revolutions": ["information_theory"]
+    },
+
+    // === BIOLOGY AND COMPLEX SYSTEMS ===
+    "natural_selection": {
+        "name": "Natural Selection",
+        "category": "biology",
+        "domains": ["evolution", "biology", "complex_systems"],
+        "statement": "Traits that confer survival and reproductive advantages propagate in populations",
+        "statement_latex": null,
+        "formulation": "Differential survival and reproduction of organisms based on heritable traits",
+        "implications": [
+            "Evolution of species",
+            "Adaptation to environments",
+            "Biodiversity"
+        ],
+        "proofs": [
+            "Fossil record transitions",
+            "Antibiotic resistance in bacteria",
+            "Galápagos finch studies"
+        ],
+        "confidence": 0.96,
+        "discovery_date": "1859",
+        "discoverers": ["Charles Darwin", "Alfred Russel Wallace"],
+        "revolutions": ["evolutionary_biology"]
+    },
+
+    // === MATHEMATICS ===
+    "bayes_theorem": {
+        "name": "Bayes' Theorem",
+        "category": "mathematics",
+        "domains": ["probability", "statistics", "decision_theory"],
+        "statement": "The probability of an event is updated based on new evidence",
+        "statement_latex": "P(A|B) = \\frac{P(B|A)P(A)}{P(B)}",
+        "formulation": "Relates conditional probabilities to update beliefs with new data",
+        "implications": [
+            "Foundation of Bayesian inference",
+            "Machine learning and AI",
+            "Decision-making under uncertainty"
+        ],
+        "proofs": [
+            "Derived from basic probability axioms",
+            "Applications in statistical modeling",
+            "Success in predictive algorithms"
+        ],
+        "confidence": 1.0,
+        "discovery_date": "1763",
+        "discoverers": ["Thomas Bayes"],
+        "revolutions": ["statistics", "machine_learning"]
+    },
+
             // === FUNDAMENTAL PHYSICS ===
             "thermodynamics_2": {
                 "name": "Second Law of Thermodynamics",
@@ -362,6 +507,21 @@
                     "laws": ["hubble_expansion", "general_relativity"],
                     "synthesis_template": "Modern cosmology reveals an expanding universe, born from an extreme primordial state."
                 }
+                "classical_mechanics": {
+        "keywords": ["newton", "motion", "force", "mechanics"],
+        "laws": ["newtons_third_law"],
+        "synthesis_template": "Classical mechanics governs the motion of macroscopic objects under forces."
+    },
+    "evolution": {
+        "keywords": ["evolution", "natural selection", "darwin", "biology"],
+        "laws": ["natural_selection"],
+        "synthesis_template": "Natural selection drives the evolution of life through differential survival and reproduction."
+    },
+    "probability_statistics": {
+        "keywords": ["probability", "bayes", "statistics", "inference"],
+        "laws": ["bayes_theorem", "shannon_entropy"],
+        "synthesis_template": "Probability and statistics provide tools to quantify uncertainty and information."
+    },
             };
 
             for (const [type, data] of Object.entries(questionTypes)) {
