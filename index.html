@@ -8,16 +8,22 @@
   <!-- MathJax 3 -->
   <script>
     window.MathJax = {
-      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-      svg: { fontCache: 'global' },
-      startup: {
-        ready() {
-          MathJax.startup.defaultReady();
-          // Once MathJax is ready, render the library
-          renderLibrary();
-        }
-      }
-    };
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']]  // Explicitly define display math
+  },
+  svg: { 
+    fontCache: 'global',
+    scale: 0.9  // Slightly scale down equations
+  },
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      // Once MathJax is ready, render the library
+      renderLibrary();
+    }
+  }
+};
   </script>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
