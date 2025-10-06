@@ -511,6 +511,193 @@ function createLawCard(law, showDetails = false) {
                 "discoverers": ["Rudolf Clausius", "William Thomson"],
                 "revolutions": ["thermodynamics", "cosmology"]
             },
+"quantum_entanglement": {
+    "name": "Quantum Entanglement Principle",
+    "category": "fundamental_physics",
+    "domains": ["quantum", "entanglement", "nonlocality", "correlation"],
+    "statement": "Quantum systems can become entangled such that the state of one particle instantly influences another, regardless of distance",
+    "statement_latex": "|\\Psi\\rangle = \\frac{1}{\\sqrt{2}}(|0\\rangle_A|1\\rangle_B - |1\\rangle_A|0\\rangle_B)",
+    "formulation": "Entangled particles share a single quantum state described by a non-separable wave function",
+    "implications": [
+        "Quantum non-locality",
+        "Violation of Bell inequalities", 
+        "Quantum teleportation protocols",
+        "Quantum computing advantage",
+        "Fundamental challenge to local realism"
+    ],
+    "proofs": [
+        "Aspect experiments (1980s)",
+        "Violation of Bell's inequality",
+        "Quantum teleportation demonstrations",
+        "Quantum cryptography systems"
+    ],
+    "limitations": "No faster-than-light communication possible",
+    "confidence": 0.98,
+    "discovery_date": "1935",
+    "discoverers": ["Albert Einstein", "Boris Podolsky", "Nathan Rosen"],
+    "revolutions": ["quantum_information", "foundations_of_physics"],
+    
+    "explanation": "Quantum entanglement creates 'spooky action at a distance' where measuring one entangled particle instantly determines the state of its partner, no matter how far apart they are. While this violates classical intuition about locality, it cannot be used for faster-than-light communication due to the no-communication theorem. Entanglement is the key resource behind quantum computing, quantum cryptography, and represents one of the most profound departures from classical physics."
+},
+"bell_inequality": {
+    "name": "Bell's Theorem and Inequality",
+    "category": "fundamental_physics", 
+    "domains": ["quantum", "foundations", "nonlocality", "entanglement"],
+    "statement": "No local hidden variable theory can reproduce all predictions of quantum mechanics",
+    "statement_latex": "|E(a,b) - E(a,b')| + |E(a',b) + E(a',b')| \\leq 2",
+    "formulation": "Mathematical inequality that distinguishes between local hidden variable theories and quantum mechanics",
+    "implications": [
+        "Quantum mechanics is inherently non-local",
+        "Reality is either non-local or contextual",
+        "Experimental test of quantum foundations",
+        "No complete local deterministic theory possible"
+    ],
+    "proofs": [
+        "Aspect experiments (1982)",
+        "Loophole-free Bell tests (2015+)",
+        "Consistent violation of inequality in experiments"
+    ],
+    "confidence": 0.97,
+    "discovery_date": "1964",
+    "discoverers": ["John Stewart Bell"],
+    "revolutions": ["quantum_foundations"],
+    
+    "explanation": "Bell's theorem demonstrates that any theory maintaining both locality and realism must satisfy certain inequalities. Quantum mechanics predicts violations of these inequalities, which have been consistently observed experimentally. This proves that the universe cannot be described by local hidden variable theories - either information can travel faster than light (non-locality) or properties don't exist until measured (anti-realism)."
+},
+"cosmic_microwave_background": {
+    "name": "Cosmic Microwave Background Radiation",
+    "category": "cosmology",
+    "domains": ["cosmology", "big_bang", "radiation", "early_universe"],
+    "statement": "The universe is filled with thermal radiation remnant from the early hot, dense phase",
+    "statement_latex": "T_{CMB} = 2.72548 \\pm 0.00057\\,K",
+    "formulation": "Blackbody spectrum at 2.7K with tiny anisotropies encoding early universe information",
+    "implications": [
+        "Strong evidence for Big Bang theory",
+        "Universe was once hot and dense",
+        "Seeds of cosmic structure formation",
+        "Precision measurements of cosmological parameters"
+    ],
+    "proofs": [
+        "Discovery by Penzias and Wilson (1965)",
+        "COBE satellite blackbody spectrum (1992)",
+        "WMAP and Planck satellite anisotropy maps",
+        "Statistical properties match inflation predictions"
+    ],
+    "confidence": 0.99,
+    "discovery_date": "1965",
+    "discoverers": ["Arno Penzias", "Robert Wilson"],
+    "revolutions": ["big_bang_cosmology"],
+    
+    "explanation": "The CMB is the oldest light in the universe, emitted when atoms first formed 380,000 years after the Big Bang. Its nearly perfect blackbody spectrum and tiny temperature fluctuations provide a snapshot of the early universe and have revolutionized cosmology. The precise measurements of CMB anisotropies have determined the age, composition, and geometry of the universe with unprecedented accuracy."
+},
+"butterfly_effect": {
+    "name": "Butterfly Effect (Sensitive Dependence on Initial Conditions)",
+    "category": "complex_systems",
+    "domains": ["chaos_theory", "nonlinear_dynamics", "predictability"],
+    "statement": "In chaotic systems, small differences in initial conditions can lead to vastly different outcomes",
+    "statement_latex": "\\delta(t) \\approx \\delta(0) e^{\\lambda t}",
+    "formulation": "Exponential divergence of trajectories in phase space characterized by positive Lyapunov exponents",
+    "implications": [
+        "Fundamental limits to long-term prediction",
+        "Weather forecasting limitations",
+        "Emergence of patterns from simple rules",
+        "Importance of microscopic details in macroscopic outcomes"
+    ],
+    "proofs": [
+        "Lorenz's weather model simulations",
+        "Double pendulum experiments",
+        "Fluid turbulence studies",
+        "Planetary orbit stability calculations"
+    ],
+    "limitations": "Applies primarily to deterministic nonlinear systems",
+    "confidence": 0.95,
+    "discovery_date": "1963",
+    "discoverers": ["Edward Lorenz"],
+    "revolutions": ["chaos_theory", "complex_systems"],
+    
+    "explanation": "The butterfly effect demonstrates that in complex, nonlinear systems, tiny perturbations can amplify exponentially over time, making long-term prediction impossible despite deterministic equations. This revealed fundamental limits to predictability in weather, climate, and many physical systems, while also explaining how complex patterns can emerge from simple deterministic rules."
+},
+"hebbian_learning": {
+    "name": "Hebb's Rule (Neural Plasticity)",
+    "category": "neuroscience",
+    "domains": ["neuroscience", "learning", "plasticity", "computation"],
+    "statement": "Neurons that fire together, wire together",
+    "statement_latex": "\\Delta w_{ij} = \\eta x_i x_j",
+    "formulation": "Synaptic strength increases when pre- and post-synaptic neurons are simultaneously active",
+    "implications": [
+        "Biological basis of learning and memory",
+        "Formation of neural assemblies",
+        "Unsupervised learning in neural networks",
+        "Cellular mechanism for associative learning"
+    ],
+    "proofs": [
+        "Long-term potentiation (LTP) experiments",
+        "Neural circuit formation studies",
+        "Computational models of learning",
+        "Brain plasticity research"
+    ],
+    "confidence": 0.96,
+    "discovery_date": "1949",
+    "discoverers": ["Donald Hebb"],
+    "revolutions": ["computational_neuroscience", "connectionism"],
+    
+    "explanation": "Hebb's rule provides the fundamental mechanism for how experiences shape neural circuitry. When two neurons repeatedly activate together, their connection strengthens, forming the biological basis of associative learning and memory formation. This principle has influenced both neuroscience and artificial intelligence, serving as the foundation for modern neural networks and our understanding of how brains learn from experience."
+},
+
+"stellar_nucleosynthesis": {
+    "name": "Stellar Nucleosynthesis",
+    "category": "astrophysics",
+    "domains": ["astrophysics", "nucleosynthesis", "stars", "elements"],
+    "statement": "Stars create chemical elements through nuclear fusion processes",
+    "statement_latex": "4^1H \\rightarrow ^4He + 2e^+ + 2\\nu_e + \\gamma",
+    "formulation": "Nuclear fusion in stellar cores transforms lighter elements into heavier ones, releasing energy",
+    "implications": [
+        "Origin of chemical elements beyond hydrogen and helium",
+        "Stellar energy source and lifetimes",
+        "Galactic chemical evolution",
+        "We are made of stardust"
+    ],
+    "proofs": [
+        "Stellar spectroscopy showing elemental abundances",
+        "Solar neutrino detection",
+        "Supernova observations creating heavy elements",
+        "Nuclear reaction cross-section measurements"
+    ],
+    "confidence": 0.98,
+    "discovery_date": "1957",
+    "discoverers": ["Margaret Burbidge", "Geoffrey Burbidge", "William Fowler", "Fred Hoyle"],
+    "revolutions": ["nuclear_astrophysics", "cosmochemistry"],
+    
+    "explanation": "Stellar nucleosynthesis explains how stars serve as cosmic furnaces that forge the elements of the periodic table. Hydrogen fuses into helium, then progressively heavier elements up to iron in massive stars. Elements heavier than iron are created in supernova explosions and neutron star mergers. This process explains the chemical composition of the universe and reveals that most atoms in our bodies were forged in long-dead stars."
+},
+"gauge_symmetry": {
+    "name": "Gauge Symmetry Principle",
+    "category": "fundamental_physics",
+    "domains": ["quantum_field_theory", "symmetry", "forces", "standard_model"],
+    "statement": "Fundamental forces arise from local gauge symmetries",
+    "statement_latex": "\\mathcal{L} = \\bar{\\psi}(i\\gamma^\\mu D_\\mu - m)\\psi - \\frac{1}{4}F_{\\mu\\nu}F^{\\mu\\nu}",
+    "formulation": "Requiring Lagrangian invariance under local symmetry transformations necessitates the introduction of gauge fields",
+    "implications": [
+        "Unification of forces through symmetry principles",
+        "Prediction of force-carrying particles (gauge bosons)",
+        "Foundation of the Standard Model",
+        "Charge conservation as consequence of symmetry"
+    ],
+    "proofs": [
+        "Success of quantum electrodynamics (QED)",
+        "Prediction and discovery of W and Z bosons",
+        "Accuracy of Standard Model predictions",
+        "Experimental verification of gauge theories"
+    ],
+    "confidence": 0.97,
+    "discovery_date": "1954",
+    "discoverers": ["Chen Ning Yang", "Robert Mills"],
+    "revolutions": ["particle_physics", "quantum_field_theory"],
+    
+    "explanation": "Gauge symmetry is the profound principle that the fundamental forces of nature emerge from requiring that physical laws remain unchanged under local symmetry transformations. Electromagnetism arises from U(1) gauge symmetry, the weak force from SU(2), and the strong force from SU(3). This framework not only explains known forces but provides the mathematical structure for potential unification of all fundamental interactions."
+},
+
+
             "general_relativity": {
                 "name": "General Relativity",
                 "category": "fundamental_physics",
@@ -1178,6 +1365,27 @@ function createLawCard(law, showDetails = false) {
                     "laws": ["hubble_expansion", "general_relativity", "dark_energy_dominance", "cosmological_principle", "cosmic_inflation"],
                     "synthesis_template": "Modern cosmology reveals an expanding universe born from an extreme primordial state, with dark energy driving accelerated expansion."
                 },
+// Add to appropriate categories in mapQuestion function
+"chaos_theory": {
+    "keywords": ["chaos", "butterfly effect", "sensitive dependence", "nonlinear", "unpredictable", "complex systems"],
+    "laws": ["butterfly_effect"],
+    "synthesis_template": "Chaos theory reveals how deterministic systems can produce unpredictable, complex behavior through sensitive dependence on initial conditions."
+},
+"neuroscience": {
+    "keywords": ["neural", "brain", "learning", "plasticity", "hebb", "neurons", "synaptic"],
+    "laws": ["hebbian_learning"],
+    "synthesis_template": "Neural plasticity and learning operate through fundamental rules where co-active neurons strengthen their connections."
+},
+"astrophysics": {
+    "keywords": ["stars", "nucleosynthesis", "elements", "stellar", "fusion", "supernova"],
+    "laws": ["stellar_nucleosynthesis"],
+    "synthesis_template": "Stars serve as cosmic element factories, creating the chemical diversity of the universe through nuclear fusion processes."
+},
+"gauge_theory": {
+    "keywords": ["gauge", "symmetry", "yang-mills", "standard model", "force unification"],
+    "laws": ["gauge_symmetry"],
+    "synthesis_template": "Fundamental forces emerge from local gauge symmetries, providing the mathematical foundation for particle physics unification."
+},
                 "classical_mechanics": {
                     "keywords": ["newton", "motion", "force", "mechanics", "inertia", "momentum", "conservation", "collisions", "action-reaction"],
                     "laws": ["newtons_third_law", "newtons_first_law", "conservation_momentum"],
