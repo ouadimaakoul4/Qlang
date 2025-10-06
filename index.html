@@ -297,8 +297,8 @@
         };
 
         function renderMathJax() {
-            if (window.MathJax) {
-                MathJax.typesetPromise && MathJax.typesetPromise();
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                MathJax.typesetPromise();
             }
         }
 
@@ -315,6 +315,21 @@
         }
 
         // ==================== FONCTIONS PRINCIPALES ====================
+
+        function getLoisAleatoires(n) {
+            const cles = Object.keys(loisUniverselles);
+            const resultat = [];
+            const usedKeys = new Set();
+            
+            while (resultat.length < n && resultat.length < cles.length) {
+                const cleAleatoire = cles[Math.floor(Math.random() * cles.length)];
+                if (!usedKeys.has(cleAleatoire)) {
+                    usedKeys.add(cleAleatoire);
+                    resultat.push(loisUniverselles[cleAleatoire]);
+                }
+            }
+            return resultat;
+        }
 
         function mapperQuestion(question) {
             const questionLower = question.toLowerCase();
@@ -336,6 +351,16 @@
                     "mots_cles": ["quantique", "incertitude", "schrödinger", "heisenberg"],
                     "lois": ["mecanique_quantique", "incertitude_heisenberg"],
                     "synthese_template": "Le monde quantique révèle une réalité probabiliste et contre-intuitive."
+                },
+                "thermodynamique": {
+                    "mots_cles": ["entropie", "thermodynamique", "désordre", "ordre"],
+                    "lois": ["thermodynamique_2", "landauer"],
+                    "synthese_template": "La thermodynamique gouverne les transformations énergétiques et définit la flèche du temps."
+                },
+                "cosmologie": {
+                    "mots_cles": ["univers", "expansion", "big bang", "cosmologie"],
+                    "lois": ["expansion_hubble", "relativite_generale"],
+                    "synthese_template": "La cosmologie moderne révèle un univers en expansion, né d'un état primordial extrême."
                 }
             };
 
@@ -357,13 +382,14 @@
             const typeQuestion = mapperQuestion(question);
             
             if (!typeQuestion) {
+                const loisAleatoires = getLoisAleatoires(3);
                 return `### 🔍 Aucune Correspondance Directe
 
 **Question** : "${question}"
 
 Aucune catégorie spécifique n'a été identifiée. Voici quelques lois universelles pertinentes :
 
-${getLoisAleatoires(3).map(loi => 
+${loisAleatoires.map(loi => 
     `- **${loi.nom}** : ${loi.énoncé}`
 ).join('\n')}
 
@@ -392,15 +418,15 @@ ${getLoisAleatoires(3).map(loi =>
                 
                 markdown += `### ${loi.nom}
 
-**Domaine** : ${loi.domaines.map(d => \`\`${d}\`\`).join(', ')}
+**Domaine** : ${loi.domaines.map(d => `\`${d}\``).join(', ')}
 
 **Énoncé** : ${loi.énoncé}
 
-${formuleHTML ? \`**Formulation mathématique** : 
+${formuleHTML ? `**Formulation mathématique** : 
 
-\${formuleHTML}
+${formuleHTML}
 
-\` : ''}
+` : ''}
 
 **Implications** : ${loi.implications.join('; ')}
 
@@ -416,16 +442,6 @@ ${formuleHTML ? \`**Formulation mathématique** :
             return markdown;
         }
 
-        function getLoisAleatoires(n) {
-            const cles = Object.keys(loisUniverselles);
-            const resultat = [];
-            for (let i = 0; i < n; i++) {
-                const cleAleatoire = cles[Math.floor(Math.random() * cles.length)];
-                resultat.push(loisUniverselles[cleAleatoire]);
-            }
-            return resultat;
-        }
-
         function showLibrary() {
             const categories = {};
             
@@ -437,7 +453,7 @@ ${formuleHTML ? \`**Formulation mathématique** :
             });
 
             let html = `<h2>📚 Bibliothèque des Lois Universelles</h2>
-                       <p>${Object.keys(loisUniverselles).length} lois cataloguées</p>`;
+                       <p><strong>${Object.keys(loisUniverselles).length} lois cataloguées</strong></p>`;
 
             for (const [categorie, lois] of Object.entries(categories)) {
                 html += `<div class="library-section">
@@ -445,7 +461,7 @@ ${formuleHTML ? \`**Formulation mathématique** :
                 
                 lois.forEach(loi => {
                     const formule = loi.énoncé_latex ? 
-                        `<div class="latex-container">\${createFormulaHTML(loi.énoncé_latex, true)}</div>` : '';
+                        `<div class="latex-container">${createFormulaHTML(loi.énoncé_latex, true)}</div>` : '';
                     
                     html += `<div class="law-card">
                             <h4>${loi.nom}</h4>
@@ -455,7 +471,7 @@ ${formuleHTML ? \`**Formulation mathématique** :
                             <div class="confidence-bar">
                                 <div class="confidence-fill" style="width: ${loi.confiance * 100}%"></div>
                             </div>
-                            <small>Confiance: ${(loi.confiance * 100).toFixed(0)}% | ${loi.date_decouverte}</small>
+                            <small>Confiance: ${(loi.confiance * 100).toFixed(0)}% | ${loi.date_decouverte} | ${Array.isArray(loi.decouvreurs) ? loi.decouvreurs.join(', ') : loi.decouvreurs}</small>
                         </div>`;
                 });
                 
@@ -471,7 +487,7 @@ ${formuleHTML ? \`**Formulation mathématique** :
             const lois = Object.values(loisUniverselles);
             const loiAleatoire = lois[Math.floor(Math.random() * lois.length)];
             const formule = loiAleatoire.énoncé_latex ? 
-                `<div class="latex-container">\${createFormulaHTML(loiAleatoire.énoncé_latex, true)}</div>` : '';
+                `<div class="latex-container">${createFormulaHTML(loiAleatoire.énoncé_latex, true)}</div>` : '';
             
             const html = `<div class="law-card">
                 <h3>🎲 Loi Aléatoire</h3>
@@ -518,15 +534,30 @@ ${formuleHTML ? \`**Formulation mathématique** :
             }
         }
 
-        // Initialisation
-        document.addEventListener('DOMContentLoaded', function() {
+        // ==================== INITIALISATION ====================
+
+        function init() {
+            // Mettre à jour le compteur de lois
             document.getElementById('law-count').textContent = Object.keys(loisUniverselles).length;
+            
+            // Afficher la bibliothèque au démarrage
             showLibrary();
+            
+            console.log('QLang initialisé avec', Object.keys(loisUniverselles).length, 'lois universelles');
+        }
+
+        // Initialisation au chargement de la page
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Permettre d'utiliser la touche Entrée
+        document.getElementById('question').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                askQLang();
+            }
         });
 
-        document.getElementById('question').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') askQLang();
-        });
+        // Focus sur le champ de question
+        document.getElementById('question').focus();
     </script>
 </body>
 </html>
