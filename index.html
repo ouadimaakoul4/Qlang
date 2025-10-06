@@ -7,9 +7,11 @@
 
   <!-- MathJax 3 -->
     <script>
-   // ----------------------------
-// Display Functions
-// ----------------------------
+
+ window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
 function renderLibrary(filterCategory = 'all', searchTerm = '') {
   const container = document.getElementById('laws-container');
   container.innerHTML = '';
@@ -91,6 +93,9 @@ function showMainView() {
   document.getElementById('main-view').style.display = 'block';
   document.getElementById('proof-view').style.display = 'none';
 }
+       }
+  }
+};
   </script>
 <!-- Polyfill fiable -->
 <script src="https://cdn.jsdelivr.net/npm/polyfill-io@3.0.1/dist/polyfill.min.js" defer></script>
