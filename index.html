@@ -8,29 +8,23 @@
   <!-- MathJax 3 -->
   <script>
     window.MathJax = {
-  tex: {
-    inlineMath: [['$', '$'], ['\\(', '\\)']],
-    displayMath: [['$$', '$$'], ['\\[', '\\]']]  // Explicitly define display math
-  },
-  svg: { 
-    fontCache: 'global',
-    scale: 0.9  // Slightly scale down equations
-  },
-  startup: {
-    ready() {
-      MathJax.startup.defaultReady();
-      // Once MathJax is ready, render the library
-      card.innerHTML = `
-  <span class="category-tag ${law.category}">${law.category.charAt(0).toUpperCase() + law.category.slice(1)}</span>
-  <h3>${law.name}</h3>
-  <div class="equation-clickable" data-law-id="${id}">
-    $${law.statement_latex}$  <!-- Changed from $$ to $ -->
-  </div>
-  <p class="law-description">${law.description}</p>
-`;
-    }
-  }
-};
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: { 
+        fontCache: 'global',
+        scale: 0.9
+      },
+      startup: {
+        pageReady: () => {
+          return MathJax.startup.defaultPageReady().then(() => {
+            // After MathJax is ready, render all equations
+            renderLibrary();
+          });
+        }
+      }
+    };
   </script>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
@@ -59,32 +53,6 @@
       box-sizing: border-box;
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
-    .related-laws {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgba(106, 90, 249, 0.2);
-}
-
-.related-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-  margin-top: 1rem;
-}
-
-.related-card {
-  background: rgba(106, 90, 249, 0.1);
-  border-radius: 8px;
-  padding: 15px;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: 1px solid rgba(106, 90, 249, 0.2);
-}
-
-.related-card:hover {
-  background: rgba(106, 90, 249, 0.2);
-  transform: translateY(-2px);
-}
 
     body {
       background: var(--bg);
@@ -118,15 +86,17 @@
       max-width: 1100px;
       margin: 0 auto;
     }
-.equation-loading {
-  opacity: 0.7;
-  font-style: italic;
-}
 
-.equation-loaded {
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
+    .equation-loading {
+      opacity: 0.7;
+      font-style: italic;
+    }
+
+    .equation-loaded {
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+
     /* --- Header --- */
     .header {
       display: flex;
@@ -147,6 +117,11 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
       flex: 1;
       max-width: 400px;
+      transition: all 0.3s;
+    }
+
+    .search-box:focus-within {
+      box-shadow: 0 4px 20px rgba(106, 90, 249, 0.3);
     }
 
     .search-box input {
@@ -157,32 +132,6 @@
       width: 100%;
       outline: none;
     }
-    .equation-clickable {
-  cursor: pointer;
-  padding: 15px;
-  margin: 15px 0;
-  background: rgba(106, 90, 249, 0.08);
-  border-radius: 8px;
-  text-align: center;
-  transition: all 0.2s;
-  border: 1px solid rgba(106, 90, 249, 0.1);
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 80px; /* Ensure consistent height */
-}
-
-.equation-clickable mjx-container {
-  display: inline-block !important;
-  margin: 0 auto !important;
-}
-
-.equation-clickable:hover {
-  background: rgba(106, 90, 249, 0.15);
-  transform: translateY(-2px);
-  border-color: rgba(106, 90, 249, 0.3);
-}
 
     .search-box input::placeholder {
       color: rgba(224, 224, 255, 0.5);
@@ -285,6 +234,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      min-height: 80px;
+    }
+
+    .equation-clickable mjx-container {
+      display: inline-block !important;
+      margin: 0 auto !important;
     }
 
     .equation-clickable:hover {
@@ -369,6 +324,33 @@
       font-family: 'Courier New', monospace;
     }
 
+    .related-laws {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(106, 90, 249, 0.2);
+    }
+
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 1rem;
+    }
+
+    .related-card {
+      background: rgba(106, 90, 249, 0.1);
+      border-radius: 8px;
+      padding: 15px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid rgba(106, 90, 249, 0.2);
+    }
+
+    .related-card:hover {
+      background: rgba(106, 90, 249, 0.2);
+      transform: translateY(-2px);
+    }
+
     /* --- Footer --- */
     .footer {
       text-align: center;
@@ -377,6 +359,13 @@
       border-top: 1px solid rgba(106, 90, 249, 0.1);
       color: rgba(224, 224, 255, 0.5);
       font-size: 0.9rem;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 2rem;
+      color: rgba(224, 224, 255, 0.6);
+      font-style: italic;
     }
 
     /* --- Responsive --- */
@@ -396,6 +385,10 @@
       
       h1 {
         font-size: 2rem;
+      }
+      
+      .category-filter {
+        justify-content: center;
       }
     }
   </style>
@@ -1180,29 +1173,6 @@ Electron shell structure (from Schrödinger equation) explains periodicity:
     // Display Functions
     // ----------------------------
     
-// Add to showProofView function
-function showRelatedLaws(lawId) {
-  const law = universalLaws[lawId];
-  const sameCategory = Object.entries(universalLaws)
-    .filter(([id, l]) => l.category === law.category && id !== lawId)
-    .slice(0, 3);
-  
-  if (sameCategory.length === 0) return '';
-  
-  return `
-    <div class="related-laws">
-      <h3>Related Laws</h3>
-      <div class="related-grid">
-        ${sameCategory.map(([id, l]) => `
-          <div class="related-card" onclick="showProofView('${id}')">
-            <h4>${l.name}</h4>
-            <p>${l.description}</p>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-  `;
-}
     function renderLibrary(filterCategory = 'all', searchTerm = '') {
       const container = document.getElementById('laws-container');
       container.innerHTML = '';
@@ -1222,32 +1192,6 @@ function showRelatedLaws(lawId) {
           law.description.toLowerCase().includes(term) ||
           law.statement_latex.toLowerCase().includes(term)
         );
-         for (const [id, law] of lawsToShow) {
-    const card = document.createElement('div');
-    card.className = 'law-card';
-    card.innerHTML = `
-      <span class="category-tag ${law.category}">${law.category.charAt(0).toUpperCase() + law.category.slice(1)}</span>
-      <h3>${law.name}</h3>
-      <div class="equation-clickable equation-loading" data-law-id="${id}">
-        \\(${law.statement_latex}\\)
-      </div>
-      <p class="law-description">${law.description}</p>
-    `;
-    container.appendChild(card);
-  }
-
-  // After MathJax renders, remove loading class
-  setTimeout(() => {
-    document.querySelectorAll('.equation-clickable').forEach(el => {
-      el.classList.remove('equation-loading');
-      el.classList.add('equation-loaded');
-      
-      el.addEventListener('click', () => {
-        window.location.hash = `proof/${el.dataset.lawId}`;
-        showProofView(el.dataset.lawId);
-      });
-    });
-  }, 100);
       }
 
       if (lawsToShow.length === 0) {
@@ -1261,23 +1205,49 @@ function showRelatedLaws(lawId) {
         card.innerHTML = `
           <span class="category-tag ${law.category}">${law.category.charAt(0).toUpperCase() + law.category.slice(1)}</span>
           <h3>${law.name}</h3>
-          <div class="equation-clickable" data-law-id="${id}">
-            $$${law.statement_latex}$$
+          <div class="equation-clickable equation-loading" data-law-id="${id}">
+            \\(${law.statement_latex}\\)
           </div>
           <p class="law-description">${law.description}</p>
         `;
         container.appendChild(card);
       }
 
-      // Attach click listeners after MathJax renders
+      // After MathJax renders, remove loading class
       setTimeout(() => {
         document.querySelectorAll('.equation-clickable').forEach(el => {
+          el.classList.remove('equation-loading');
+          el.classList.add('equation-loaded');
+          
           el.addEventListener('click', () => {
             window.location.hash = `proof/${el.dataset.lawId}`;
             showProofView(el.dataset.lawId);
           });
         });
       }, 100);
+    }
+
+    function showRelatedLaws(lawId) {
+      const law = universalLaws[lawId];
+      const sameCategory = Object.entries(universalLaws)
+        .filter(([id, l]) => l.category === law.category && id !== lawId)
+        .slice(0, 3);
+      
+      if (sameCategory.length === 0) return '';
+      
+      return `
+        <div class="related-laws">
+          <h3>Related Laws</h3>
+          <div class="related-grid">
+            ${sameCategory.map(([id, l]) => `
+              <div class="related-card" onclick="showProofView('${id}')">
+                <h4>${l.name}</h4>
+                <p>${l.description}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
     }
 
     function showProofView(lawId) {
@@ -1288,7 +1258,7 @@ function showRelatedLaws(lawId) {
       document.getElementById('proof-view').style.display = 'block';
 
       const html = marked.parse(law.full_explanation);
-      document.getElementById('proof-content').innerHTML = html;
+      document.getElementById('proof-content').innerHTML = html + showRelatedLaws(lawId);
 
       // Re-render MathJax in the new content
       if (window.MathJax) {
