@@ -3,24 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QLang — Interrogez l'Univers</title>
+    <title>QLang — Bibliothèque des Lois Universelles</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
     <style>
         body { 
-            font-family: Arial, sans-serif; 
-            max-width: 800px; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px; 
             margin: 0 auto; 
             padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0c2461 0%, #1e3799 100%);
             color: white;
+            line-height: 1.6;
         }
         .container {
             background: rgba(255, 255, 255, 0.1);
             padding: 30px;
             border-radius: 15px;
             backdrop-filter: blur(10px);
+            margin-bottom: 20px;
         }
-        input { 
+        .library-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        input, select { 
             width: 100%; 
             padding: 15px; 
             margin-bottom: 15px;
@@ -36,14 +44,12 @@
             border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
-            transition: background 0.3s;
+            transition: all 0.3s;
+            margin: 5px;
         }
         button:hover {
             background: #ff5252;
-        }
-        button:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
+            transform: translateY(-2px);
         }
         #response { 
             background: white;
@@ -54,200 +60,416 @@
             min-height: 100px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
-        .loading {
-            text-align: center;
-            font-style: italic;
+        .law-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #ff6b6b;
         }
-        .error {
-            color: #ff6b6b;
-            background: #fff5f5;
-            border: 1px solid #ff6b6b;
+        .domain-tag {
+            display: inline-block;
+            background: #4a69bd;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin: 2px;
+        }
+        .confidence-bar {
+            height: 8px;
+            background: #333;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+        .confidence-fill {
+            height: 100%;
+            background: #ff6b6b;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🌌 QLang v1.2 — Traducteur Cosmique</h1>
-        <p>Posez une question à l'univers, et obtenez une réponse fondée sur ses lois fondamentales.</p>
+        <h1>🌌 QLang — Bibliothèque des Lois Universelles</h1>
+        <p>Explorez la connaissance cosmique à travers les lois fondamentales de l'univers.</p>
         
-        <input type="text" id="question" placeholder="Ex: L'information est-elle plus fondamentale que la matière ?">
+        <input type="text" id="question" placeholder="Posez votre question cosmique...">
         <button onclick="askQLang()">✨ Interroger l'Univers</button>
+        <button onclick="showLibrary()">📚 Voir la Bibliothèque</button>
+        <button onclick="showRandomLaw()">🎲 Loi Aléatoire</button>
         
         <div id="response">
-            <p>Prêt à recevoir votre question cosmique...</p>
+            <p>La bibliothèque contient <span id="law-count">0</span> lois universelles.</p>
         </div>
     </div>
 
     <script>
-        // Base de connaissances des lois cosmiques
-        const lois = {
-            "thermo_2": {
-                "nom": "2e loi de la thermodynamique",
-                "énoncé": "ΔS ≥ 0 dans un système isolé",
-                "conséquences": ["flèche du temps", "augmentation de l'entropie", "limite à la complexité perpétuelle"],
-                "domaine": ["thermodynamique", "entropie", "systèmes"],
-                "confiance_intrinsèque": 1.0
+        // ==================== BIBLIOTHÈQUE DES LOIS UNIVERSELLES ====================
+
+        const loisUniverselles = {
+            // === PHYSIQUE FONDAMENTALE ===
+            "thermodynamique_2": {
+                "nom": "Deuxième Loi de la Thermodynamique",
+                "categorie": "physique_fondamentale",
+                "domaines": ["thermodynamique", "entropie", "fleche_temps"],
+                "énoncé": "L'entropie d'un système isolé ne peut que croître ou rester constante",
+                "énoncé_latex": "\\Delta S \\geq 0",
+                "formulation": "Dans tout processus naturel, l'entropie totale de l'univers augmente",
+                "implications": [
+                    "Flèche du temps irréversible",
+                    "Impossibilité du mouvement perpétuel",
+                    "Mort thermique de l'univers comme état final"
+                ],
+                "preuves": [
+                    "Expériences de calorimétrie",
+                    "Moteurs thermiques réels",
+                    "Fondements statistiques (Boltzmann)"
+                ],
+                "limites": "Systèmes ouverts et loin de l'équilibre",
+                "confiance": 0.99,
+                "date_decouverte": "1850",
+                "decouvreurs": ["Rudolf Clausius", "William Thomson"],
+                "revolutions": ["thermodynamique", "cosmologie"]
             },
+
+            "relativite_generale": {
+                "nom": "Relativité Générale",
+                "categorie": "physique_fondamentale", 
+                "domaines": ["gravitation", "espace_temps", "cosmologie"],
+                "énoncé": "La matière et l'énergie courbent l'espace-temps, et cette courbure dicte le mouvement",
+                "énoncé_latex": "G_{\\mu\\nu} = \\frac{8\\pi G}{c^4} T_{\\mu\\nu}",
+                "formulation": "Équation d'Einstein reliant géométrie et contenu matériel",
+                "implications": [
+                    "Déflexion de la lumière par les masses",
+                    "Ondes gravitationnelles", 
+                    "Expansion de l'univers",
+                    "Trous noirs"
+                ],
+                "preuves": [
+                    "Déflexion stellaire lors des éclipses (1919)",
+                    "Décalage vers le rouge gravitationnel",
+                    "Ondes gravitationnelles (LIGO 2015)"
+                ],
+                "confiance": 0.98,
+                "date_decouverte": "1915",
+                "decouvreurs": ["Albert Einstein"],
+                "revolutions": ["gravitation", "cosmologie"]
+            },
+
+            "mecanique_quantique": {
+                "nom": "Principes de la Mécanique Quantique",
+                "categorie": "physique_fondamentale",
+                "domaines": ["quantique", "incertitude", "superposition"],
+                "énoncé": "Système décrit par une fonction d'onde, évolution unitaire, mesure probabiliste",
+                "formulation": "Équation de Schrödinger : $i\\hbar\\frac{\\partial}{\\partial t}\\Psi = \\hat{H}\\Psi$",
+                "implications": [
+                    "Dualité onde-particule",
+                    "Intrication quantique",
+                    "Principe d'incertitude",
+                    "Effet tunnel"
+                ],
+                "preuves": [
+                    "Expérience de Stern-Gerlach",
+                    "Interférences avec particules individuelles",
+                    "Calculateurs quantiques"
+                ],
+                "confiance": 0.99,
+                "date_decouverte": "1925-1927",
+                "decouvreurs": ["Heisenberg", "Schrödinger", "Dirac", "Bohr"]
+            },
+
+            // === COSMOLOGIE ===
+            "expansion_hubble": {
+                "nom": "Loi de Hubble-Lemaître",
+                "categorie": "cosmologie",
+                "domaines": ["expansion", "cosmologie"],
+                "énoncé": "Les galaxies s'éloignent à une vitesse proportionnelle à leur distance",
+                "énoncé_latex": "v = H_0 d",
+                "implications": [
+                    "Univers en expansion",
+                    "Big Bang comme origine",
+                    "Âge fini de l'univers"
+                ],
+                "confiance": 0.95,
+                "date_decouverte": "1927-1929",
+                "decouvreurs": ["Georges Lemaître", "Edwin Hubble"]
+            },
+
+            // === INFORMATION ET COMPLEXITÉ ===
             "bekenstein": {
                 "nom": "Limite de Bekenstein",
-                "énoncé": "Densité d'information maximale ~ A / (4 l_Pl²)",
-                "conséquences": ["borne supérieure à l'information dans un volume", "lien gravité-information", "principe holographique"],
-                "domaine": ["information", "gravité", "cosmologie"],
-                "confiance_intrinsèque": 0.95
+                "categorie": "information",
+                "domaines": ["information", "gravité", "holographie"],
+                "énoncé": "Quantité maximale d'information contenue dans une région d'espace",
+                "énoncé_latex": "I \\leq \\frac{2\\pi R E}{\\hbar c \\ln 2}",
+                "implications": [
+                    "Principe holographique",
+                    "Entropie des trous noirs",
+                    "Limites computationnelles fondamentales"
+                ],
+                "confiance": 0.90,
+                "date_decouverte": "1973",
+                "decouvreurs": ["Jacob Bekenstein"]
             },
+
             "landauer": {
                 "nom": "Principe de Landauer",
-                "énoncé": "Coût minimal de kT ln(2) par bit effacé",
-                "conséquences": ["coût thermodynamique du calcul", "limite à la complexité computationnelle"],
-                "domaine": ["information", "thermodynamique", "computation"],
-                "confiance_intrinsèque": 0.98
+                "categorie": "information", 
+                "domaines": ["information", "thermodynamique", "computation"],
+                "énoncé": "Effacement d'un bit d'information dissipe au moins kT ln(2) d'énergie",
+                "énoncé_latex": "E \\geq kT \\ln 2",
+                "implications": [
+                    "Lien information/entropie",
+                    "Limites énergétiques du calcul",
+                    "Ordinateurs réversibles"
+                ],
+                "confiance": 0.85,
+                "date_decouverte": "1961",
+                "decouvreurs": ["Rolf Landauer"]
+            },
+
+            // === BIOLOGIE ET COMPLEXITÉ ===
+            "evolution_darwin": {
+                "nom": "Sélection Naturelle",
+                "categorie": "biologie",
+                "domaines": ["evolution", "adaptation", "complexite"],
+                "énoncé": "Les organismes les mieux adaptés à leur environnement ont plus de descendants",
+                "implications": [
+                    "Adaptation des espèces",
+                    "Diversité biologique", 
+                    "Émergence de complexité"
+                ],
+                "confiance": 0.98,
+                "date_decouverte": "1859",
+                "decouvreurs": ["Charles Darwin", "Alfred Wallace"]
+            },
+
+            // === MATHÉMATIQUES FONDAMENTALES ===
+            "theoreme_godel": {
+                "nom": "Théorèmes d'Incomplétude de Gödel",
+                "categorie": "mathematiques",
+                "domaines": ["logique", "incomplétude", "fondements"],
+                "énoncé": "Tout système formel consistant contenant l'arithmétique contient des propositions indécidables",
+                "implications": [
+                    "Limites de la formalisation mathématique",
+                    "Impossibilité d'auto-fondation complète",
+                    "Nécessité de l'intuition humaine"
+                ],
+                "confiance": 1.00,
+                "date_decouverte": "1931",
+                "decouvreurs": ["Kurt Gödel"]
+            },
+
+            // === ÉMERGENCE ET SYSTÈMES COMPLEXES ===
+            "emergence_prigogine": {
+                "nom": "Émergence Loin de l'Équilibre",
+                "categorie": "complexite",
+                "domaines": ["emergence", "auto_organisation", "systemes"],
+                "énoncé": "Les systèmes ouverts loin de l'équilibre peuvent développer des structures organisées",
+                "implications": [
+                    "Auto-organisation de la matière",
+                    "Émergence de la vie",
+                    "Structures dissipatives"
+                ],
+                "confiance": 0.88,
+                "date_decouverte": "1977", 
+                "decouvreurs": ["Ilya Prigogine"]
             }
         };
 
-        // Types de questions reconnues
+        // ==================== SYSTÈME DE QUESTIONS ====================
+
         const questionsTypes = {
             "fondamentalite_info": {
-                "mots_cles": ["information", "fondamentale", "matière", "bit", "primitive", "plus fondamentale"],
-                "lois": ["bekenstein", "landauer", "thermo_2"],
-                "synthese_template": "L'information et la matière sont intriquées, mais l'information semble **plus primitive** dans la hiérarchie cosmique. La matière sans information est un état indifférencié (entropie maximale). L'information sans matière est instable (coût énergétique). Cependant, dans les régimes extrêmes, l'information précède la géométrie (principe holographique). Ainsi, l'information définit **ce qui peut exister**, tandis que la matière fournit le cadre."
+                "mots_cles": ["information", "fondamentale", "matière", "bit", "primitif"],
+                "lois": ["bekenstein", "landauer", "thermodynamique_2"],
+                "synthese_template": "L'information apparaît comme une entité fondamentale, peut-être plus primitive que la matière elle-même. Les limites de Bekenstein et Landauer établissent un pont profond entre information, énergie et espace-temps."
             },
+
             "origine_lois": {
-                "mots_cles": ["lois", "chaos", "ordre", "pourquoi", "fondement", "origine"],
-                "lois": ["thermo_2"],
-                "synthese_template": "Le chaos absolu est instable. Les systèmes évoluent vers des états symétriques ou auto-organisés. Seules les structures cohérentes persistent. Les lois sont la trace de ce qui a survécu à travers l'évolution cosmique."
+                "mots_cles": ["origine", "lois", "fondement", "pourquoi", "existence"],
+                "lois": ["theoreme_godel", "emergence_prigogine", "relativite_generale"],
+                "synthese_template": "L'origine des lois physiques reste une frontière de la connaissance. Les théorèmes de Gödel suggèrent des limites à toute complétude, tandis que l'émergence propose une genèse dynamique."
             },
-            "direction_temps": {
-                "mots_cles": ["temps", "direction", "sens", "flèche", "pourquoi le temps"],
-                "lois": ["thermo_2"],
-                "synthese_template": "Le temps a une direction parce que l'entropie augmente. L'univers a commencé dans un état de basse entropie, et évolue vers le désordre maximal selon la deuxième loi de la thermodynamique."
-            },
-            "entropie": {
-                "mots_cles": ["entropie", "désordre", "ordre", "complexité"],
-                "lois": ["thermo_2", "landauer"],
-                "synthese_template": "L'entropie mesure le désordre et augmente inévitablement dans les systèmes isolés. Cependant, des îlots de complexité peuvent émerger localement au prix d'une augmentation globale de l'entropie."
+
+            "expansion_univers": {
+                "mots_cles": ["expansion", "big bang", "univers", "cosmologie", "hubble"],
+                "lois": ["expansion_hubble", "relativite_generale"],
+                "synthese_template": "L'univers est en expansion accélérée, trace observable d'un commencement fini dans le temps. Cette expansion sculpte l'histoire cosmique et détermine le destin ultime."
             }
         };
+
+        // ==================== FONCTIONS PRINCIPALES ====================
 
         function mapperQuestion(question) {
             const questionLower = question.toLowerCase();
-            
-            for (const [qType, data] of Object.entries(questionsTypes)) {
-                if (data.mots_cles.some(mot => questionLower.includes(mot))) {
-                    return {
-                        type: qType,
-                        lois: data.lois
-                    };
+            let meilleurScore = 0;
+            let meilleurType = null;
+
+            for (const [type, data] of Object.entries(questionsTypes)) {
+                const score = data.mots_cles.filter(mot => 
+                    questionLower.includes(mot)
+                ).length;
+                
+                if (score > meilleurScore) {
+                    meilleurScore = score;
+                    meilleurType = type;
                 }
             }
-            
-            return {
-                type: null,
-                lois: []
-            };
+
+            return meilleurType ? questionsTypes[meilleurType] : null;
         }
 
         function genererReponse(question) {
-            const { type, lois: loisInvoquees } = mapperQuestion(question);
+            const typeQuestion = mapperQuestion(question);
             
-            if (!loisInvoquees.length) {
-                return `### 🔮 Réponse QLang v1.2
+            if (!typeQuestion) {
+                return `### 🔍 Aucune Correspondance Directe
 
-**Question** : ${question}
+**Question** : "${question}"
 
-**Synthèse** : Aucune loi cosmique pertinente n'a été identifiée pour votre question.
+Aucune catégorie spécifique n'a été identifiée. Voici quelques lois universelles pertinentes :
 
-**Suggestions** : Reformulez avec des termes comme :
-- "entropie", "information", "temps"
-- "matière", "énergie", "complexité"
-- "lois fondamentales", "origine"
+${getLoisAleatoires(3).map(loi => 
+    `- **${loi.nom}** : ${loi.énoncé}`
+).join('\n')}
 
-**Confiance** : ★☆☆☆☆
-**Lois invoquées** : Aucune`;
+**Suggestions** : Reformulez en utilisant des termes comme "information", "expansion", "quantique", "évolution", etc.`;
             }
 
-            let markdown = `### 🔮 Réponse QLang v1.2
+            const loisInvoquees = typeQuestion.lois.map(cle => loisUniverselles[cle]);
+            const confianceMoyenne = loisInvoquees.reduce((sum, loi) => sum + loi.confiance, 0) / loisInvoquees.length;
 
-**Question** : ${question}
+            let markdown = `### 🌟 Analyse par QLang
 
-**Synthèse** : `;
+**Question** : "${question}"
 
-            // Ajouter le template de synthèse
-            if (type && questionsTypes[type]) {
-                markdown += questionsTypes[type].synthese_template + "\n";
-            } else {
-                markdown += "Synthèse basée sur l'analyse des lois cosmiques fondamentales.\n";
-            }
+**Catégorie identifiée** : ${typeQuestion.mots_cles.join(', ')}
 
-            // Ajouter les lois invoquées
-            markdown += "\n**Lois cosmiques invoquées** :\n";
-            let confianceMoyenne = 0;
-            
-            loisInvoquees.forEach(loiKey => {
-                const loi = lois[loiKey];
-                markdown += `- **${loi.nom}** : ${loi.énoncé}. \n  Conséquences: ${loi.conséquences.join(", ")}.\n`;
-                confianceMoyenne += loi.confiance_intrinsèque;
+**Synthèse** : ${typeQuestion.synthese_template}
+
+---
+
+## 📜 Lois Universelles Invoquées
+
+`;
+
+            loisInvoquees.forEach(loi => {
+                markdown += `### ${loi.nom}
+**Domaine** : ${loi.domaines.map(d => `\`${d}\``).join(', ')}
+**Énoncé** : ${loi.énoncé}
+${loi.énoncé_latex ? `**Formulation** : $${loi.énoncé_latex}$` : ''}
+**Implications** : ${loi.implications.join('; ')}
+**Niveau de confiance** : ${(loi.confiance * 100).toFixed(0)}%
+
+`;
             });
 
-            // Calculer la confiance
-            confianceMoyenne /= loisInvoquees.length;
-            const etoiles = "★".repeat(Math.round(confianceMoyenne * 5)) + 
-                           "☆".repeat(5 - Math.round(confianceMoyenne * 5));
-            
-            markdown += `\n**Niveau de confiance** : ${etoiles} (${confianceMoyenne.toFixed(2)})\n`;
-            markdown += `\n*Basé sur l'analyse des lois fondamentales de l'univers*`;
+            markdown += `---
+**Confiance globale** : ${(confianceMoyenne * 100).toFixed(1)}%
+**Nombre de lois invoquées** : ${loisInvoquees.length}
+**Couverture domaines** : ${new Set(loisInvoquees.flatMap(l => l.domaines)).size} domaines différents`;
 
             return markdown;
         }
 
+        function getLoisAleatoires(n) {
+            const cles = Object.keys(loisUniverselles);
+            const resultat = [];
+            for (let i = 0; i < n; i++) {
+                const cleAleatoire = cles[Math.floor(Math.random() * cles.length)];
+                resultat.push(loisUniverselles[cleAleatoire]);
+            }
+            return resultat;
+        }
+
+        function showLibrary() {
+            const categories = {};
+            
+            Object.values(loisUniverselles).forEach(loi => {
+                if (!categories[loi.categorie]) {
+                    categories[loi.categorie] = [];
+                }
+                categories[loi.categorie].push(loi);
+            });
+
+            let html = `<h2>📚 Bibliothèque des Lois Universelles</h2>
+                       <p>${Object.keys(loisUniverselles).length} lois cataloguées</p>`;
+
+            for (const [categorie, lois] of Object.entries(categories)) {
+                html += `<div class="library-section">
+                        <h3>${categorie.replace('_', ' ').toUpperCase()} (${lois.length} lois)</h3>`;
+                
+                lois.forEach(loi => {
+                    html += `<div class="law-card">
+                            <h4>${loi.nom}</h4>
+                            <p>${loi.énoncé}</p>
+                            <div>${loi.domaines.map(d => `<span class="domain-tag">${d}</span>`).join('')}</div>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" style="width: ${loi.confiance * 100}%"></div>
+                            </div>
+                            <small>Confiance: ${(loi.confiance * 100).toFixed(0)}% | ${loi.date_decouverte}</small>
+                        </div>`;
+                });
+                
+                html += `</div>`;
+            }
+
+            document.getElementById('response').innerHTML = html;
+        }
+
+        function showRandomLaw() {
+            const lois = Object.values(loisUniverselles);
+            const loiAleatoire = lois[Math.floor(Math.random() * lois.length)];
+            
+            const html = `<div class="law-card">
+                <h3>🎲 Loi Aléatoire</h3>
+                <h4>${loiAleatoire.nom}</h4>
+                <p><strong>Énoncé :</strong> ${loiAleatoire.énoncé}</p>
+                ${loiAleatoire.énoncé_latex ? `<p><strong>Formulation :</strong> $${loiAleatoire.énoncé_latex}$</p>` : ''}
+                <p><strong>Domaine :</strong> ${loiAleatoire.domaines.join(', ')}</p>
+                <p><strong>Implications :</strong> ${loiAleatoire.implications.join('; ')}</p>
+                <p><strong>Découvreurs :</strong> ${Array.isArray(loiAleatoire.decouvreurs) ? loiAleatoire.decouvreurs.join(', ') : loiAleatoire.decouvreurs}</p>
+                <p><strong>Date :</strong> ${loiAleatoire.date_decouverte}</p>
+            </div>`;
+            
+            document.getElementById('response').innerHTML = html;
+        }
+
+        // ==================== INTERFACE UTILISATEUR ====================
+
         async function askQLang() {
-            const questionInput = document.getElementById('question');
+            const question = document.getElementById('question').value.trim();
             const responseDiv = document.getElementById('response');
-            const button = document.querySelector('button');
-            
-            const question = questionInput.value.trim();
-            
+
             if (!question) {
-                responseDiv.innerHTML = "<p class='error'>🌠 Veuillez poser une question à l'univers.</p>";
+                responseDiv.innerHTML = "<p>🌠 Veuillez poser une question cosmique.</p>";
                 return;
             }
 
-            // Désactiver le bouton pendant le traitement
-            button.disabled = true;
-            button.textContent = "🌌 L'univers réfléchit...";
+            responseDiv.innerHTML = "<p>🌀 Consultation des archives universelles...</p>";
 
-            // Afficher un message de chargement
-            responseDiv.innerHTML = "<p class='loading'>🌀 Consultation des lois cosmiques...</p>";
-
-            // Simuler un temps de traitement (comme si on interrogeait l'univers !)
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            // Simulation de traitement
+            await new Promise(resolve => setTimeout(resolve, 1000));
 
             try {
-                // Générer la réponse
                 const reponseMarkdown = genererReponse(question);
-                
-                // Convertir le markdown en HTML
                 const reponseHTML = marked.parse(reponseMarkdown);
                 responseDiv.innerHTML = reponseHTML;
-                
             } catch (error) {
-                console.error("Erreur:", error);
-                responseDiv.innerHTML = `<p class='error'>❌ Une anomalie cosmique s'est produite: ${error.message}</p>`;
-            } finally {
-                // Réactiver le bouton
-                button.disabled = false;
-                button.textContent = "✨ Interroger l'Univers";
+                responseDiv.innerHTML = `<p>❌ Erreur dans le continuum espace-temps: ${error.message}</p>`;
             }
         }
 
-        // Permettre d'utiliser la touche Entrée
-        document.getElementById('question').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                askQLang();
-            }
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('law-count').textContent = Object.keys(loisUniverselles).length;
+            showLibrary();
         });
 
-        // Focus sur le champ de question au chargement
-        document.getElementById('question').focus();
+        document.getElementById('question').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') askQLang();
+        });
     </script>
 </body>
 </html>
