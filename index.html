@@ -24,44 +24,6 @@
             backdrop-filter: blur(10px);
             margin-bottom: 20px;
         }
-        .library-section {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 15px 0;
-        }
-        input, select, textarea { 
-            width: 100%; 
-            padding: 10px; 
-            margin-bottom: 10px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-        button { 
-            padding: 12px 20px; 
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-            margin: 5px;
-        }
-        button:hover {
-            background: #ff5252;
-            transform: translateY(-2px);
-        }
-        #response { 
-            background: white;
-            color: #333;
-            border-radius: 10px;
-            padding: 25px;
-            margin-top: 25px;
-            min-height: 100px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
         .law-card {
             background: white;
             color: #333;
@@ -71,622 +33,232 @@
             border-left: 5px solid #4a69bd;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-        .domain-tag {
-            display: inline-block;
-            background: #4a69bd;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.8em;
-            margin: 3px;
-            color: white;
-        }
-        .confidence-bar {
-            height: 10px;
-            background: #ddd;
+        .debug-info {
+            background: #fff3cd;
+            color: #856404;
+            padding: 10px;
             border-radius: 5px;
             margin: 10px 0;
-        }
-        .confidence-fill {
-            height: 100%;
-            background: #ff6b6b;
-            border-radius: 5px;
-        }
-        .formula-container {
-            text-align: center;
-            margin: 20px 0;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border: 2px solid #4a69bd;
-            font-size: 1.2em;
-        }
-        .editor-section {
-            background: rgba(255, 255, 255, 0.95);
-            color: #333;
-            padding: 25px;
-            border-radius: 15px;
-            margin: 20px 0;
-            border: 2px solid #ff6b6b;
-        }
-        .enrich-buttons {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .law-details {
-            margin: 15px 0;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 4px solid #27ae60;
-        }
-        .math-display {
-            font-size: 1.3em;
-            padding: 15px;
-            margin: 15px 0;
+            font-family: monospace;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🌌 QLang — Bibliothèque des Lois Universelles</h1>
-        <p>Explorez la connaissance cosmique à travers les lois fondamentales de l'univers.</p>
+        <h1>🔧 QLang — Version Debug</h1>
+        <p>Apprenez à corriger les bugs avec moi !</p>
         
-        <input type="text" id="question" placeholder="Posez votre question cosmique...">
-        <button onclick="askQLang()">✨ Interroger l'Univers</button>
-        <button onclick="showLibrary()">📚 Voir la Bibliothèque</button>
-        <button onclick="showRandomLaw()">🎲 Loi Aléatoire</button>
-        
-        <!-- SECTION ENRICHISSEMENT -->
-        <div class="enrich-buttons">
-            <h3>🎯 Enrichir la Bibliothèque</h3>
-            <button onclick="genererLoisAvancees()" style="background: #9b59b6;">
-                🧠 Générer 20 Lois Détaillées
-            </button>
-            <button onclick="afficherEditeur()" style="background: #2ecc71;">
-                ✏️ Ajouter Une Loi
-            </button>
-            <button onclick="exporterBibliotheque()" style="background: #e74c3c;">
-                📥 Exporter en JSON
-            </button>
-        </div>
+        <button onclick="debugLois()">🐛 Tester le Debug</button>
+        <button onclick="genererLoisCorrigees()">✅ Générer Lois Corrigées</button>
+        <button onclick="montrerProbleme()">❌ Voir le Problème</button>
         
         <div id="response">
-            <p>La bibliothèque contient <span id="law-count">0</span> lois universelles.</p>
+            <p>Cliquez sur les boutons pour voir les différences.</p>
         </div>
     </div>
 
     <script>
-        // Configuration MathJax pour un rendu correct
-        window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                processEscapes: true,
-                processEnvironments: true
-            },
-            options: {
-                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-                renderActions: {
-                    addMenu: [0, '', '']
-                }
-            }
-        };
+        // ==================== EXPLICATION DU BUG ====================
 
-        // ==================== BIBLIOTHÈQUE DE BASE DÉTAILLÉE ====================
-        let loisUniverselles = {
-            "thermodynamique_2": {
-                "nom": "Deuxième Loi de la Thermodynamique",
-                "categorie": "thermodynamique",
-                "domaines": ["thermodynamique", "entropie", "fleche_temps", "physique_fondamentale"],
-                "énoncé": "L'entropie d'un système isolé ne peut qu'augmenter ou rester constante, définissant ainsi la flèche du temps",
-                "énoncé_latex": "\\Delta S \\geq 0",
-                "description": "Cette loi fondamentale établit l'irréversibilité des processus naturels et la croissance inévitable du désordre dans l'univers.",
-                "implications": [
-                    "Flèche du temps irréversible",
-                    "Impossibilité des moteurs à mouvement perpétuel de deuxième espèce", 
-                    "Mort thermique de l'univers comme état final",
-                    "Limites fondamentales de l'efficacité énergétique"
-                ],
-                "applications": [
-                    "Moteurs thermiques et réfrigérateurs",
-                    "Étude des trous noirs et leur entropie",
-                    "Théorie de l'information"
-                ],
-                "confiance": 0.99,
-                "date_decouverte": "1850",
-                "decouvreurs": ["Rudolf Clausius", "William Thomson (Lord Kelvin)"],
-                "formulation_mathematique": "Pour un système isolé, la variation d'entropie $\\Delta S$ est toujours positive ou nulle."
-            },
-
-            "relativite_generale": {
-                "nom": "Relativité Générale", 
-                "categorie": "physique_fondamentale",
-                "domaines": ["gravitation", "espace_temps", "cosmologie", "relativite"],
-                "énoncé": "La matière et l'énergie courbent la géométrie de l'espace-temps, et cette courbure dicte le mouvement des corps",
-                "énoncé_latex": "G_{\\mu\\nu} = \\frac{8\\pi G}{c^4} T_{\\mu\\nu}",
-                "description": "Théorie révolutionnaire qui unifie la gravitation avec la géométrie de l'espace-temps, remplaçant la conception newtonienne de la force gravitationnelle.",
-                "implications": [
-                    "Déflexion de la lumière par les masses (lentilles gravitationnelles)",
-                    "Ondes gravitationnelles détectables",
-                    "Expansion accélérée de l'univers", 
-                    "Existence des trous noirs",
-                    "Dilatation du temps gravitationnelle"
-                ],
-                "applications": [
-                    "Systèmes GPS et correction relativiste",
-                    "Cosmologie moderne et modèle ΛCDM",
-                    "Astrophysique des trous noirs et étoiles à neutrons"
-                ],
-                "confiance": 0.98,
-                "date_decouverte": "1915",
-                "decouvreurs": ["Albert Einstein"],
-                "formulation_mathematique": "Le tenseur d'Einstein $G_{\\mu\\nu}$ est proportionnel au tenseur énergie-impulsion $T_{\\mu\\nu}$."
-            },
-
-            "mecanique_quantique": {
-                "nom": "Équation de Schrödinger",
-                "categorie": "physique_quantique", 
-                "domaines": ["quantique", "mecanique_ondulatoire", "physique_fondamentale"],
-                "énoncé": "Évolution temporelle de la fonction d'onde décrivant l'état quantique d'un système physique",
-                "énoncé_latex": "i\\hbar\\frac{\\partial}{\\partial t}\\Psi(\\mathbf{r},t) = \\hat{H}\\Psi(\\mathbf{r},t)",
-                "description": "Équation fondamentale décrivant l'évolution des systèmes quantiques non-relativistes, fondement de la chimie quantique et de la physique de la matière condensée.",
-                "implications": [
-                    "Dualité onde-corpuscule",
-                    "Quantification des niveaux d'énergie",
-                    "Comportement probabiliste des particules",
-                    "Effet tunnel quantique",
-                    "Intrication quantique"
-                ],
-                "applications": [
-                    "Structure électronique des atomes et molécules",
-                    "Micro-électronique et transistors",
-                    "Imagerie médicale (IRM)",
-                    "Calculateurs quantiques"
-                ],
-                "confiance": 0.99,
-                "date_decouverte": "1926",
-                "decouvreurs": ["Erwin Schrödinger"],
-                "formulation_mathematique": "L'opérateur hamiltonien $\\hat{H}$ agit sur la fonction d'onde $\\Psi$ pour décrire son évolution temporelle."
-            },
-
-            "equivalence_masse_energie": {
-                "nom": "Équivalence Masse-Énergie",
-                "categorie": "relativite",
-                "domaines": ["relativite_restreinte", "energie", "masse", "physique_fondamentale"],
-                "énoncé": "La masse et l'énergie sont deux manifestations d'une même entité physique et sont convertibles",
-                "énoncé_latex": "E = mc^2",
-                "description": "Relation fondamentale démontrant que masse et énergie sont équivalentes, avec des implications profondes en physique nucléaire et cosmologie.",
-                "implications": [
-                    "Énergie de liaison nucléaire",
-                    "Création et annihilation de paires particule-antiparticule",
-                    "Source d'énergie des étoiles par fusion nucléaire",
-                    "Courbure de l'espace-temps par l'énergie"
-                ],
-                "applications": [
-                    "Énergie nucléaire civile et militaire",
-                    "Physique des particules et accélérateurs",
-                    "Imagerie médicale (TEP scan)",
-                    "Cosmologie du Big Bang"
-                ],
-                "confiance": 0.999,
-                "date_decouverte": "1905",
-                "decouvreurs": ["Albert Einstein"],
-                "formulation_mathematique": "L'énergie au repos $E$ d'un corps de masse $m$ est donnée par $E = mc^2$ où $c$ est la vitesse de la lumière."
-            }
-        };
-
-        // ==================== GÉNÉRATEUR DE LOIS AVANCÉES ====================
-
-        function genererLoisAvancees() {
-            const nouvellesLois = {};
-            const categories = {
-                "electromagnetisme": {
-                    noms: ["Maxwell", "Ampère", "Faraday", "Gauss", "Coulomb", "Lorentz"],
-                    concepts: ["champ électromagnétique", "induction", "force électromotrice", "flux magnétique", "charge électrique"]
-                },
-                "cosmologie": {
-                    noms: ["Hubble", "Lemaître", "Friedmann", "Gamow", "Penzias", "Wilson"],
-                    concepts: ["expansion cosmique", "fond diffus cosmologique", "inflation", "matière noire", "énergie noire"]
-                },
-                "physique_nucleaire": {
-                    noms: ["Rutherford", "Bohr", "Fermi", "Curie", "Meitner", "Hahn"],
-                    concepts: ["désintégration radioactive", "fission nucléaire", "fusion nucléaire", "radioactivité", "demi-vie"]
-                },
-                "thermodynamique": {
-                    noms: ["Carnot", "Clausius", "Boltzmann", "Gibbs", "Nernst", "Onsager"],
-                    concepts: ["rendement thermique", "entropie statistique", "potentiel chimique", "équilibre thermodynamique"]
-                },
-                "physique_quantique": {
-                    noms: ["Heisenberg", "Dirac", "Pauli", "Born", "Jordan", "de Broglie"],
-                    concepts: ["principe d'incertitude", "spin", "statistique quantique", "dualité onde-particule"]
-                }
+        function montrerProbleme() {
+            // EXEMPLE DU PROBLÈME
+            const loiAvecBug = {
+                nom: "Loi de Newton",
+                enonce: "F = ma"  // ❌ MAUVAIS: "enonce" sans accent
             };
 
-            const formules = {
-                electromagnetisme: [
-                    "\\nabla \\cdot \\mathbf{E} = \\frac{\\rho}{\\epsilon_0}",
-                    "\\nabla \\cdot \\mathbf{B} = 0", 
-                    "\\nabla \\times \\mathbf{E} = -\\frac{\\partial \\mathbf{B}}{\\partial t}",
-                    "\\nabla \\times \\mathbf{B} = \\mu_0\\mathbf{J} + \\mu_0\\epsilon_0\\frac{\\partial \\mathbf{E}}{\\partial t}",
-                    "\\mathbf{F} = q(\\mathbf{E} + \\mathbf{v} \\times \\mathbf{B})"
-                ],
-                cosmologie: [
-                    "v = H_0 d",
-                    "\\frac{\\dot{a}^2}{a^2} = \\frac{8\\pi G}{3}\\rho - \\frac{k c^2}{a^2}",
-                    "T = 2.725 \\, \\text{K}",
-                    "z = \\frac{\\lambda_{\\text{obs}} - \\lambda_{\\text{emit}}}{\\lambda_{\\text{emit}}}"
-                ],
-                physique_nucleaire: [
-                    "N(t) = N_0 e^{-\\lambda t}",
-                    "E = \\Delta m c^2",
-                    "R = R_0 A^{1/3}",
-                    "\\sigma = \\pi (R_1 + R_2)^2"
-                ],
-                thermodynamique: [
-                    "\\eta = 1 - \\frac{T_C}{T_H}",
-                    "S = k_B \\ln \\Omega",
-                    "dU = T dS - P dV",
-                    "F = U - TS"
-                ],
-                physique_quantique: [
-                    "\\Delta x \\Delta p \\geq \\frac{\\hbar}{2}",
-                    "E_n = -\\frac{13.6}{n^2} \\, \\text{eV}",
-                    "\\psi(x) = \\sqrt{\\frac{2}{L}}\\sin\\left(\\frac{n\\pi x}{L}\\right)",
-                    "[\\hat{x}, \\hat{p}] = i\\hbar"
-                ]
+            const loiCorrecte = {
+                nom: "Loi de Newton", 
+                énoncé: "F = ma"  // ✅ BON: "énoncé" avec accent
             };
 
-            let loiIndex = 0;
+            let html = `<h2>🔍 Analyse du Bug</h2>`;
             
-            for (const [categorie, data] of Object.entries(categories)) {
-                for (let i = 0; i < 4; i++) {
-                    const id = `avancee_${categorie}_${loiIndex++}`;
-                    const auteur = data.noms[Math.floor(Math.random() * data.noms.length)];
-                    const concept = data.concepts[Math.floor(Math.random() * data.concepts.length)];
-                    const formule = formules[categorie][Math.floor(Math.random() * formules[categorie].length)];
-                    
-                    nouvellesLois[id] = {
-                        nom: `Loi de ${auteur} en ${concept.replace(/_/g, ' ')}`,
-                        categorie: categorie,
-                        domaines: [categorie, "physique_fondamentale"],
-                        : `Description détaillée du ${concept.replace(/_/g, ' ')} selon les travaux de ${auteur}.`,
-                        _latex: formule,
-                        description: `Cette loi fondamentale de la ${categorie} décrit le comportement du ${concept.replace(/_/g, ' ')} et a des implications profondes pour notre compréhension de l'univers.`,
-                        implications: [
-                            "Implication fondamentale pour la théorie",
-                            "Application expérimentale vérifiée",
-                            "Conséquence cosmologique importante"
-                        ],
-                        applications: [
-                            "Applications technologiques dérivées",
-                            "Utilisation en recherche fondamentale",
-                            "Impact sur le développement théorique"
-                        ],
-                        confiance: 0.85 + Math.random() * 0.1,
-                        date_decouverte: (1900 + Math.floor(Math.random() * 100)).toString(),
-                        decouvreurs: [auteur],
-                        formulation_mathematique: `Formulation mathématique complète : $${formule}$`
+            html += `<div class="law-card">
+                <h3>❌ LOI AVEC BUG</h3>
+                <div class="debug-info">
+                    const loi = {<br>
+                    &nbsp;&nbsp;nom: "Loi de Newton",<br>
+                    &nbsp;&nbsp;<span style="color:red">enonce</span>: "F = ma"  // SANS accent<br>
                     };
-                }
-            }
-            
-            // Fusionner avec les lois existantes
-            Object.assign(loisUniverselles, nouvellesLois);
-            
-            // Mettre à jour l'affichage
-            document.getElementById('law-count').textContent = Object.keys(loisUniverselles).length;
-            showLibrary();
-            
-            alert(`✅ 20 nouvelles lois détaillées générées ! Total: ${Object.keys(loisUniverselles).length} lois`);
-        }
-
-        // ==================== ÉDITEUR MANUEL AMÉLIORÉ ====================
-
-        function afficherEditeur() {
-            const htmlEditeur = `
-                <div class="editor-section">
-                    <h3>✏️ Ajouter une Nouvelle Loi Détaillée</h3>
-                    
-                    <div style="display: grid; gap: 15px; grid-template-columns: 1fr 1fr;">
-                        <div>
-                            <label><strong>Nom de la loi:</strong></label>
-                            <input type="text" id="nom-loi" placeholder="Ex: Loi de conservation de l'énergie">
-                        </div>
-                        
-                        <div>
-                            <label><strong>Catégorie:</strong></label>
-                            <select id="categorie-loi">
-                                <option value="physique_fondamentale">Physique Fondamentale</option>
-                                <option value="physique_quantique">Physique Quantique</option>
-                                <option value="relativite">Relativité</option>
-                                <option value="thermodynamique">Thermodynamique</option>
-                                <option value="electromagnetisme">Électromagnétisme</option>
-                                <option value="cosmologie">Cosmologie</option>
-                                <option value="physique_nucleaire">Physique Nucléaire</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label><strong>Énoncé court:</strong></label>
-                        <textarea id="-loi" placeholder="Description concise de la loi..." style="width: 100%; height: 60px;"></textarea>
-                    </div>
-
-                    <div>
-                        <label><strong>Description détaillée:</strong></label>
-                        <textarea id="description-loi" placeholder="Explication complète de la loi, son contexte historique, son importance..." style="width: 100%; height: 100px;"></textarea>
-                    </div>
-
-                    <div>
-                        <label><strong>Formule LaTeX:</strong></label>
-                        <input type="text" id="latex-loi" placeholder="Ex: E = mc^2" style="width: 100%;">
-                        <small style="color: #666;">Utilisez $$ pour les formules en display et $ pour les formules en ligne</small>
-                    </div>
-
-                    <div>
-                        <label><strong>Formulation mathématique:</strong></label>
-                        <textarea id="formulation-loi" placeholder="Description mathématique de la loi..." style="width: 100%; height: 60px;"></textarea>
-                    </div>
-
-                    <div>
-                        <label><strong>Implications (séparées par des virgules):</strong></label>
-                        <input type="text" id="implications-loi" placeholder="conséquence1, conséquence2, conséquence3..." style="width: 100%;">
-                    </div>
-
-                    <div>
-                        <label><strong>Applications (séparées par des virgules):</strong></label>
-                        <input type="text" id="applications-loi" placeholder="application1, application2, application3..." style="width: 100%;">
-                    </div>
-
-                    <button onclick="ajouterLoiManuellement()" style="background: #27ae60; width: 100%; padding: 15px; font-size: 16px;">
-                        ✅ Ajouter la Loi à la Bibliothèque
-                    </button>
-                    
-                    <button onclick="showLibrary()" style="background: #95a5a6; width: 100%; margin-top: 10px; padding: 15px;">
-                        ❌ Annuler et Revenir à la Bibliothèque
-                    </button>
                 </div>
-            `;
-            
-            document.getElementById('response').innerHTML = htmlEditeur;
+                <p><strong>Résultat :</strong> Énoncé : ${loiAvecBug.énoncé || "UNDEFINED !"}</p>
+                <p><em>JavaScript cherche "énoncé" mais trouve "enonce"</em></p>
+            </div>`;
+
+            html += `<div class="law-card">
+                <h3>✅ LOI CORRECTE</h3>
+                <div class="debug-info">
+                    const loi = {<br>
+                    &nbsp;&nbsp;nom: "Loi de Newton",<br>
+                    &nbsp;&nbsp;<span style="color:green">énoncé</span>: "F = ma"  // AVEC accent<br>
+                    };
+                </div>
+                <p><strong>Résultat :</strong> Énoncé : ${loiCorrecte.énoncé || "UNDEFINED !"}</p>
+                <p><em>JavaScript trouve bien "énoncé"</em></p>
+            </div>`;
+
+            html += `<div class="law-card">
+                <h3>🎯 SOLUTION</h3>
+                <p><strong>Dans TOUT le code, il faut utiliser :</strong></p>
+                <div class="debug-info">
+                    énoncé: "texte"  // ✅ TOUJOURS avec accent aigu<br>
+                    énoncé_latex: "formule"  // ✅ idem pour latex
+                </div>
+                <p><strong>Et JAMAIS :</strong></p>
+                <div class="debug-info">
+                    enonce: "texte"  // ❌ sans accent<br>
+                    enonce_latex: "formule"  // ❌ sans accent
+                </div>
+            </div>`;
+
+            document.getElementById('response').innerHTML = html;
         }
 
-        function ajouterLoiManuellement() {
-            const nom = document.getElementById('nom-loi').value;
-            const categorie = document.getElementById('categorie-loi').value;
-            const  = document.getElementById('-loi').value;
-            const description = document.getElementById('description-loi').value;
-            const latex = document.getElementById('latex-loi').value;
-            const formulation = document.getElementById('formulation-loi').value;
-            const implicationsTexte = document.getElementById('implications-loi').value;
-            const applicationsTexte = document.getElementById('applications-loi').value;
-            
-            if (!nom || !) {
-                alert('❌ Veuillez remplir au moins le nom et l\'énoncé de la loi');
-                return;
-            }
-            
-            const implications = implicationsTexte ? implicationsTexte.split(',').map(i => i.trim()) : ["À préciser"];
-            const applications = applicationsTexte ? applicationsTexte.split(',').map(i => i.trim()) : ["À préciser"];
+        // ==================== VERSION CORRIGÉE ====================
 
-            const id = 'manuelle_' + Date.now();
+        function genererLoisCorrigees() {
+            const nouvellesLois = {};
             
-            loisUniverselles[id] = {
-                nom: nom,
-                categorie: categorie,
-                domaines: [categorie, "physique_fondamentale"],
-                : ,
-                description: description || "Description détaillée à compléter.",
-                _latex: latex || null,
-                formulation_mathematique: formulation || "Formulation mathématique à compléter.",
-                implications: implications,
-                applications: applications,
-                confiance: 0.8,
-                date_decouverte: new Date().getFullYear().toString(),
-                decouvreurs: ["Contributeur"]
+            // CORRECTION : TOUJOURS utiliser "énoncé" et "énoncé_latex"
+            for (let i = 0; i < 5; i++) {
+                const id = 'corrigee_' + i;
+                nouvellesLois[id] = {
+                    nom: `Loi Corrigée ${i + 1}`,
+                    categorie: "physique_fondamentale",
+                    domaines: ["physique", "fondamental"],
+                    
+                    // ✅ CORRECT - avec accent
+                    énoncé: `La propriété ${i} d'un système reste constante.`,
+                    
+                    // ✅ CORRECT - avec accent  
+                    énoncé_latex: `E_${i} = k \\log W`,
+                    
+                    implications: ["Conséquence importante", "Application universelle"],
+                    confiance: 0.9,
+                    date_decouverte: "2024",
+                    decouvreurs: ["Équipe Debug"]
+                };
+            }
+
+            let html = `<h2>✅ Lois Générées CORRECTEMENT</h2>`;
+            
+            Object.values(nouvellesLois).forEach(loi => {
+                html += `<div class="law-card">
+                    <h3>${loi.nom}</h3>
+                    <p><strong>Énoncé :</strong> ${loi.énoncé}</p>
+                    <p><strong>Formule :</strong> ${loi.énoncé_latex}</p>
+                    <div class="debug-info" style="color:green;">
+                        ✅ PAS de "undefined" - tout fonctionne !
+                    </div>
+                </div>`;
+            });
+
+            html += `<div class="law-card">
+                <h3>🧠 Ce que vous devez retenir :</h3>
+                <p><strong>Règle d'or :</strong> Toujours utiliser le même nom de propriété</p>
+                <p><strong>Dans votre cas :</strong> "énoncé" avec accent dans TOUT le code</p>
+                <p><strong>Vérification :</strong> Utilisez Ctrl+F pour chercher "enonce" (sans accent) et remplacez par "énoncé"</p>
+            </div>`;
+
+            document.getElementById('response').innerHTML = html;
+        }
+
+        // ==================== OUTIL DE DEBUG ====================
+
+        function debugLois() {
+            // Créons une loi avec le bug pour démontrer
+            const loiTest = {
+                nom: "Loi Test",
+                // ❌ Version avec bug
+                enonce: "Ceci est un énoncé",
+                enonce_latex: "E = mc^2",
+                // ✅ Version correcte  
+                énoncé: "Ceci est un énoncé correct",
+                énoncé_latex: "E = mc^2"
             };
 
-            document.getElementById('law-count').textContent = Object.keys(loisUniverselles).length;
-            showLibrary();
+            let html = `<h2>🔧 Outil de Debug</h2>`;
             
-            alert('✅ Loi ajoutée avec succès à la bibliothèque !');
-        }
-
-        // ==================== FONCTIONS PRINCIPALES CORRIGÉES ====================
-
-        function renderMathFormulas() {
-            if (window.MathJax && MathJax.typesetPromise) {
-                MathJax.typesetPromise().catch(err => {
-                    console.log('MathJax error:', err);
-                });
-            }
-        }
-
-        function showLibrary() {
-            const categories = {};
-            
-            Object.values(loisUniverselles).forEach(loi => {
-                if (!categories[loi.categorie]) {
-                    categories[loi.categorie] = [];
-                }
-                categories[loi.categorie].push(loi);
-            });
-
-            let html = `<h2>📚 Bibliothèque des Lois Universelles</h2>
-                       <p><strong>${Object.keys(loisUniverselles).length} lois fondamentales cataloguées</strong></p>`;
-
-            for (const [categorie, lois] of Object.entries(categories)) {
-                html += `<div class="library-section">
-                        <h3>${categorie.replace(/_/g, ' ').toUpperCase()} (${lois.length} lois)</h3>`;
-                
-                lois.forEach(loi => {
-                    const formuleDisplay = loi.énoncé_latex ? 
-                        `<div class="formula-container">
-                            <div class="math-display">$$${loi.énoncé_latex}$$</div>
-                         </div>` : '';
-                    
-                    html += `<div class="law-card">
-                            <h4>${loi.nom}</h4>
-                            <p><strong>Énoncé :</strong> ${loi.énoncé}</p>
-                            
-                            ${loi.description ? `<div class="law-details">
-                                <strong>Description :</strong> ${loi.description}
-                            </div>` : ''}
-                            
-                            ${formuleDisplay}
-                            
-                            ${loi.formulation_mathematique ? `<div class="law-details">
-                                <strong>Formulation mathématique :</strong> ${loi.formulation_mathematique}
-                            </div>` : ''}
-                            
-                            <div><strong>Domaines :</strong> ${loi.domaines.map(d => `<span class="domain-tag">${d}</span>`).join('')}</div>
-                            
-                            <div style="margin: 15px 0;">
-                                <strong>Implications :</strong>
-                                <ul>${loi.implications.map(imp => `<li>${imp}</li>`).join('')}</ul>
-                            </div>
-                            
-                            ${loi.applications ? `<div style="margin: 15px 0;">
-                                <strong>Applications :</strong>
-                                <ul>${loi.applications.map(app => `<li>${app}</li>`).join('')}</ul>
-                            </div>` : ''}
-                            
-                            <div class="confidence-bar">
-                                <div class="confidence-fill" style="width: ${loi.confiance * 100}%"></div>
-                            </div>
-                            <small>
-                                <strong>Niveau de confiance :</strong> ${(loi.confiance * 100).toFixed(0)}% | 
-                                <strong>Découverte :</strong> ${loi.date_decouverte} | 
-                                <strong>Auteur(s) :</strong> ${Array.isArray(loi.decouvreurs) ? loi.decouvreurs.join(', ') : loi.decouvreurs}
-                            </small>
-                        </div>`;
-                });
-                
-                html += `</div>`;
-            }
-
-            document.getElementById('response').innerHTML = html;
-            setTimeout(renderMathFormulas, 100);
-        }
-
-        function showRandomLaw() {
-            const lois = Object.values(loisUniverselles);
-            if (lois.length === 0) {
-                document.getElementById('response').innerHTML = "<p>Aucune loi dans la bibliothèque.</p>";
-                return;
-            }
-            
-            const loiAleatoire = lois[Math.floor(Math.random() * lois.length)];
-            const formuleDisplay = loiAleatoire.énoncé_latex ? 
-                `<div class="formula-container">
-                    <div class="math-display">$$${loiAleatoire.énoncé_latex}$$</div>
-                 </div>` : '';
-            
-            const html = `<div class="law-card">
-                <h3>🎲 Loi Aléatoire</h3>
-                <h4>${loiAleatoire.nom}</h4>
-                <p><strong>Énoncé :</strong> ${loiAleatoire.énoncé}</p>
-                
-                ${loiAleatoire.description ? `<div class="law-details">
-                    <strong>Description :</strong> ${loiAleatoire.description}
-                </div>` : ''}
-                
-                ${formuleDisplay}
-                
-                ${loiAleatoire.formulation_mathematique ? `<div class="law-details">
-                    <strong>Formulation mathématique :</strong> ${loiAleatoire.formulation_mathematique}
-                </div>` : ''}
-                
-                <p><strong>Domaine :</strong> ${loiAleatoire.domaines.join(', ')}</p>
-                <p><strong>Implications :</strong> ${loiAleatoire.implications.join('; ')}</p>
-                ${loiAleatoire.applications ? `<p><strong>Applications :</strong> ${loiAleatoire.applications.join('; ')}</p>` : ''}
-                <p><strong>Découvreurs :</strong> ${Array.isArray(loiAleatoire.decouvreurs) ? loiAleatoire.decouvreurs.join(', ') : loiAleatoire.decouvreurs}</p>
-                <p><strong>Date :</strong> ${loiAleatoire.date_decouverte}</p>
-                <div class="confidence-bar">
-                    <div class="confidence-fill" style="width: ${loiAleatoire.confiance * 100}%"></div>
+            html += `<div class="law-card">
+                <h3>Test de la Loi</h3>
+                <div class="debug-info">
+                    // Regardons ce que contient la loi :<br>
+                    console.log(loiTest);
                 </div>
-                <small>Niveau de confiance: ${(loiAleatoire.confiance * 100).toFixed(0)}%</small>
+                
+                <table style="width:100%; border-collapse: collapse; margin: 15px 0;">
+                    <tr style="background: #f8f9fa;">
+                        <th style="padding:10px; border:1px solid #ddd;">Propriété</th>
+                        <th style="padding:10px; border:1px solid #ddd;">Valeur</th>
+                        <th style="padding:10px; border:1px solid #ddd;">Résultat</th>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px; border:1px solid #ddd;">loiTest.enonce</td>
+                        <td style="padding:10px; border:1px solid #ddd;">${loiTest.enonce}</td>
+                        <td style="padding:10px; border:1px solid #ddd; color:red;">❌ Mauvais nom</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px; border:1px solid #ddd;">loiTest.énoncé</td>
+                        <td style="padding:10px; border:1px solid #ddd;">${loiTest.énoncé}</td>
+                        <td style="padding:10px; border:1px solid #ddd; color:green;">✅ Bon nom</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px; border:1px solid #ddd;">loiTest.enonce_latex</td>
+                        <td style="padding:10px; border:1px solid #ddd;">${loiTest.enonce_latex}</td>
+                        <td style="padding:10px; border:1px solid #ddd; color:red;">❌ Mauvais nom</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px; border:1px solid #ddd;">loiTest.énoncé_latex</td>
+                        <td style="padding:10px; border:1px solid #ddd;">${loiTest.énoncé_latex}</td>
+                        <td style="padding:10px; border:1px solid #ddd; color:green;">✅ Bon nom</td>
+                    </tr>
+                </table>
             </div>`;
-            
+
+            html += `<div class="law-card">
+                <h3>🎯 Comment corriger dans VOTRE code :</h3>
+                <p><strong>Étape 1 :</strong> Cherchez "enonce" (sans accent) dans tout le code</p>
+                <p><strong>Étape 2 :</strong> Remplacez TOUS les "enonce" par "énoncé"</p>
+                <p><strong>Étape 3 :</strong> Remplacez TOUS les "enonce_latex" par "énoncé_latex"</p>
+                <p><strong>Étape 4 :</strong> Testez à nouveau</p>
+                
+                <div class="debug-info">
+                    // AVANT (bug) :<br>
+                    enonce: "texte"<br>
+                    enonce_latex: "formule"<br><br>
+                    
+                    // APRÈS (corrigé) :<br>
+                    énoncé: "texte"<br>
+                    énoncé_latex: "formule"
+                </div>
+            </div>`;
+
             document.getElementById('response').innerHTML = html;
-            setTimeout(renderMathFormulas, 100);
         }
 
-        function exporterBibliotheque() {
-            const dataStr = JSON.stringify(loisUniverselles, null, 2);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+        // ==================== CORRECTION DU GÉNÉRATEUR ORIGINAL ====================
+
+        function corrigerGenerateurOriginal() {
+            // VOICI CE QU'IL FAUT CHANGER DANS VOTRE CODE ORIGINAL :
             
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', 'lois_universelles_detaillees.json');
-            linkElement.click();
+            // ❌ AVANT (dans le générateur) :
+            const loiBug = {
+                nom: "Loi Bug",
+                enonce: "texte",           // ❌ SANS accent
+                enonce_latex: "formule"    // ❌ SANS accent
+            };
             
-            alert('📥 Bibliothèque détaillée exportée !');
+            // ✅ APRÈS (corrigé) :
+            const loiFix = {
+                nom: "Loi Fix", 
+                énoncé: "texte",           // ✅ AVEC accent
+                énoncé_latex: "formule"    // ✅ AVEC accent
+            };
+            
+            alert("Regardez les commentaires dans le code pour voir les corrections !");
         }
-
-        async function askQLang() {
-            const question = document.getElementById('question').value.trim();
-            const responseDiv = document.getElementById('response');
-
-            if (!question) {
-                responseDiv.innerHTML = "<p>🌠 Veuillez poser une question cosmique.</p>";
-                return;
-            }
-
-            responseDiv.innerHTML = "<p>🌀 Consultation des archives universelles...</p>";
-
-            await new Promise(resolve => setTimeout(resolve, 1500));
-
-            // Réponse intelligente basée sur le contenu réel
-            const questionLower = question.toLowerCase();
-            let reponse = `### 🌟 Réponse à: "${question}"\n\n`;
-            let loisPertinentes = [];
-            
-            // Recherche dans les lois existantes
-            Object.values(loisUniverselles).forEach(loi => {
-                if (questionLower.includes(loi.categorie) || 
-                    loi.domaines.some(domaine => questionLower.includes(domaine)) ||
-                    loi.nom.toLowerCase().includes(questionLower)) {
-                    loisPertinentes.push(loi);
-                }
-            });
-            
-            if (loisPertinentes.length > 0) {
-                reponse += `**${loisPertinentes.length} loi(s) pertinente(s) trouvée(s)**\n\n`;
-                loisPertinentes.forEach(loi => {
-                    reponse += `### ${loi.nom}\n`;
-                    reponse += `${loi.description}\n\n`;
-                    if (loi.énoncé_latex) {
-                        reponse += `**Formule :** $${loi.énoncé_latex}$\n\n`;
-                    }
-                });
-            } else {
-                reponse += "**Analyse générale**\n\n";
-                reponse += `Votre question "${question}" explore des concepts universels fondamentaux. \n\n`;
-                reponse += `La bibliothèque contient ${Object.keys(loisUniverselles).length} lois détaillées pour approfondir ces questions.`;
-            }
-            
-            reponse += `\n\n*Basé sur ${Object.keys(loisUniverselles).length} lois universelles documentées*`;
-
-            responseDiv.innerHTML = marked.parse(reponse);
-            setTimeout(renderMathFormulas, 100);
-        }
-
-        // ==================== INITIALISATION ====================
-
-        function init() {
-            document.getElementById('law-count').textContent = Object.keys(loisUniverselles).length;
-            showLibrary();
-        }
-
-        document.addEventListener('DOMContentLoaded', init);
-        document.getElementById('question').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') askQLang();
-        });
     </script>
 </body>
 </html>
