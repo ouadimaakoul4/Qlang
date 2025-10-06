@@ -15,7 +15,69 @@
         ready() {
           MathJax.startup.defaultReady();
           // Once MathJax is ready, render the library
-          renderLibrary();
+          function renderLibrary(filterCategory = 'all', searchTerm = '') {
+  const container = document.getElementById('laws-container');
+  container.innerHTML = '';
+
+  let lawsToShow = Object.entries(universalLaws);
+
+  // Apply category filter
+  if (filterCategory !== 'all') {
+    lawsToShow = lawsToShow.filter(([id, law]) => law.category === filterCategory);
+  }
+
+  // Apply search filter
+  if (searchTerm) {
+    const term = searchTerm.toLowerCase();
+    lawsToShow = lawsToShow.filter(([id, law]) => 
+      law.name.toLowerCase().includes(term) || 
+      law.description.toLowerCase().includes(term) ||
+      law.statement_latex.toLowerCase().includes(term)
+    );
+  }
+
+  if (lawsToShow.length === 0) {
+    container.innerHTML = '<p class="no-results">No laws match your search criteria.</p>';
+    return;
+  }
+
+  for (const [id, law] of lawsToShow) {
+    const card = document.createElement('div');
+    card.className = 'law-card';
+    card.innerHTML = `
+      <span class="category-tag ${law.category}">${law.category.charAt(0).toUpperCase() + law.category.slice(1)}</span>
+      <h3>${law.name}</h3>
+      <div class="equation-clickable" data-law-id="${id}">
+        $$${law.statement_latex}$$
+      </div>
+      <p class="law-description">${law.description}</p>
+    `;
+    container.appendChild(card);
+  }
+
+  // 👇 CORRECTION FONDAMENTALE : Attendez que MathJax soit prêt
+  if (window.MathJax && window.MathJax.startup) {
+    window.MathJax.startup.promise.then(() => {
+      // Rendre les équations dans le conteneur
+      MathJax.typeset([container]);
+
+      // Ensuite, attacher les écouteurs d'événements
+      document.querySelectorAll('.equation-clickable').forEach(el => {
+        el.addEventListener('click', () => {
+          window.location.hash = `proof/${el.dataset.lawId}`;
+          showProofView(el.dataset.lawId);
+        });
+      });
+    }).catch(err => {
+      console.error("Erreur lors du rendu MathJax :", err);
+    });
+  } else {
+    // Si MathJax n'est pas chargé, réessayer après un délai
+    setTimeout(() => {
+      renderLibrary(filterCategory, searchTerm);
+    }, 500);
+  }
+};
         }
       }
     };
