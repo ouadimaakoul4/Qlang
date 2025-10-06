@@ -123,11 +123,106 @@
 
     <script>
         // ==================== LIBRARY OF UNIVERSAL LAWS ====================
-
-        const universalLaws = {
-
-            
+   const universalLaws = {
     // === FUNDAMENTAL PHYSICS ===
+    "thermodynamics_2": {
+        "name": "Second Law of Thermodynamics",
+        "category": "fundamental_physics",
+        "domains": ["thermodynamics", "entropy", "time_arrow"],
+        "statement": "The entropy of an isolated system can only increase or remain constant",
+        "statement_latex": "\\Delta S \\geq 0",
+        "formulation": "In any natural process, the total entropy of the universe increases",
+        "implications": [
+            "Irreversible time arrow",
+            "Impossibility of perpetual motion",
+            "Heat death of the universe as final state"
+        ],
+        "proofs": [
+            "Calorimetry experiments",
+            "Real heat engines",
+            "Statistical foundations (Boltzmann)"
+        ],
+        "limitations": "Open systems and far from equilibrium",
+        "confidence": 0.99,
+        "discovery_date": "1850",
+        "discoverers": ["Rudolf Clausius", "William Thomson"],
+        "revolutions": ["thermodynamics", "cosmology"]
+    },
+    "general_relativity": {
+        "name": "General Relativity",
+        "category": "fundamental_physics",
+        "domains": ["gravitation", "space_time", "cosmology"],
+        "statement": "Matter and energy curve spacetime, and this curvature dictates motion",
+        "statement_latex": "G_{\\mu\\nu} = \\frac{8\\pi G}{c^4} T_{\\mu\\nu}",
+        "formulation": "Einstein's equation relating geometry and material content",
+        "implications": [
+            "Light deflection by masses",
+            "Gravitational waves",
+            "Expansion of the universe",
+            "Black holes"
+        ],
+        "proofs": [
+            "Stellar deflection during eclipses (1919)",
+            "Gravitational redshift",
+            "Gravitational waves (LIGO 2015)"
+        ],
+        "confidence": 0.98,
+        "discovery_date": "1915",
+        "discoverers": ["Albert Einstein"],
+        "revolutions": ["gravitation", "cosmology"]
+    },
+    "quantum_mechanics": {
+        "name": "Principles of Quantum Mechanics",
+        "category": "fundamental_physics",
+        "domains": ["quantum", "uncertainty", "superposition"],
+        "statement": "System described by a wave function, unitary evolution, probabilistic measurement",
+        "statement_latex": "i\\hbar\\frac{\\partial}{\\partial t}\\Psi = \\hat{H}\\Psi",
+        "formulation": "Schrödinger equation describing temporal evolution",
+        "implications": [
+            "Wave-particle duality",
+            "Quantum entanglement",
+            "Uncertainty principle",
+            "Tunnel effect"
+        ],
+        "proofs": [
+            "Stern-Gerlach experiment",
+            "Interferences with individual particles",
+            "Quantum computers"
+        ],
+        "confidence": 0.99,
+        "discovery_date": "1925-1927",
+        "discoverers": ["Heisenberg", "Schrödinger", "Dirac", "Bohr"]
+    },
+    "mass_energy_equivalence": {
+        "name": "Mass-Energy Equivalence",
+        "category": "fundamental_physics",
+        "domains": ["relativity", "energy", "mass"],
+        "statement": "Mass and energy are equivalent and convertible",
+        "statement_latex": "E = mc^2",
+        "implications": [
+            "Nuclear energy",
+            "Particle creation and annihilation",
+            "Spacetime curvature by energy"
+        ],
+        "confidence": 0.99,
+        "discovery_date": "1905",
+        "discoverers": ["Albert Einstein"]
+    },
+    "heisenberg_uncertainty": {
+        "name": "Heisenberg Uncertainty Principle",
+        "category": "fundamental_physics",
+        "domains": ["quantum", "uncertainty", "measurement"],
+        "statement": "Impossibility of simultaneously knowing with precision certain pairs of properties",
+        "statement_latex": "\\Delta x \\Delta p \\geq \\frac{\\hbar}{2}",
+        "implications": [
+            "Fundamental measurement limits",
+            "Probabilistic nature of quantum reality",
+            "Zero-point energy"
+        ],
+        "confidence": 0.98,
+        "discovery_date": "1927",
+        "discoverers": ["Werner Heisenberg"]
+    },
     "newtons_third_law": {
         "name": "Newton's Third Law of Motion",
         "category": "fundamental_physics",
@@ -150,7 +245,6 @@
         "discoverers": ["Isaac Newton"],
         "revolutions": ["classical_mechanics"]
     },
-
     "pauli_exclusion_principle": {
         "name": "Pauli Exclusion Principle",
         "category": "fundamental_physics",
@@ -173,8 +267,67 @@
         "discoverers": ["Wolfgang Pauli"],
         "revolutions": ["quantum_mechanics"]
     },
+    "newtons_first_law": {
+        "name": "Newton's First Law of Motion",
+        "category": "fundamental_physics",
+        "domains": ["mechanics", "force"],
+        "statement": "A body remains at rest or in uniform motion unless acted upon by a force",
+        "statement_latex": "\\vec{F} = 0 \\implies \\vec{a} = 0",
+        "formulation": "Objects maintain their state of motion in the absence of net external forces",
+        "implications": [
+            "Foundation of inertia",
+            "Conservation of momentum",
+            "Reference frames"
+        ],
+        "proofs": [
+            "Galilean experiments",
+            "Motion of planets",
+            "Modern dynamics"
+        ],
+        "confidence": 0.99,
+        "discovery_date": "1687",
+        "discoverers": ["Isaac Newton"],
+        "revolutions": ["classical_mechanics"]
+    },
+    "born_rule": {
+        "name": "Born Rule",
+        "category": "fundamental_physics",
+        "domains": ["quantum", "probability", "measurement"],
+        "statement": "The probability of a quantum measurement outcome is the square of the wave function amplitude",
+        "statement_latex": "P(x) = |\\psi(x)|^2",
+        "formulation": "Measurement probabilities are derived from the wave function",
+        "implications": [
+            "Probabilistic nature of quantum mechanics",
+            "Interpretation of wave function",
+            "Quantum measurement problem"
+        ],
+        "proofs": [
+            "Double-slit experiment",
+            "Quantum state tomography",
+            "Photon detection"
+        ],
+        "confidence": 0.98,
+        "discovery_date": "1926",
+        "discoverers": ["Max Born"],
+        "revolutions": ["quantum_mechanics"]
+    },
 
     // === COSMOLOGY ===
+    "hubble_expansion": {
+        "name": "Hubble-Lemaître Law",
+        "category": "cosmology",
+        "domains": ["expansion", "cosmology"],
+        "statement": "Galaxies recede at a speed proportional to their distance",
+        "statement_latex": "v = H_0 d",
+        "implications": [
+            "Expanding universe",
+            "Big Bang as origin",
+            "Finite age of the universe"
+        ],
+        "confidence": 0.95,
+        "discovery_date": "1927-1929",
+        "discoverers": ["Georges Lemaître", "Edwin Hubble"]
+    },
     "dark_energy_dominance": {
         "name": "Dark Energy Dominance",
         "category": "cosmology",
@@ -197,8 +350,60 @@
         "discoverers": ["Saul Perlmutter", "Brian Schmidt", "Adam Riess"],
         "revolutions": ["cosmology"]
     },
+    "cosmological_principle": {
+        "name": "Cosmological Principle",
+        "category": "cosmology",
+        "domains": ["cosmology", "universe_structure"],
+        "statement": "The universe is homogeneous and isotropic on large scales",
+        "statement_latex": null,
+        "formulation": "No preferred location or direction exists in the universe at cosmological scales",
+        "implications": [
+            "Simplified cosmological models",
+            "Uniform cosmic microwave background",
+            "Large-scale structure formation"
+        ],
+        "proofs": [
+            "CMB isotropy (COBE, Planck)",
+            "Galaxy distribution surveys",
+            "Isotropic expansion rates"
+        ],
+        "confidence": 0.95,
+        "discovery_date": "1930s",
+        "discoverers": ["Edwin Hubble", "Georges Lemaître"],
+        "revolutions": ["cosmology"]
+    },
 
     // === INFORMATION AND COMPLEXITY ===
+    "bekenstein": {
+        "name": "Bekenstein Bound",
+        "category": "information",
+        "domains": ["information", "gravity", "holography"],
+        "statement": "Maximum amount of information contained in a region of space",
+        "statement_latex": "I \\leq \\frac{2\\pi R E}{\\hbar c \\ln 2}",
+        "implications": [
+            "Holographic principle",
+            "Black hole entropy",
+            "Fundamental computational limits"
+        ],
+        "confidence": 0.90,
+        "discovery_date": "1973",
+        "discoverers": ["Jacob Bekenstein"]
+    },
+    "landauer": {
+        "name": "Landauer's Principle",
+        "category": "information",
+        "domains": ["information", "thermodynamics", "computation"],
+        "statement": "Erasing one bit of information dissipates at least kT ln(2) of energy",
+        "statement_latex": "E \\geq kT \\ln 2",
+        "implications": [
+            "Information/entropy link",
+            "Energy limits of computation",
+            "Reversible computers"
+        ],
+        "confidence": 0.85,
+        "discovery_date": "1961",
+        "discoverers": ["Rolf Landauer"]
+    },
     "shannon_entropy": {
         "name": "Shannon's Information Entropy",
         "category": "information",
@@ -268,164 +473,8 @@
         "discovery_date": "1763",
         "discoverers": ["Thomas Bayes"],
         "revolutions": ["statistics", "machine_learning"]
-    },
-
-            // === FUNDAMENTAL PHYSICS ===
-            "thermodynamics_2": {
-                "name": "Second Law of Thermodynamics",
-                "category": "fundamental_physics",
-                "domains": ["thermodynamics", "entropy", "time_arrow"],
-                "statement": "The entropy of an isolated system can only increase or remain constant",
-                "statement_latex": "\\\\Delta S \\\\geq 0",
-                "formulation": "In any natural process, the total entropy of the universe increases",
-                "implications": [
-                    "Irreversible time arrow",
-                    "Impossibility of perpetual motion", 
-                    "Heat death of the universe as final state"
-                ],
-                "proofs": [
-                    "Calorimetry experiments",
-                    "Real heat engines",
-                    "Statistical foundations (Boltzmann)"
-                ],
-                "limitations": "Open systems and far from equilibrium",
-                "confidence": 0.99,
-                "discovery_date": "1850",
-                "discoverers": ["Rudolf Clausius", "William Thomson"],
-                "revolutions": ["thermodynamics", "cosmology"]
-            },
-
-            "general_relativity": {
-                "name": "General Relativity", 
-                "category": "fundamental_physics",
-                "domains": ["gravitation", "space_time", "cosmology"],
-                "statement": "Matter and energy curve spacetime, and this curvature dictates motion",
-                "statement_latex": "G_{\\\\mu\\\\nu} = \\\\frac{8\\\\pi G}{c^4} T_{\\\\mu\\\\nu}",
-                "formulation": "Einstein's equation relating geometry and material content",
-                "implications": [
-                    "Light deflection by masses",
-                    "Gravitational waves",
-                    "Expansion of the universe", 
-                    "Black holes"
-                ],
-                "proofs": [
-                    "Stellar deflection during eclipses (1919)",
-                    "Gravitational redshift", 
-                    "Gravitational waves (LIGO 2015)"
-                ],
-                "confidence": 0.98,
-                "discovery_date": "1915",
-                "discoverers": ["Albert Einstein"],
-                "revolutions": ["gravitation", "cosmology"]
-            },
-
-            "quantum_mechanics": {
-                "name": "Principles of Quantum Mechanics",
-                "category": "fundamental_physics", 
-                "domains": ["quantum", "uncertainty", "superposition"],
-                "statement": "System described by a wave function, unitary evolution, probabilistic measurement",
-                "statement_latex": "i\\\\hbar\\\\frac{\\\\partial}{\\\\partial t}\\\\Psi = \\\\hat{H}\\\\Psi",
-                "formulation": "Schrödinger equation describing temporal evolution",
-                "implications": [
-                    "Wave-particle duality",
-                    "Quantum entanglement", 
-                    "Uncertainty principle",
-                    "Tunnel effect"
-                ],
-                "proofs": [
-                    "Stern-Gerlach experiment",
-                    "Interferences with individual particles",
-                    "Quantum computers"
-                ],
-                "confidence": 0.99,
-                "discovery_date": "1925-1927", 
-                "discoverers": ["Heisenberg", "Schrödinger", "Dirac", "Bohr"]
-            },
-
-            // === COSMOLOGY ===
-            "hubble_expansion": {
-                "name": "Hubble-Lemaître Law",
-                "category": "cosmology",
-                "domains": ["expansion", "cosmology"], 
-                "statement": "Galaxies recede at a speed proportional to their distance",
-                "statement_latex": "v = H_0 d",
-                "implications": [
-                    "Expanding universe",
-                    "Big Bang as origin", 
-                    "Finite age of the universe"
-                ],
-                "confidence": 0.95,
-                "discovery_date": "1927-1929",
-                "discoverers": ["Georges Lemaître", "Edwin Hubble"]
-            },
-
-            // === INFORMATION AND COMPLEXITY ===  
-            "bekenstein": {
-                "name": "Bekenstein Bound",
-                "category": "information",
-                "domains": ["information", "gravity", "holography"],
-                "statement": "Maximum amount of information contained in a region of space",
-                "statement_latex": "I \\\\leq \\\\frac{2\\\\pi R E}{\\\\hbar c \\\\ln 2}",
-                "implications": [
-                    "Holographic principle", 
-                    "Black hole entropy",
-                    "Fundamental computational limits"
-                ],
-                "confidence": 0.90,
-                "discovery_date": "1973",
-                "discoverers": ["Jacob Bekenstein"]
-            },
-
-            "landauer": {
-                "name": "Landauer's Principle", 
-                "category": "information",
-                "domains": ["information", "thermodynamics", "computation"],
-                "statement": "Erasing one bit of information dissipates at least kT ln(2) of energy", 
-                "statement_latex": "E \\\\geq kT \\\\ln 2",
-                "implications": [
-                    "Information/entropy link",
-                    "Energy limits of computation", 
-                    "Reversible computers"
-                ],
-                "confidence": 0.85,
-                "discovery_date": "1961",
-                "discoverers": ["Rolf Landauer"]
-            },
-
-            // === OTHER IMPORTANT LAWS ===
-            "mass_energy_equivalence": {
-                "name": "Mass-Energy Equivalence",
-                "category": "fundamental_physics",
-                "domains": ["relativity", "energy", "mass"],
-                "statement": "Mass and energy are equivalent and convertible",
-                "statement_latex": "E = mc^2", 
-                "implications": [
-                    "Nuclear energy",
-                    "Particle creation and annihilation",
-                    "Spacetime curvature by energy"
-                ],
-                "confidence": 0.99,
-                "discovery_date": "1905",
-                "discoverers": ["Albert Einstein"]
-            },
-
-            "heisenberg_uncertainty": {
-                "name": "Heisenberg Uncertainty Principle",
-                "category": "fundamental_physics", 
-                "domains": ["quantum", "uncertainty", "measurement"],
-                "statement": "Impossibility of simultaneously knowing with precision certain pairs of properties",
-                "statement_latex": "\\\\Delta x \\\\Delta p \\\\geq \\\\frac{\\\\hbar}{2}",
-                "implications": [
-                    "Fundamental measurement limits",
-                    "Probabilistic nature of quantum reality",
-                    "Zero-point energy"
-                ],
-                "confidence": 0.98,
-                "discovery_date": "1927",
-                "discoverers": ["Werner Heisenberg"]
-            }
-        };
-
+    }
+};
         // ==================== MATHJAX FUNCTIONS ====================
 
         // MathJax Configuration
@@ -482,48 +531,47 @@
             let bestType = null;
 
             const questionTypes = {
-                "fundamentality_info": {
-                    "keywords": ["information", "fundamental", "matter", "bit", "primitive"],
-                    "laws": ["bekenstein", "landauer", "thermodynamics_2"],
-                    "synthesis_template": "Information appears as a fundamental entity, perhaps more primitive than matter itself."
-                },
-                "relativity": {
-                    "keywords": ["relativity", "einstein", "space-time", "gravitation"],
-                    "laws": ["general_relativity", "mass_energy_equivalence"],
-                    "synthesis_template": "Relativity revolutionizes our understanding of space, time, and gravitation."
-                },
-                "quantum": {
-                    "keywords": ["quantum", "uncertainty", "schrödinger", "heisenberg"],
-                    "laws": ["quantum_mechanics", "heisenberg_uncertainty"],
-                    "synthesis_template": "The quantum world reveals a probabilistic and counter-intuitive reality."
-                },
-                "thermodynamics": {
-                    "keywords": ["entropy", "thermodynamics", "disorder", "order"],
-                    "laws": ["thermodynamics_2", "landauer"],
-                    "synthesis_template": "Thermodynamics governs energy transformations and defines the arrow of time."
-                },
-                "cosmology": {
-                    "keywords": ["universe", "expansion", "big bang", "cosmology"],
-                    "laws": ["hubble_expansion", "general_relativity"],
-                    "synthesis_template": "Modern cosmology reveals an expanding universe, born from an extreme primordial state."
-                }
-                "classical_mechanics": {
-        "keywords": ["newton", "motion", "force", "mechanics"],
-        "laws": ["newtons_third_law"],
+    "fundamentality_info": {
+        "keywords": ["information", "fundamental", "matter", "bit", "primitive"],
+        "laws": ["bekenstein", "landauer", "shannon_entropy"],
+        "synthesis_template": "Information appears as a fundamental entity, perhaps more primitive than matter itself."
+    },
+    "relativity": {
+        "keywords": ["relativity", "einstein", "space-time", "gravitation", "mass-energy"],
+        "laws": ["general_relativity", "mass_energy_equivalence"],
+        "synthesis_template": "Relativity revolutionizes our understanding of space, time, and gravitation."
+    },
+    "quantum": {
+        "keywords": ["quantum", "uncertainty", "schrödinger", "heisenberg", "born", "pauli", "superposition", "fermions"],
+        "laws": ["quantum_mechanics", "heisenberg_uncertainty", "pauli_exclusion_principle", "born_rule"],
+        "synthesis_template": "The quantum world reveals a probabilistic and counter-intuitive reality."
+    },
+    "thermodynamics": {
+        "keywords": ["entropy", "thermodynamics", "disorder", "order", "energy"],
+        "laws": ["thermodynamics_2", "landauer"],
+        "synthesis_template": "Thermodynamics governs energy transformations and defines the arrow of time."
+    },
+    "cosmology": {
+        "keywords": ["universe", "expansion", "big bang", "cosmology", "dark energy", "homogeneous", "isotropic"],
+        "laws": ["hubble_expansion", "general_relativity", "dark_energy_dominance", "cosmological_principle"],
+        "synthesis_template": "Modern cosmology reveals an expanding universe, born from an extreme primordial state."
+    },
+    "classical_mechanics": {
+        "keywords": ["newton", "motion", "force", "mechanics", "inertia"],
+        "laws": ["newtons_third_law", "newtons_first_law"],
         "synthesis_template": "Classical mechanics governs the motion of macroscopic objects under forces."
     },
     "evolution": {
-        "keywords": ["evolution", "natural selection", "darwin", "biology"],
+        "keywords": ["evolution", "natural selection", "darwin", "biology", "adaptation"],
         "laws": ["natural_selection"],
         "synthesis_template": "Natural selection drives the evolution of life through differential survival and reproduction."
     },
     "probability_statistics": {
-        "keywords": ["probability", "bayes", "statistics", "inference"],
+        "keywords": ["probability", "bayes", "statistics", "inference", "information", "entropy"],
         "laws": ["bayes_theorem", "shannon_entropy"],
         "synthesis_template": "Probability and statistics provide tools to quantify uncertainty and information."
-    },
-            };
-
+    }
+};
             for (const [type, data] of Object.entries(questionTypes)) {
                 const score = data.keywords.filter(word => 
                     questionLower.includes(word)
