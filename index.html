@@ -20,7 +20,14 @@
     ready() {
       MathJax.startup.defaultReady();
       // Once MathJax is ready, render the library
-      renderLibrary();
+      card.innerHTML = `
+  <span class="category-tag ${law.category}">${law.category.charAt(0).toUpperCase() + law.category.slice(1)}</span>
+  <h3>${law.name}</h3>
+  <div class="equation-clickable" data-law-id="${id}">
+    $${law.statement_latex}$  <!-- Changed from $$ to $ -->
+  </div>
+  <p class="law-description">${law.description}</p>
+`;
     }
   }
 };
