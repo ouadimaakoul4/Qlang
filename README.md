@@ -1,10 +1,5 @@
 QLang v1.0 — Library of Universal Laws
 
-https://img.shields.io/badge/QLang-Universal%2520Laws-blueviolet
-https://img.shields.io/badge/version-1.0-green
-https://img.shields.io/badge/laws-27-brightgreen
-https://img.shields.io/badge/license-MIT-lightgrey
-
     Explore cosmic knowledge through the fundamental laws that govern our universe
 
 QLang is an interactive web application that catalogs and explores the fundamental laws spanning physics, cosmology, information theory, biology, mathematics, and chemistry. It's a digital compendium of humanity's understanding of universal principles.
@@ -40,7 +35,7 @@ Local Installation
 
 bash
 
-git clone https://github.com/your-username/qlang.git
+git clone https://github.com/ouadimaakoul4/qlang.git
 cd qlang
 
     Open index.html in your browser:
