@@ -321,12 +321,172 @@
         <div class="footer">
             <p>QLang v1.0 — A comprehensive library of universal laws spanning physics, cosmology, information theory, and more</p>
         </div>
+<!-- Add this to the controls section -->
+<div class="button-group">
+    <button onclick="showByCategory('fundamental_physics')" class="secondary">⚛️ Physics</button>
+    <button onclick="showByCategory('cosmology')" class="secondary">🌌 Cosmology</button>
+    <button onclick="showByCategory('information')" class="secondary">💡 Information</button>
+</div>
+
+<!-- Add filter controls -->
+<div class="filters" style="margin: 15px 0; display: none;" id="filters">
+    <input type="text" id="domainFilter" placeholder="Filter by domain (quantum, relativity...)" style="margin-bottom: 10px;">
+    <input type="range" id="confidenceFilter" min="0" max="100" value="0" style="width: 100%;">
+    <label for="confidenceFilter">Minimum Confidence: <span id="confidenceValue">0%</span></label>
+</div>
     </div>
 
     <script>
+
+// Add these new functions to enhance functionality
+
+function showByCategory(category) {
+    const laws = Object.values(universalLaws).filter(law => law.category === category);
+    
+    let html = `<h2>${category.replace(/_/g, ' ').toUpperCase()} Laws</h2>`;
+    
+    laws.forEach(law => {
+        const formula = law.statement_latex ? 
+            `<div class="latex-container">${createFormulaHTML(law.statement_latex, true)}</div>` : '';
+        
+        html += `<div class="law-card">
+            <h4>${law.name}</h4>
+            <p><strong>Statement:</strong> ${law.statement}</p>
+            ${formula}
+            <div>${law.domains.map(d => `<span class="domain-tag">${d}</span>`).join('')}</div>
+            <p><strong>Implications:</strong> ${law.implications.join('; ')}</p>
+            <div class="confidence-bar">
+                <div class="confidence-fill" style="width: ${law.confidence * 100}%"></div>
+            </div>
+            <div class="law-meta">
+                <span>Confidence: ${(law.confidence * 100).toFixed(0)}%</span>
+                <span>${law.discovery_date}</span>
+            </div>
+        </div>`;
+    });
+    
+    document.getElementById('response').innerHTML = html;
+    document.getElementById('filters').style.display = 'block';
+    setTimeout(renderMathJax, 100);
+}
+
+// Enhanced search functionality
+function searchLaws(query) {
+    const results = Object.values(universalLaws).filter(law => 
+        law.name.toLowerCase().includes(query.toLowerCase()) ||
+        law.statement.toLowerCase().includes(query.toLowerCase()) ||
+        law.domains.some(domain => domain.toLowerCase().includes(query.toLowerCase())) ||
+        (law.implications && law.implications.some(imp => imp.toLowerCase().includes(query.toLowerCase())))
+    );
+    
+    return results;
+}
+
+// Add to the existing askQLang function
+async function askQLang() {
+    const question = document.getElementById('question').value.trim();
+    const responseDiv = document.getElementById('response');
+
+    if (!question) {
+        responseDiv.innerHTML = "<p>🌠 Please ask a cosmic question.</p>";
+        return;
+    }
+
+    // First, check for direct matches in the library
+    const directMatches = searchLaws(question);
+    if (directMatches.length > 0) {
+        let html = `<h3>🔍 Direct Matches Found</h3>`;
+        directMatches.forEach(law => {
+            html += `<div class="law-card">
+                <h4>${law.name}</h4>
+                <p>${law.statement}</p>
+            </div>`;
+        });
+        responseDiv.innerHTML = html;
+        return;
+    }
+
+    // Continue with existing question mapping logic...
+    responseDiv.innerHTML = "<p>🌀 Consulting universal archives...</p>";
+    // ... rest of existing function
+}
+
+// Add citation functionality
+function generateCitation(law) {
+    const discoverers = Array.isArray(law.discoverers) ? law.discoverers.join(' & ') : law.discoverers;
+    return `${law.name} (${law.discovery_date}) by ${discoverers}. ${law.statement}`;
+}
+
+// Add to law-card generation
+function createLawCard(law, showDetails = false) {
+    const formula = law.statement_latex ? 
+        `<div class="latex-container">${createFormulaHTML(law.statement_latex, true)}</div>` : '';
+    
+    let details = '';
+    if (showDetails) {
+        details = `
+            <p><strong>Formulation:</strong> ${law.formulation || law.statement}</p>
+            <p><strong>Implications:</strong> ${law.implications.join('; ')}</p>
+            <p><strong>Proofs:</strong> ${law.proofs ? law.proofs.join('; ') : 'Experimental verification'}</p>
+            ${law.limitations ? `<p><strong>Limitations:</strong> ${law.limitations}</p>` : ''}
+        `;
+    }
+    
+    return `<div class="law-card">
+        <h4>${law.name} <span class="category-badge">${law.category.replace(/_/g, ' ')}</span></h4>
+        <p><strong>Statement:</strong> ${law.statement}</p>
+        ${formula}
+        <div>${law.domains.map(d => `<span class="domain-tag">${d}</span>`).join('')}</div>
+        ${details}
+        <div class="confidence-bar">
+            <div class="confidence-fill" style="width: ${law.confidence * 100}%"></div>
+        </div>
+        <div class="law-meta">
+            <span>Confidence: ${(law.confidence * 100).toFixed(0)}%</span>
+            <span>${law.discovery_date}</span>
+            <span>${Array.isArray(law.discoverers) ? law.discoverers.join(', ') : law.discoverers}</span>
+        </div>
+    </div>`;
+}
+
         // ==================== LIBRARY OF UNIVERSAL LAWS ====================
         const universalLaws = {
-            // === FUNDAMENTAL PHYSICS ===
+
+ // Consider adding these to your universalLaws object:
+
+"noether_theorem": {
+    "name": "Noether's Theorem",
+    "category": "fundamental_physics",
+    "domains": ["symmetry", "conservation", "mathematics"],
+    "statement": "Every differentiable symmetry of a physical system corresponds to a conservation law",
+    "statement_latex": null,
+    "formulation": "Continuous symmetries imply conserved quantities",
+    "implications": [
+        "Time symmetry → energy conservation",
+        "Space symmetry → momentum conservation",
+        "Rotation symmetry → angular momentum conservation"
+    ],
+    "confidence": 0.99,
+    "discovery_date": "1918",
+    "discoverers": ["Emmy Noether"]
+},
+
+"quantum_superposition": {
+    "name": "Quantum Superposition Principle",
+    "category": "fundamental_physics", 
+    "domains": ["quantum", "superposition", "wave_function"],
+    "statement": "A quantum system can exist in multiple states simultaneously until measured",
+    "statement_latex": "|\\psi\\rangle = \\sum c_i |\\phi_i\\rangle",
+    "formulation": "Wave function as linear combination of basis states",
+    "implications": [
+        "Quantum computing advantage",
+        "Double-slit interference",
+        "Schrödinger's cat paradox"
+    ],
+    "confidence": 0.98,
+    "discovery_date": "1926",
+    "discoverers": ["Erwin Schrödinger", "Paul Dirac"]
+},           // === FUNDAMENTAL PHYSICS ===
             "thermodynamics_2": {
                 "name": "Second Law of Thermodynamics",
                 "category": "fundamental_physics",
