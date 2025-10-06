@@ -48,4 +48,4 @@ Update questionTypes in index.html if new keywords or categories are introduced.
 License
 This project is licensed under the MIT License. See the LICENSE file for details.
 Contact
-For questions or suggestions, open an issue or contact the maintainers at [your-email@example.com].
+For questions or suggestions, open an issue or contact the maintainers at ouadimaakoul1@gmail.com .
