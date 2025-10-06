@@ -118,7 +118,15 @@
       max-width: 1100px;
       margin: 0 auto;
     }
+.equation-loading {
+  opacity: 0.7;
+  font-style: italic;
+}
 
+.equation-loaded {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
     /* --- Header --- */
     .header {
       display: flex;
@@ -1214,6 +1222,32 @@ function showRelatedLaws(lawId) {
           law.description.toLowerCase().includes(term) ||
           law.statement_latex.toLowerCase().includes(term)
         );
+         for (const [id, law] of lawsToShow) {
+    const card = document.createElement('div');
+    card.className = 'law-card';
+    card.innerHTML = `
+      <span class="category-tag ${law.category}">${law.category.charAt(0).toUpperCase() + law.category.slice(1)}</span>
+      <h3>${law.name}</h3>
+      <div class="equation-clickable equation-loading" data-law-id="${id}">
+        \\(${law.statement_latex}\\)
+      </div>
+      <p class="law-description">${law.description}</p>
+    `;
+    container.appendChild(card);
+  }
+
+  // After MathJax renders, remove loading class
+  setTimeout(() => {
+    document.querySelectorAll('.equation-clickable').forEach(el => {
+      el.classList.remove('equation-loading');
+      el.classList.add('equation-loaded');
+      
+      el.addEventListener('click', () => {
+        window.location.hash = `proof/${el.dataset.lawId}`;
+        showProofView(el.dataset.lawId);
+      });
+    });
+  }, 100);
       }
 
       if (lawsToShow.length === 0) {
