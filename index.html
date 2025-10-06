@@ -1,1323 +1,1257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>QLang — Library of Universal Laws</title>
-
-  <!-- MathJax 3 -->
-  <script>
-    window.MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['$$', '$$'], ['\\[', '\\]']]
-      },
-      svg: { 
-        fontCache: 'global',
-        scale: 0.9
-      },
-      startup: {
-        pageReady: () => {
-          return MathJax.startup.defaultPageReady().then(() => {
-            // After MathJax is ready, render all equations
-            renderLibrary();
-          });
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QLang v1.0 — Library of Universal Laws</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary: #0c2461;
+            --secondary: #1e3799;
+            --accent: #ff6b6b;
+            --light: rgba(255, 255, 255, 0.1);
+            --lighter: rgba(255, 255, 255, 0.05);
+            --text: white;
+            --card-bg: white;
+            --card-text: #333;
         }
-      }
-    };
-  </script>
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-
-  <!-- Marked.js for Markdown -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-  <style>
-    :root {
-      --bg: #0b0b1a;
-      --card-bg: #15152a;
-      --text: #e0e0ff;
-      --accent: #6a5af9;
-      --equation-hover: #8a7bff;
-      --physics: #ff6b6b;
-      --cosmology: #4ecdc4;
-      --information: #ffe66d;
-      --biology: #95e1d3;
-      --mathematics: #ff9a76;
-      --chemistry: #a8e6cf;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      padding: 20px;
-      min-height: 100vh;
-      background-image: 
-        radial-gradient(circle at 10% 20%, rgba(106, 90, 249, 0.1) 0%, transparent 20%),
-        radial-gradient(circle at 90% 80%, rgba(255, 107, 107, 0.1) 0%, transparent 20%);
-    }
-
-    h1, h2, h3 {
-      margin-bottom: 1rem;
-      font-weight: 600;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      background: linear-gradient(90deg, var(--accent), var(--physics));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .equation-loading {
-      opacity: 0.7;
-      font-style: italic;
-    }
-
-    .equation-loaded {
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
-
-    /* --- Header --- */
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .search-box {
-      background: var(--card-bg);
-      border-radius: 50px;
-      padding: 10px 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      flex: 1;
-      max-width: 400px;
-      transition: all 0.3s;
-    }
-
-    .search-box:focus-within {
-      box-shadow: 0 4px 20px rgba(106, 90, 249, 0.3);
-    }
-
-    .search-box input {
-      background: transparent;
-      border: none;
-      color: var(--text);
-      font-size: 1rem;
-      width: 100%;
-      outline: none;
-    }
-
-    .search-box input::placeholder {
-      color: rgba(224, 224, 255, 0.5);
-    }
-
-    /* --- Category Filter --- */
-    .category-filter {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 2rem;
-    }
-
-    .category-btn {
-      background: var(--card-bg);
-      border: 1px solid rgba(106, 90, 249, 0.3);
-      color: var(--text);
-      padding: 8px 16px;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-size: 0.9rem;
-    }
-
-    .category-btn:hover {
-      background: rgba(106, 90, 249, 0.1);
-      transform: translateY(-2px);
-    }
-
-    .category-btn.active {
-      background: var(--accent);
-      color: white;
-      box-shadow: 0 4px 15px rgba(106, 90, 249, 0.3);
-    }
-
-    /* --- Main View --- */
-    #main-view {
-      display: block;
-    }
-
-    .laws-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
-    }
-
-    .law-card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      transition: all 0.3s;
-      border: 1px solid rgba(106, 90, 249, 0.1);
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-
-    .law-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(106, 90, 249, 0.2);
-      border-color: rgba(106, 90, 249, 0.3);
-    }
-
-    .law-card h3 {
-      font-size: 1.3rem;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .category-tag {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 50px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      margin-bottom: 15px;
-      align-self: flex-start;
-    }
-
-    .physics { background: rgba(255, 107, 107, 0.2); color: var(--physics); }
-    .cosmology { background: rgba(78, 205, 196, 0.2); color: var(--cosmology); }
-    .information { background: rgba(255, 230, 109, 0.2); color: var(--information); }
-    .biology { background: rgba(149, 225, 211, 0.2); color: var(--biology); }
-    .mathematics { background: rgba(255, 154, 118, 0.2); color: var(--mathematics); }
-    .chemistry { background: rgba(168, 230, 207, 0.2); color: var(--chemistry); }
-
-    .equation-clickable {
-      cursor: pointer;
-      padding: 15px;
-      margin: 15px 0;
-      background: rgba(106, 90, 249, 0.08);
-      border-radius: 8px;
-      text-align: center;
-      transition: all 0.2s;
-      border: 1px solid rgba(106, 90, 249, 0.1);
-      flex-grow: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 80px;
-    }
-
-    .equation-clickable mjx-container {
-      display: inline-block !important;
-      margin: 0 auto !important;
-    }
-
-    .equation-clickable:hover {
-      background: rgba(106, 90, 249, 0.15);
-      transform: translateY(-2px);
-      border-color: rgba(106, 90, 249, 0.3);
-    }
-
-    .law-description {
-      font-size: 0.9rem;
-      color: rgba(224, 224, 255, 0.7);
-      margin-top: 10px;
-      line-height: 1.5;
-    }
-
-    /* --- Proof View --- */
-    #proof-view {
-      display: none;
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 25px;
-      box-shadow: 0 6px 30px rgba(0,0,0,0.4);
-      border: 1px solid rgba(106, 90, 249, 0.1);
-      margin-top: 20px;
-    }
-
-    #back-btn {
-      background: var(--accent);
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-bottom: 20px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s;
-      box-shadow: 0 4px 10px rgba(106, 90, 249, 0.3);
-    }
-
-    #back-btn:hover {
-      opacity: 0.9;
-      transform: translateY(-2px);
-    }
-
-    .proof-content h2 {
-      color: var(--accent);
-      margin-top: 1.5rem;
-      border-bottom: 1px solid rgba(106, 90, 249, 0.2);
-      padding-bottom: 0.5rem;
-    }
-
-    .proof-content h3 {
-      color: var(--text);
-      margin-top: 1.2rem;
-    }
-
-    .proof-content p, .proof-content li {
-      margin-bottom: 1rem;
-      line-height: 1.7;
-    }
-
-    .proof-content ul, .proof-content ol {
-      margin-left: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    blockquote {
-      border-left: 3px solid var(--accent);
-      padding-left: 15px;
-      margin: 1.2rem 0;
-      color: #c0c0ff;
-      font-style: italic;
-    }
-
-    .proof-content code {
-      background: rgba(0,0,0,0.3);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: 'Courier New', monospace;
-    }
-
-    .related-laws {
-      margin-top: 2rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid rgba(106, 90, 249, 0.2);
-    }
-
-    .related-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-top: 1rem;
-    }
-
-    .related-card {
-      background: rgba(106, 90, 249, 0.1);
-      border-radius: 8px;
-      padding: 15px;
-      cursor: pointer;
-      transition: all 0.2s;
-      border: 1px solid rgba(106, 90, 249, 0.2);
-    }
-
-    .related-card:hover {
-      background: rgba(106, 90, 249, 0.2);
-      transform: translateY(-2px);
-    }
-
-    /* --- Footer --- */
-    .footer {
-      text-align: center;
-      margin-top: 3rem;
-      padding-top: 2rem;
-      border-top: 1px solid rgba(106, 90, 249, 0.1);
-      color: rgba(224, 224, 255, 0.5);
-      font-size: 0.9rem;
-    }
-
-    .no-results {
-      text-align: center;
-      padding: 2rem;
-      color: rgba(224, 224, 255, 0.6);
-      font-style: italic;
-    }
-
-    /* --- Responsive --- */
-    @media (max-width: 768px) {
-      .laws-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      
-      .search-box {
-        max-width: 100%;
-      }
-      
-      h1 {
-        font-size: 2rem;
-      }
-      
-      .category-filter {
-        justify-content: center;
-      }
-    }
-  </style>
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: var(--light);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #4a69bd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .search-container {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        input { 
+            width: 100%; 
+            padding: 15px; 
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+        
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        button { 
+            padding: 15px 25px; 
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        button:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        button.secondary {
+            background: #4a69bd;
+        }
+        
+        button.secondary:hover {
+            background: #3c5aa8;
+        }
+        
+        #response { 
+            background: var(--card-bg);
+            color: var(--card-text);
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 25px;
+            min-height: 100px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .library-section {
+            background: var(--lighter);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .library-section h3 {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffd700;
+        }
+        
+        .law-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            transition: transform 0.3s;
+        }
+        
+        .law-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .law-card h4 {
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+        
+        .domain-tag {
+            display: inline-block;
+            background: #4a69bd;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin: 5px 5px 5px 0;
+            color: white;
+        }
+        
+        .confidence-bar {
+            height: 8px;
+            background: #333;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .confidence-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 4px;
+            transition: width 1s ease-in-out;
+        }
+        
+        .math-formula {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 3px solid #4a69bd;
+            color: #333;
+            overflow-x: auto;
+        }
+        
+        .latex-container {
+            text-align: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f1f3f4;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+        
+        .law-meta {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .category-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            font-size: 0.7rem;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .stat-card {
+            background: var(--lighter);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>🌌 QLang — Universal Laws</h1>
-      <div class="search-box">
-        <span>🔍</span>
-        <input type="text" id="search-input" placeholder="Search laws...">
-      </div>
-    </div>
-
-    <!-- Category Filter -->
-    <div class="category-filter">
-      <button class="category-btn active" data-category="all">All</button>
-      <button class="category-btn" data-category="physics">Physics</button>
-      <button class="category-btn" data-category="cosmology">Cosmology</button>
-      <button class="category-btn" data-category="information">Information</button>
-      <button class="category-btn" data-category="biology">Biology</button>
-      <button class="category-btn" data-category="mathematics">Mathematics</button>
-      <button class="category-btn" data-category="chemistry">Chemistry</button>
-    </div>
-
-    <!-- Main View: Library -->
-    <div id="main-view">
-      <p>Click on any equation to view its full explanation and derivation.</p>
-      <div class="laws-grid" id="laws-container"></div>
-    </div>
-
-    <!-- Detailed View: Proof/Explanation -->
-    <div id="proof-view">
-      <button id="back-btn">← Back to Library</button>
-      <div id="proof-content"></div>
-    </div>
-
-    <div class="footer">
-      <p>QLang — A curated collection of fundamental laws that describe our universe</p>
-    </div>
-  </div>
-
-  <script>
-    // 🔬 Database of universal laws
-    const universalLaws = {
-      second_thermo: {
-        name: "Second Law of Thermodynamics",
-        category: "physics",
-        statement_latex: "\\Delta S_{\\text{universe}} \\geq 0",
-        description: "The total entropy of an isolated system can only increase over time.",
-        full_explanation: `
-## 🌡️ Historical Origin
-Formulated in the mid-19th century by Rudolf Clausius and Lord Kelvin, the Second Law states that the **entropy of an isolated system never decreases**. It introduces the thermodynamic arrow of time.
-
-## 📐 Formulation and Justification
-Entropy $S$ quantifies microscopic disorder. For a reversible process: $dS = \\frac{\\delta Q_{\\text{rev}}}{T}$. In irreversible processes (e.g., gas diffusion), experiments show $\\Delta S > 0$.
-
-Ludwig Boltzmann (1877) gave a statistical proof:  
-$$
-S = k_B \\ln \\Omega
-$$
-where $\\Omega$ is the number of microstates. Systems evolve toward the most probable macrostate—maximum entropy.
-
-## 🧠 Key Assumptions
-- Validity of statistical mechanics
-- Ergodicity (system explores all accessible microstates over time)
-
-## 💥 Implications
-- Impossibility of a perpetual motion machine of the second kind
-- Defines the direction of time (past = low entropy, future = high entropy)
-- Explains why the early universe had extremely low entropy (cosmological puzzle)
-`
-      },
-
-      general_relativity: {
-        name: "General Relativity",
-        category: "physics",
-        statement_latex: "G_{\\mu\\nu} + \\Lambda g_{\\mu\\nu} = \\frac{8\\pi G}{c^4} T_{\\mu\\nu}",
-        description: "Spacetime curvature is determined by the distribution of matter and energy.",
-        full_explanation: `
-## 🌌 Historical Origin
-In 1915, Albert Einstein extended special relativity to include gravity, proposing that **gravity is the curvature of spacetime** caused by mass and energy.
-
-## 📐 Conceptual Derivation
-Starting from the equivalence principle (gravity ≈ acceleration), Einstein sought a tensor equation linking geometry ($G_{\\mu\\nu}$) and matter ($T_{\\mu\\nu}$). The Einstein tensor $G_{\\mu\\nu} = R_{\\mu\\nu} - \\frac{1}{2}R g_{\\mu\\nu}$ ensures local conservation ($\\nabla_\\mu T^{\\mu\\nu} = 0$).
-
-The cosmological constant $\\Lambda$ was added (then retracted, then revived) to account for dark energy.
-
-## 🧠 Key Assumptions
-- Strong equivalence principle
-- General covariance (laws are identical in all reference frames)
-- Spacetime is a smooth 4D manifold
-
-## 💥 Implications
-- Bending of starlight by the Sun (confirmed in 1919)
-- GPS satellites require relativistic time corrections
-- Predicts black holes and gravitational waves (detected in 2015)
-`
-      },
-
-      quantum_principles: {
-        name: "Principles of Quantum Mechanics",
-        category: "physics",
-        statement_latex: "\\text{State: } |\\psi\\rangle \\in \\mathcal{H}, \\quad \\text{Measurement: } P(a) = |\\langle a|\\psi\\rangle|^2",
-        description: "Quantum systems are described by state vectors in Hilbert space with probabilistic measurement outcomes.",
-        full_explanation: `
-## ⚛️ Historical Origin
-Developed between 1925–1930 by Heisenberg, Schrödinger, Born, Dirac, and von Neumann, quantum mechanics describes a probabilistic, non-local reality.
-
-## 📐 Core Postulates
-1. A system's state is a vector $|\\psi\\rangle$ in a Hilbert space $\\mathcal{H}$.
-2. Observables are Hermitian operators.
-3. Measuring observable $A$ yields eigenvalue $a$ with probability $P(a) = |\\langle a|\\psi\\rangle|^2$ (Born rule).
-4. After measurement, the state collapses to $|a\\rangle$.
-
-## 🧠 Key Assumptions
-- Unitary, linear time evolution (Schrödinger equation)
-- Completeness of the quantum state description
-
-## 💥 Implications
-- Quantum entanglement (EPR paradox, Bell's inequalities)
-- Fundamental uncertainty (Heisenberg)
-- Enables lasers, transistors, MRI, and quantum computing
-`
-      },
-
-      mass_energy: {
-        name: "Mass-Energy Equivalence",
-        category: "physics",
-        statement_latex: "E = mc^2",
-        description: "Energy and mass are interchangeable; a fundamental relationship in physics.",
-        full_explanation: `
-## 💥 Historical Origin
-In September 1905, Albert Einstein published a short paper titled *"Does the Inertia of a Body Depend Upon Its Energy Content?"* as part of special relativity, showing that **mass and energy are interchangeable**.
-
-## 📐 Conceptual Derivation
-Einstein considered a body at rest emitting two light pulses (photons) of equal energy $\\varepsilon$ in opposite directions. To conserve momentum, the body remains at rest. But in a moving frame, photon energies shift (Doppler effect). Enforcing **energy conservation in all frames** leads to:
-
-$$
-\\Delta E = \\Delta m \\cdot c^2
-$$
-
-Thus, a loss of energy $\\Delta E$ corresponds to a loss of mass $\\Delta m = \\Delta E / c^2$.
-
-## 🧠 Key Assumptions
-- Principle of relativity (laws are identical in all inertial frames)
-- Invariance of the speed of light ($c$ is constant)
-- Conservation of energy and momentum
-
-## 💥 Implications
-- Explains energy release in **nuclear reactions** (fission/fusion)
-- Foundation of **particle physics** (pair production/annihilation)
-- Verified via mass defect in atomic nuclei
-
-> "The mass of a body is a measure of its energy content."  
-> — Albert Einstein, 1905
-`
-      },
-
-      heisenberg: {
-        name: "Heisenberg Uncertainty Principle",
-        category: "physics",
-        statement_latex: "\\sigma_x \\sigma_p \\geq \\frac{\\hbar}{2}",
-        description: "It's impossible to simultaneously know both position and momentum with arbitrary precision.",
-        full_explanation: `
-## 🔍 Historical Origin
-Werner Heisenberg formulated this principle in 1927 while analyzing the limits of simultaneously measuring a particle's position and momentum.
-
-## 📐 Mathematical Proof
-In quantum mechanics, $\\hat{x}$ and $\\hat{p}$ do not commute: $[\\hat{x}, \\hat{p}] = i\\hbar$. For any two non-commuting operators, Robertson's inequality gives:
-
-$$
-\\sigma_A \\sigma_B \\geq \\frac{1}{2} \\left| \\langle [\\hat{A}, \\hat{B}] \\rangle \\right|
-$$
-
-Applied to $x$ and $p$, this yields $\\sigma_x \\sigma_p \\geq \\hbar/2$.
-
-## 🧠 Interpretation
-This is not a technological limitation, but a **fundamental property of nature**: particles do not have definite trajectories.
-
-## 💥 Implications
-- Atomic stability (electrons don't spiral into the nucleus)
-- Quantum vacuum fluctuations
-- Fundamental limits in microscopy and metrology
-`
-      },
-
-      newton_laws: {
-        name: "Newton's Laws of Motion",
-        category: "physics",
-        statement_latex: "\\vec{F} = m\\vec{a} \\quad \\text{(2nd Law)}",
-        description: "The foundation of classical mechanics describing motion and forces.",
-        full_explanation: `
-## 🏛️ Historical Origin
-Published in 1687 in *Philosophiæ Naturalis Principia Mathematica*, Newton's three laws founded classical mechanics.
-
-## 📐 Statements
-1. **Inertia**: An object remains at rest or in uniform motion unless acted upon by a force.
-2. **Force**: $\\vec{F} = \\frac{d\\vec{p}}{dt} = m\\vec{a}$ (for constant mass).
-3. **Action-Reaction**: For every action, there is an equal and opposite reaction.
-
-## 🧠 Key Assumptions
-- Absolute space and time
-- Valid at low speeds ($v \\ll c$) and macroscopic scales (not quantum)
-
-## 💥 Implications
-- Predicts planetary orbits (combined with universal gravitation)
-- Basis of classical engineering
-- Superseded by relativity and quantum mechanics at extremes
-`
-      },
-
-      pauli_exclusion: {
-        name: "Pauli Exclusion Principle",
-        category: "physics",
-        statement_latex: "\\Psi(\\mathbf{r}_1, \\mathbf{r}_2) = -\\Psi(\\mathbf{r}_2, \\mathbf{r}_1) \\text{ for fermions}",
-        description: "No two identical fermions can occupy the same quantum state simultaneously.",
-        full_explanation: `
-## ⚛️ Historical Origin
-Wolfgang Pauli proposed this principle in 1925 to explain atomic structure and the periodic table.
-
-## 📐 Formulation
-No two fermions (half-integer spin particles, e.g., electrons) can occupy the same quantum state. This follows from the antisymmetry of the total wavefunction:
-
-$$
-\\Psi(\\mathbf{r}_1, s_1; \\mathbf{r}_2, s_2) = -\\Psi(\\mathbf{r}_2, s_2; \\mathbf{r}_1, s_1)
-$$
-
-If two electrons shared all quantum numbers, $\\Psi = -\\Psi \\Rightarrow \\Psi = 0$ (forbidden).
-
-## 🧠 Implications
-- Electron shell structure → chemistry
-- Degeneracy pressure (white dwarfs, neutron stars)
-- Conductivity in metals
-`
-      },
-
-      born_rule: {
-        name: "Born Rule",
-        category: "physics",
-        statement_latex: "P(x) = |\\psi(x)|^2",
-        description: "The probability of finding a particle at a location is proportional to the square of its wavefunction.",
-        full_explanation: `
-## 🎲 Historical Origin
-Max Born proposed in 1926 that the wavefunction $\\psi$ does not represent a physical wave, but a **probability amplitude**.
-
-## 📐 Formulation
-For a particle in 1D, the probability of finding it between $x$ and $x+dx$ is:
-
-$$
-P(x)\\,dx = |\\psi(x)|^2\\,dx
-$$
-
-Normalization: $\\int |\\psi(x)|^2\\,dx = 1$.
-
-## 🧠 Interpretation
-This bridges the deterministic evolution of $\\psi$ (via Schrödinger) and the random outcomes of measurements.
-
-## 💥 Implications
-- Foundation of the Copenhagen interpretation
-- Basis of all quantum predictions
-- Verified by countless experiments (interference, diffraction)
-`
-      },
-
-      conservation_energy: {
-        name: "Conservation of Energy",
-        category: "physics",
-        statement_latex: "\\frac{dE}{dt} = 0 \\quad \\text{(isolated system)}",
-        description: "Energy cannot be created or destroyed, only transformed from one form to another.",
-        full_explanation: `
-## 🔁 Historical Origin
-Formalized in the 19th century (Mayer, Joule, Helmholtz), this law states that **energy cannot be created or destroyed**, only transformed.
-
-## 📐 Theoretical Proof
-Noether's Theorem (1918): **every continuous symmetry implies a conservation law**. Time-translation symmetry ($\\partial \\mathcal{L}/\\partial t = 0$) ⇒ energy conservation.
-
-## 🧠 Validity
-- Holds in classical, relativistic, and quantum physics
-- In an expanding universe, global time symmetry is broken → energy is not conserved cosmologically
-
-## 💥 Implications
-- Perpetual motion machines are impossible
-- Energy accounting in chemical/nuclear reactions
-- Foundation of thermodynamics and engineering
-`
-      },
-
-      conservation_momentum: {
-        name: "Conservation of Momentum",
-        category: "physics",
-        statement_latex: "\\frac{d\\vec{p}}{dt} = 0 \\quad \\text{(isolated system)}",
-        description: "The total momentum of an isolated system remains constant in the absence of external forces.",
-        full_explanation: `
-## 🚀 Historical Origin
-Rooted in the work of Descartes and Newton, this law is central to mechanics.
-
-## 📐 Theoretical Proof
-Noether's Theorem: **spatial translation symmetry** ⇒ conservation of total momentum.
-
-## 🧠 Validity
-- Holds in classical, relativistic, and quantum physics
-- Even in inelastic collisions, total momentum is conserved
-
-## 💥 Applications
-- Rocket propulsion (momentum exchange)
-- Particle physics (collision analysis)
-- Stability of planetary systems
-`
-      },
-
-      maxwell_equations: {
-        name: "Maxwell's Equations",
-        category: "physics",
-        statement_latex: "\\nabla \\cdot \\mathbf{E} = \\frac{\\rho}{\\varepsilon_0}, \\quad \\nabla \\times \\mathbf{E} = -\\frac{\\partial \\mathbf{B}}{\\partial t}, \\quad \\nabla \\cdot \\mathbf{B} = 0, \\quad \\nabla \\times \\mathbf{B} = \\mu_0 \\mathbf{J} + \\mu_0\\varepsilon_0 \\frac{\\partial \\mathbf{E}}{\\partial t}",
-        description: "The fundamental equations describing electricity, magnetism, and electromagnetic waves.",
-        full_explanation: `
-## ⚡ Historical Origin
-James Clerk Maxwell unified electricity and magnetism in 1865, showing that light is an electromagnetic wave.
-
-## 📐 The Four Equations (in differential form)
-1. Gauss's Law: Electric field divergence ∝ charge density
-2. Faraday's Law: Changing magnetic field induces electric field
-3. Gauss's Law for Magnetism: No magnetic monopoles
-4. Ampère-Maxwell Law: Currents and changing E-fields produce B-fields
-
-## 🧠 Key Insight
-The term $\\mu_0\\varepsilon_0 \\frac{\\partial \\mathbf{E}}{\\partial t}$ (displacement current) was Maxwell's addition—it predicts **self-sustaining EM waves** propagating at speed $c = 1/\\sqrt{\\mu_0\\varepsilon_0}$.
-
-## 💥 Implications
-- Prediction and understanding of radio, microwaves, light, X-rays
-- Foundation of all electrical engineering and telecommunications
-- Inspired Einstein's special relativity (constancy of $c$)
-`
-      },
-
-      special_relativity: {
-        name: "Special Relativity",
-        category: "physics",
-        statement_latex: "c = \\text{constant}, \\quad \\text{Lorentz transformations}",
-        description: "The laws of physics are the same in all inertial frames, and the speed of light is constant.",
-        full_explanation: `
-## 🚄 Historical Origin
-Einstein published special relativity in 1905 to resolve contradictions between Maxwell's electromagnetism and Newtonian mechanics.
-
-## 📐 Postulates
-1. **Principle of Relativity**: Laws of physics are identical in all inertial frames.
-2. **Invariance of $c$**: The speed of light in vacuum is constant for all observers.
-
-## 📐 Key Results
-- Time dilation: $\\Delta t = \\gamma \\Delta t_0$
-- Length contraction: $L = L_0 / \\gamma$
-- Relativistic momentum: $\\vec{p} = \\gamma m \\vec{v}$
-- $E^2 = (pc)^2 + (mc^2)^2$
-
-where $\\gamma = 1/\\sqrt{1 - v^2/c^2}$.
-
-## 💥 Implications
-- Unified space and time into spacetime
-- $E = mc^2$ as a special case
-- Essential for particle accelerators and GPS
-`
-      },
-
-      schrodinger_equation: {
-        name: "Schrödinger Equation",
-        category: "physics",
-        statement_latex: "i\\hbar\\frac{\\partial}{\\partial t}\\Psi = \\hat{H}\\Psi",
-        description: "The fundamental equation of quantum mechanics describing how quantum states evolve.",
-        full_explanation: `
-## ⚛️ Historical Origin
-In 1926, Erwin Schrödinger formulated a wave equation describing how quantum states evolve over time, inspired by de Broglie's matter-wave hypothesis.
-
-## 📐 Physical Derivation
-Start from classical energy:  
-$$
-E = \\frac{p^2}{2m} + V(\\mathbf{r})
-$$
-
-In quantum mechanics, replace:
-- $E \\rightarrow i\\hbar \\frac{\\partial}{\\partial t}$
-- $\\mathbf{p} \\rightarrow -i\\hbar \\nabla$
-
-Applying these to a wavefunction $\\Psi(\\mathbf{r}, t)$ yields:
-
-$$
-i\\hbar\\frac{\\partial}{\\partial t}\\Psi(\\mathbf{r},t) = \\left[ -\\frac{\\hbar^2}{2m}\\nabla^2 + V(\\mathbf{r}) \\right] \\Psi(\\mathbf{r},t)
-$$
-
-where $\\hat{H} = -\\frac{\\hbar^2}{2m}\\nabla^2 + V$ is the **Hamiltonian operator**.
-
-## 🧠 Key Assumptions
-- Wavefunction $\\Psi$ fully describes the system
-- Evolution is deterministic and unitary
-
-## 💥 Implications
-- Predicts atomic energy levels (e.g., hydrogen)
-- Foundation of quantum chemistry and semiconductor physics
-- Probabilistic interpretation via Born rule ($P = |\\Psi|^2$)
-
-> "I don't like it, and I'm sorry I ever had anything to do with it."  
-> — Erwin Schrödinger (on the Copenhagen interpretation)
-`
-      },
-
-      dirac_equation: {
-        name: "Dirac Equation",
-        category: "physics",
-        statement_latex: "(i\\hbar\\gamma^\\mu \\partial_\\mu - mc) \\psi = 0",
-        description: "The relativistic wave equation that predicted antimatter and electron spin.",
-        full_explanation: `
-## 🌀 Historical Origin
-Paul Dirac derived this equation in 1928 to reconcile quantum mechanics with special relativity for electrons.
-
-## 📐 Motivation and Form
-The Schrödinger equation is non-relativistic. The Klein-Gordon equation is relativistic but has negative probabilities. Dirac sought a **first-order** equation in time and space:
-
-$$
-(i\\hbar\\gamma^\\mu \\partial_\\mu - mc) \\psi = 0
-$$
-
-where $\\gamma^\\mu$ are 4×4 matrices, and $\\psi$ is a 4-component **spinor**.
-
-## 🧠 Key Predictions
-- Electron spin emerges naturally (not added ad hoc)
-- Magnetic moment of the electron
-- **Antimatter**: negative-energy solutions → prediction of the positron (discovered 1932)
-
-## 💥 Implications
-- Foundation of quantum electrodynamics (QED)
-- First successful unification of relativity and quantum theory
-- Confirmed to extraordinary precision (e.g., g-factor)
-`
-      },
-
-      // 🌌 COSMOLOGY (4)
-      hubble_lemaitre: {
-        name: "Hubble-Lemaître Law",
-        category: "cosmology",
-        statement_latex: "v = H_0 \\, d",
-        description: "Galaxies recede from us with velocity proportional to their distance.",
-        full_explanation: `
-## 🌠 Historical Origin
-Georges Lemaître (1927) and Edwin Hubble (1929) independently found that **galaxies recede from us**, with velocity proportional to distance.
-
-## 📐 Observational Basis
-Hubble measured redshifts of galaxies and their distances (via Cepheid variables). The linear relation:
-
-$$
-v = H_0 \\, d
-$$
-
-where $v$ = recession velocity, $d$ = distance, $H_0$ = Hubble constant (~70 km/s/Mpc).
-
-## 🧠 Interpretation
-This is **not** motion through space, but **expansion of space itself** (metric expansion). Galaxies are carried apart as spacetime stretches.
-
-## 💥 Implications
-- Evidence for the Big Bang
-- Defines the age of the universe: $t \\approx 1/H_0$
-- Led to modern cosmology and the ΛCDM model
-`
-      },
-
-      dark_energy: {
-        name: "Dark Energy Dominance",
-        category: "cosmology",
-        statement_latex: "\\Omega_\\Lambda \\approx 0.69",
-        description: "The universe's expansion is accelerating due to dark energy.",
-        full_explanation: `
-## 🌌 Historical Origin
-In 1998, two teams studying distant supernovae discovered that the universe's expansion is **accelerating**, not slowing down.
-
-## 📐 Evidence
-Type Ia supernovae are "standard candles." Their observed brightness was **fainter than expected**, implying greater distance → acceleration.
-
-This requires a repulsive component: **dark energy**, modeled as a cosmological constant $\\Lambda$.
-
-## 🧠 Properties
-- Smooth, non-clumping energy filling space
-- Negative pressure: $p = -\\rho c^2$
-- Constitutes ~69% of the universe's energy density ($\\Omega_\\Lambda \\approx 0.69$)
-
-## 💥 Implications
-- Fate of the universe: "Big Freeze" or "Big Rip"
-- Greatest unsolved problem in physics: Why is $\\Lambda$ so small but non-zero?
-- Challenges quantum field theory predictions (120 orders of magnitude off!)
-`
-      },
-
-      cosmological_principle: {
-        name: "Cosmological Principle",
-        category: "cosmology",
-        statement_latex: "\\text{Homogeneous \\& isotropic on large scales}",
-        description: "The universe looks the same in all directions and locations when viewed on large scales.",
-        full_explanation: `
-## 🌍 Historical Origin
-Assumed since Copernicus, formalized in modern cosmology by Einstein and Friedmann.
-
-## 📐 Statement
-On sufficiently large scales (>100 Mpc), the universe is:
-- **Homogeneous**: same at every point
-- **Isotropic**: same in every direction
-
-This is supported by:
-- Cosmic Microwave Background (CMB) uniformity (1 part in 100,000)
-- Galaxy surveys (e.g., SDSS)
-
-## 🧠 Role in Cosmology
-This principle justifies the **Friedmann-Lemaître-Robertson-Walker (FLRW) metric**, the foundation of Big Bang cosmology.
-
-## 💥 Caveats
-- Not valid at small scales (galaxies, clusters)
-- Tensions exist (e.g., "Hubble tension," large-scale structures like the "Hercules-Corona Borealis Great Wall")
-`
-      },
-
-      cosmic_inflation: {
-        name: "Cosmic Inflation",
-        category: "cosmology",
-        statement_latex: "a(t) \\propto e^{H t}, \\quad H \\approx \\text{constant}",
-        description: "The universe underwent exponential expansion in its earliest moments.",
-        full_explanation: `
-## 💥 Historical Origin
-Proposed by Alan Guth (1980) to solve horizon, flatness, and monopole problems in Big Bang cosmology.
-
-## 📐 Mechanism
-A scalar "inflaton" field dominated the early universe (~$10^{-36}$ s after Big Bang), causing **exponential expansion**:
-
-$$
-a(t) \\propto e^{H t}
-$$
-
-where $a(t)$ is the scale factor, and $H$ is nearly constant.
-
-## 🧠 Solved Problems
-- **Horizon problem**: Why is CMB so uniform? → regions were in causal contact before inflation.
-- **Flatness problem**: Why is space so flat? → inflation stretched curvature to near zero.
-- **Monopole problem**: Why no magnetic monopoles? → diluted to undetectable levels.
-
-## 💥 Evidence
-- CMB fluctuations match inflationary predictions (scale-invariant, Gaussian, adiabatic)
-- Observed flatness ($\\Omega_{\\text{total}} \\approx 1$)
-
-> Inflation is not yet directly proven, but it's the leading paradigm.
-`
-      },
-
-      // 💻 INFORMATION THEORY (4)
-      bekenstein_bound: {
-        name: "Bekenstein Bound",
-        category: "information",
-        statement_latex: "S \\leq \\frac{2\\pi k_B R E}{\\hbar c}",
-        description: "The maximum information content of a region is proportional to its surface area.",
-        full_explanation: `
-## 🔐 Historical Origin
-Jacob Bekenstein (1981) showed that **the entropy (information content) of any finite region of space is bounded** by its surface area, not volume.
-
-## 📐 Formula
-For a system of energy $E$ and radius $R$:
-
-$$
-S \\leq \\frac{2\\pi k_B R E}{\\hbar c}
-$$
-
-In natural units ($k_B = \\hbar = c = 1$): $S \\leq 2\\pi R E$.
-
-## 🧠 Connection to Black Holes
-For a black hole, equality holds: $S_{\\text{BH}} = \\frac{k_B A}{4\\ell_P^2}$, where $A$ is horizon area. This led to the **holographic principle**.
-
-## 💥 Implications
-- Information in a region is encoded on its boundary
-- Fundamental limit on data storage (e.g., a 1 cm sphere can store ~$10^{66}$ bits)
-- Deep link between gravity, quantum mechanics, and information
-`
-      },
-
-      landauer_principle: {
-        name: "Landauer's Principle",
-        category: "information",
-        statement_latex: "E_{\\text{min}} = k_B T \\ln 2",
-        description: "Erasing information has a fundamental energy cost.",
-        full_explanation: `
-## 💡 Historical Origin
-Rolf Landauer (1961) established a fundamental link between **information theory and thermodynamics**.
-
-## 📐 Statement
-Erasing **one bit** of information in a computational system at temperature $T$ **must dissipate at least**:
-
-$$
-E_{\\text{min}} = k_B T \\ln 2
-$$
-
-This is not about measurement, but **irreversible erasure** (e.g., resetting a bit to 0).
-
-## 🧠 Why?
-Erasure reduces phase-space volume, decreasing entropy. To satisfy the Second Law, heat must be dumped into the environment.
-
-## 💥 Implications
-- Sets ultimate energy limit for computation
-- Reversible computing can (in theory) avoid this cost
-- Connects abstract information to physical reality
-`
-      },
-
-      shannon_entropy: {
-        name: "Shannon's Information Entropy",
-        category: "information",
-        statement_latex: "H(X) = -\\sum_i p(x_i) \\log_2 p(x_i)",
-        description: "A measure of uncertainty or information content in a random variable.",
-        full_explanation: `
-## 📡 Historical Origin
-Claude Shannon (1948) founded information theory, defining entropy as **average information content** or uncertainty.
-
-## 📐 Definition
-For a discrete random variable $X$ with outcomes $x_i$ and probabilities $p(x_i)$:
-
-$$
-H(X) = -\\sum_i p(x_i) \\log_2 p(x_i)
-$$
-
-Units: **bits** (if log base 2).
-
-## 🧠 Interpretation
-- $H = 0$: outcome is certain (no information gained)
-- $H = \\log_2 N$: uniform distribution over $N$ outcomes (max uncertainty)
-- Measures minimum bits needed to encode messages (source coding theorem)
-
-## 💥 Applications
-- Data compression (ZIP, MP3, JPEG)
-- Cryptography
-- Machine learning (decision trees, cross-entropy loss)
-- Analogous to thermodynamic entropy (but not identical)
-`
-      },
-
-      church_turing: {
-        name: "Church-Turing Thesis",
-        category: "information",
-        statement_latex: "\\text{Computable} \\iff \\text{Turing-computable}",
-        description: "Any function that can be computed by an algorithm can be computed by a Turing machine.",
-        full_explanation: `
-## 🤖 Historical Origin
-Alonzo Church (lambda calculus) and Alan Turing (Turing machines) independently defined computability in 1936. Their models were equivalent.
-
-## 📐 Thesis Statement
-> "Every effectively calculable function is computable by a Turing machine."
-
-This is a **thesis**, not a theorem—it cannot be proven, but no counterexample has ever been found.
-
-## 🧠 Implications
-- Defines the **limits of computation**
-- All modern computers are Turing-equivalent (same computational power)
-- Undecidable problems exist (e.g., Halting Problem)
-
-## 💥 Modern View
-- Quantum computers are still Turing-computable (they compute the same functions, possibly faster)
-- Hypercomputation (beyond Turing) remains speculative
-`
-      },
-
-      // 🧬 BIOLOGY (1)
-      natural_selection: {
-        name: "Natural Selection",
-        category: "biology",
-        statement_latex: "\\text{Fitness} \\propto \\text{Reproductive Success}",
-        description: "Organisms better adapted to their environment tend to survive and produce more offspring.",
-        full_explanation: `
-## 🌿 Historical Origin
-Charles Darwin and Alfred Russel Wallace proposed natural selection in 1858 as the mechanism for evolution.
-
-## 📐 Core Logic
-1. **Variation**: Individuals in a population differ.
-2. **Heritability**: Traits are passed to offspring.
-3. **Selection**: Some traits confer higher survival/reproduction ("fitness").
-4. **Time**: Advantageous traits accumulate over generations.
-
-Mathematically, fitness $w$ is proportional to expected reproductive success.
-
-## 🧠 Modern Synthesis
-Combined with genetics (1930s–1950s), natural selection explains:
-- Adaptation
-- Speciation
-- Biodiversity
-
-## 💥 Evidence
-- Fossil record
-- Observed speciation (e.g., Darwin's finches)
-- Antibiotic resistance in bacteria
-- DNA sequence homology
-
-> "Nothing in biology makes sense except in the light of evolution."  
-> — Theodosius Dobzhansky
-`
-      },
-
-      // 📐 MATHEMATICS (2)
-      bayes_theorem: {
-        name: "Bayes' Theorem",
-        category: "mathematics",
-        statement_latex: "P(H|E) = \\frac{P(E|H) P(H)}{P(E)}",
-        description: "A formula for updating the probability of a hypothesis based on evidence.",
-        full_explanation: `
-## 🎯 Historical Origin
-Thomas Bayes derived this result in the 1750s (published posthumously in 1763). It was later refined by Laplace.
-
-## 📐 Formula
-Given a hypothesis $H$ and evidence $E$:
-
-$$
-P(H|E) = \\frac{P(E|H) \\, P(H)}{P(E)}
-$$
-
-- $P(H)$: prior probability (belief before evidence)
-- $P(E|H)$: likelihood
-- $P(H|E)$: posterior probability (updated belief)
-
-## 🧠 Interpretation
-Bayes' theorem is the foundation of **probabilistic reasoning** and **learning from data**.
-
-## 💥 Applications
-- Medical diagnosis (e.g., interpreting test results)
-- Machine learning (Naive Bayes, Bayesian networks)
-- Spam filtering
-- Scientific inference (updating theories with new data)
-`
-      },
-
-      goedel_incompleteness: {
-        name: "Gödel's Incompleteness Theorems",
-        category: "mathematics",
-        statement_latex: "\\text{Any consistent formal system rich enough for arithmetic is incomplete.}",
-        description: "There are true mathematical statements that cannot be proven within the system.",
-        full_explanation: `
-## 🧩 Historical Origin
-Kurt Gödel proved these theorems in 1931, shattering Hilbert's dream of a complete, consistent foundation for mathematics.
-
-## 📐 The Two Theorems
-1. **First Incompleteness Theorem**: In any consistent formal system capable of expressing basic arithmetic, there are **true statements that cannot be proven** within the system.
-2. **Second Incompleteness Theorem**: Such a system cannot prove its own consistency.
-
-## 🧠 Key Insight
-Gödel encoded statements about the system **within the system itself** (Gödel numbering), constructing a self-referential sentence: "This statement is not provable."
-
-## 💥 Implications
-- Limits of formal reasoning
-- No "final" foundation for mathematics
-- Influenced computer science (undecidability, halting problem)
-- Philosophical impact on truth, proof, and knowledge
-`
-      },
-
-      // ⚗️ CHEMISTRY (1)
-      periodic_law: {
-        name: "Periodic Law",
-        category: "chemistry",
-        statement_latex: "\\text{Properties are periodic functions of atomic number } Z",
-        description: "The properties of elements recur periodically when arranged by atomic number.",
-        full_explanation: `
-## 🧪 Historical Origin
-Dmitri Mendeleev formulated the periodic law in 1869, arranging elements by atomic weight and noting repeating ("periodic") chemical properties.
-
-## 📐 Modern Statement
-> "The physical and chemical properties of elements are periodic functions of their **atomic number** $Z$ (number of protons)."
-
-Mendeleev left gaps for undiscovered elements (e.g., Ga, Ge) and accurately predicted their properties.
-
-## 🧠 Quantum Explanation
-Electron shell structure (from Schrödinger equation) explains periodicity:
-- Elements in the same group have same valence electron configuration
-- Periods correspond to filling of electron shells (s, p, d, f)
-
-## 💥 Implications
-- Predicts reactivity, bonding, ionization energy, etc.
-- Organizes all known elements (118+)
-- Foundation of modern chemistry and materials science
-`
-      }
-    };
-
-    // ----------------------------
-    // Display Functions
-    // ----------------------------
-    
-    function renderLibrary(filterCategory = 'all', searchTerm = '') {
-      const container = document.getElementById('laws-container');
-      container.innerHTML = '';
-
-      let lawsToShow = Object.entries(universalLaws);
-      
-      // Apply category filter
-      if (filterCategory !== 'all') {
-        lawsToShow = lawsToShow.filter(([id, law]) => law.category === filterCategory);
-      }
-      
-      // Apply search filter
-      if (searchTerm) {
-        const term = searchTerm.toLowerCase();
-        lawsToShow = lawsToShow.filter(([id, law]) => 
-          law.name.toLowerCase().includes(term) || 
-          law.description.toLowerCase().includes(term) ||
-          law.statement_latex.toLowerCase().includes(term)
-        );
-      }
-
-      if (lawsToShow.length === 0) {
-        container.innerHTML = '<p class="no-results">No laws match your search criteria.</p>';
-        return;
-      }
-
-      for (const [id, law] of lawsToShow) {
-        const card = document.createElement('div');
-        card.className = 'law-card';
-        card.innerHTML = `
-          <span class="category-tag ${law.category}">${law.category.charAt(0).toUpperCase() + law.category.slice(1)}</span>
-          <h3>${law.name}</h3>
-          <div class="equation-clickable equation-loading" data-law-id="${id}">
-            \\(${law.statement_latex}\\)
-          </div>
-          <p class="law-description">${law.description}</p>
-        `;
-        container.appendChild(card);
-      }
-
-      // After MathJax renders, remove loading class
-      setTimeout(() => {
-        document.querySelectorAll('.equation-clickable').forEach(el => {
-          el.classList.remove('equation-loading');
-          el.classList.add('equation-loaded');
-          
-          el.addEventListener('click', () => {
-            window.location.hash = `proof/${el.dataset.lawId}`;
-            showProofView(el.dataset.lawId);
-          });
-        });
-      }, 100);
-    }
-
-    function showRelatedLaws(lawId) {
-      const law = universalLaws[lawId];
-      const sameCategory = Object.entries(universalLaws)
-        .filter(([id, l]) => l.category === law.category && id !== lawId)
-        .slice(0, 3);
-      
-      if (sameCategory.length === 0) return '';
-      
-      return `
-        <div class="related-laws">
-          <h3>Related Laws</h3>
-          <div class="related-grid">
-            ${sameCategory.map(([id, l]) => `
-              <div class="related-card" onclick="showProofView('${id}')">
-                <h4>${l.name}</h4>
-                <p>${l.description}</p>
-              </div>
-            `).join('')}
-          </div>
+    <div class="container">
+        <div class="header">
+            <h1>🌌 QLang — Library of Universal Laws</h1>
+            <p>Explore cosmic knowledge through the fundamental laws of the universe</p>
         </div>
-      `;
-    }
-
-    function showProofView(lawId) {
-      const law = universalLaws[lawId];
-      if (!law) return;
-
-      document.getElementById('main-view').style.display = 'none';
-      document.getElementById('proof-view').style.display = 'block';
-
-      const html = marked.parse(law.full_explanation);
-      document.getElementById('proof-content').innerHTML = html + showRelatedLaws(lawId);
-
-      // Re-render MathJax in the new content
-      if (window.MathJax) {
-        MathJax.typesetClear([document.getElementById('proof-content')]);
-        MathJax.typeset([document.getElementById('proof-content')]);
-      }
-    }
-
-    function showMainView() {
-      document.getElementById('main-view').style.display = 'block';
-      document.getElementById('proof-view').style.display = 'none';
-    }
-
-    // ----------------------------
-    // Navigation & Filtering
-    // ----------------------------
-
-    // Category filter buttons
-    document.querySelectorAll('.category-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
         
-        const category = btn.dataset.category;
-        const searchTerm = document.getElementById('search-input').value;
-        renderLibrary(category, searchTerm);
-      });
-    });
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="law-count">0</div>
+                <div class="stat-label">Universal Laws</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="category-count">0</div>
+                <div class="stat-label">Categories</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="domain-count">0</div>
+                <div class="stat-label">Domains</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="search-container">
+                <input type="text" id="question" placeholder="Ask your cosmic question...">
+            </div>
+            <div class="button-group">
+                <button onclick="askQLang()">✨ Query the Universe</button>
+                <button onclick="showLibrary()" class="secondary">📚 View Library</button>
+                <button onclick="showRandomLaw()" class="secondary">🎲 Random Law</button>
+            </div>
+        </div>
+        
+        <div id="response">
+            <p>Welcome to QLang! Explore the fundamental laws that govern our universe.</p>
+        </div>
+        
+        <div class="footer">
+            <p>QLang v1.0 — A comprehensive library of universal laws spanning physics, cosmology, information theory, and more</p>
+        </div>
+    </div>
 
-    // Search functionality
-    document.getElementById('search-input').addEventListener('input', (e) => {
-      const searchTerm = e.target.value;
-      const activeCategory = document.querySelector('.category-btn.active').dataset.category;
-      renderLibrary(activeCategory, searchTerm);
-    });
+    <script>
+        // ==================== LIBRARY OF UNIVERSAL LAWS ====================
+        const universalLaws = {
+            // === FUNDAMENTAL PHYSICS ===
+            "thermodynamics_2": {
+                "name": "Second Law of Thermodynamics",
+                "category": "fundamental_physics",
+                "domains": ["thermodynamics", "entropy", "time_arrow"],
+                "statement": "The entropy of an isolated system can only increase or remain constant",
+                "statement_latex": "\\Delta S \\geq 0",
+                "formulation": "In any natural process, the total entropy of the universe increases",
+                "implications": [
+                    "Irreversible time arrow",
+                    "Impossibility of perpetual motion",
+                    "Heat death of the universe as final state"
+                ],
+                "proofs": [
+                    "Calorimetry experiments",
+                    "Real heat engines",
+                    "Statistical foundations (Boltzmann)"
+                ],
+                "limitations": "Open systems and far from equilibrium",
+                "confidence": 0.99,
+                "discovery_date": "1850",
+                "discoverers": ["Rudolf Clausius", "William Thomson"],
+                "revolutions": ["thermodynamics", "cosmology"]
+            },
+            "general_relativity": {
+                "name": "General Relativity",
+                "category": "fundamental_physics",
+                "domains": ["gravitation", "space_time", "cosmology"],
+                "statement": "Matter and energy curve spacetime, and this curvature dictates motion",
+                "statement_latex": "G_{\\mu\\nu} = \\frac{8\\pi G}{c^4} T_{\\mu\\nu}",
+                "formulation": "Einstein's equation relating geometry and material content",
+                "implications": [
+                    "Light deflection by masses",
+                    "Gravitational waves",
+                    "Expansion of the universe",
+                    "Black holes"
+                ],
+                "proofs": [
+                    "Stellar deflection during eclipses (1919)",
+                    "Gravitational redshift",
+                    "Gravitational waves (LIGO 2015)"
+                ],
+                "confidence": 0.98,
+                "discovery_date": "1915",
+                "discoverers": ["Albert Einstein"],
+                "revolutions": ["gravitation", "cosmology"]
+            },
+            "quantum_mechanics": {
+                "name": "Principles of Quantum Mechanics",
+                "category": "fundamental_physics",
+                "domains": ["quantum", "uncertainty", "superposition"],
+                "statement": "System described by a wave function, unitary evolution, probabilistic measurement",
+                "statement_latex": "i\\hbar\\frac{\\partial}{\\partial t}\\Psi = \\hat{H}\\Psi",
+                "formulation": "Schrödinger equation describing temporal evolution",
+                "implications": [
+                    "Wave-particle duality",
+                    "Quantum entanglement",
+                    "Uncertainty principle",
+                    "Tunnel effect"
+                ],
+                "proofs": [
+                    "Stern-Gerlach experiment",
+                    "Interferences with individual particles",
+                    "Quantum computers"
+                ],
+                "confidence": 0.99,
+                "discovery_date": "1925-1927",
+                "discoverers": ["Heisenberg", "Schrödinger", "Dirac", "Bohr"]
+            },
+            "mass_energy_equivalence": {
+                "name": "Mass-Energy Equivalence",
+                "category": "fundamental_physics",
+                "domains": ["relativity", "energy", "mass"],
+                "statement": "Mass and energy are equivalent and convertible",
+                "statement_latex": "E = mc^2",
+                "implications": [
+                    "Nuclear energy",
+                    "Particle creation and annihilation",
+                    "Spacetime curvature by energy"
+                ],
+                "confidence": 0.99,
+                "discovery_date": "1905",
+                "discoverers": ["Albert Einstein"]
+            },
+            "heisenberg_uncertainty": {
+                "name": "Heisenberg Uncertainty Principle",
+                "category": "fundamental_physics",
+                "domains": ["quantum", "uncertainty", "measurement"],
+                "statement": "Impossibility of simultaneously knowing with precision certain pairs of properties",
+                "statement_latex": "\\Delta x \\Delta p \\geq \\frac{\\hbar}{2}",
+                "implications": [
+                    "Fundamental measurement limits",
+                    "Probabilistic nature of quantum reality",
+                    "Zero-point energy"
+                ],
+                "confidence": 0.98,
+                "discovery_date": "1927",
+                "discoverers": ["Werner Heisenberg"]
+            },
+            "newtons_third_law": {
+                "name": "Newton's Third Law of Motion",
+                "category": "fundamental_physics",
+                "domains": ["mechanics", "force", "interaction"],
+                "statement": "For every action, there is an equal and opposite reaction",
+                "statement_latex": "\\vec{F}_{12} = -\\vec{F}_{21}",
+                "formulation": "The force exerted by object 1 on object 2 is equal in magnitude and opposite in direction to the force exerted by object 2 on object 1",
+                "implications": [
+                    "Conservation of momentum",
+                    "Reciprocity in physical interactions",
+                    "Rocket propulsion mechanics"
+                ],
+                "proofs": [
+                    "Experimental observations of collisions",
+                    "Rocket launch dynamics",
+                    "Balance of forces in static systems"
+                ],
+                "confidence": 0.99,
+                "discovery_date": "1687",
+                "discoverers": ["Isaac Newton"],
+                "revolutions": ["classical_mechanics"]
+            },
+            "pauli_exclusion_principle": {
+                "name": "Pauli Exclusion Principle",
+                "category": "fundamental_physics",
+                "domains": ["quantum", "matter", "fermions"],
+                "statement": "No two fermions can occupy the same quantum state simultaneously",
+                "statement_latex": null,
+                "formulation": "Fermions (e.g., electrons) obey antisymmetric wave functions, preventing identical quantum states",
+                "implications": [
+                    "Structure of atoms and electron shells",
+                    "Stability of matter",
+                    "Behavior of neutron stars and white dwarfs"
+                ],
+                "proofs": [
+                    "Atomic spectra",
+                    "Periodic table structure",
+                    "Degenerate matter in astrophysics"
+                ],
+                "confidence": 0.98,
+                "discovery_date": "1925",
+                "discoverers": ["Wolfgang Pauli"],
+                "revolutions": ["quantum_mechanics"]
+            },
+            "newtons_first_law": {
+                "name": "Newton's First Law of Motion",
+                "category": "fundamental_physics",
+                "domains": ["mechanics", "force"],
+                "statement": "A body remains at rest or in uniform motion unless acted upon by a force",
+                "statement_latex": "\\vec{F} = 0 \\implies \\vec{a} = 0",
+                "formulation": "Objects maintain their state of motion in the absence of net external forces",
+                "implications": [
+                    "Foundation of inertia",
+                    "Conservation of momentum",
+                    "Reference frames"
+                ],
+                "proofs": [
+                    "Galilean experiments",
+                    "Motion of planets",
+                    "Modern dynamics"
+                ],
+                "confidence": 0.99,
+                "discovery_date": "1687",
+                "discoverers": ["Isaac Newton"],
+                "revolutions": ["classical_mechanics"]
+            },
+            "born_rule": {
+                "name": "Born Rule",
+                "category": "fundamental_physics",
+                "domains": ["quantum", "probability", "measurement"],
+                "statement": "The probability of a quantum measurement outcome is the square of the wave function amplitude",
+                "statement_latex": "P(x) = |\\psi(x)|^2",
+                "formulation": "Measurement probabilities are derived from the wave function",
+                "implications": [
+                    "Probabilistic nature of quantum mechanics",
+                    "Interpretation of wave function",
+                    "Quantum measurement problem"
+                ],
+                "proofs": [
+                    "Double-slit experiment",
+                    "Quantum state tomography",
+                    "Photon detection"
+                ],
+                "confidence": 0.98,
+                "discovery_date": "1926",
+                "discoverers": ["Max Born"],
+                "revolutions": ["quantum_mechanics"]
+            },
+            "conservation_energy": {
+                "name": "Conservation of Energy",
+                "category": "fundamental_physics",
+                "domains": ["energy", "symmetry", "thermodynamics"],
+                "statement": "Energy cannot be created or destroyed, only transformed",
+                "statement_latex": "\\frac{dE}{dt} = 0",
+                "formulation": "Total energy in an isolated system remains constant over time",
+                "implications": [
+                    "No perpetual motion machines",
+                    "Energy transformation efficiency limits",
+                    "Time translation symmetry"
+                ],
+                "proofs": [
+                    "Noether's theorem",
+                    "Calorimetry experiments",
+                    "Mechanical equivalent of heat"
+                ],
+                "confidence": 0.99,
+                "discovery_date": "1842",
+                "discoverers": ["Julius von Mayer", "James Joule", "Hermann von Helmholtz"],
+                "revolutions": ["thermodynamics"]
+            },
+            "conservation_momentum": {
+                "name": "Conservation of Momentum",
+                "category": "fundamental_physics", 
+                "domains": ["mechanics", "symmetry", "collisions"],
+                "statement": "Total momentum of an isolated system remains constant",
+                "statement_latex": "\\frac{d\\vec{p}}{dt} = 0",
+                "formulation": "In the absence of external forces, momentum is conserved",
+                "implications": [
+                    "Rocket propulsion",
+                    "Collision analysis",
+                    "Space translation symmetry"
+                ],
+                "proofs": [
+                    "Collision experiments",
+                    "Noether's theorem",
+                    "Astronomical observations"
+                ],
+                "confidence": 0.99,
+                "discovery_date": "1644",
+                "discoverers": ["René Descartes"],
+                "revolutions": ["classical_mechanics"]
+            },
+            "maxwell_equations": {
+                "name": "Maxwell's Equations",
+                "category": "fundamental_physics",
+                "domains": ["electromagnetism", "waves", "light"],
+                "statement": "Fundamental laws governing electricity, magnetism, and electromagnetic waves",
+                "statement_latex": "\\nabla \\cdot \\vec{E} = \\frac{\\rho}{\\epsilon_0}, \\quad \\nabla \\cdot \\vec{B} = 0, \\quad \\nabla \\times \\vec{E} = -\\frac{\\partial \\vec{B}}{\\partial t}, \\quad \\nabla \\times \\vec{B} = \\mu_0\\vec{J} + \\mu_0\\epsilon_0\\frac{\\partial \\vec{E}}{\\partial t}",
+                "formulation": "Set of four differential equations describing electromagnetic fields",
+                "implications": [
+                    "Electromagnetic wave propagation",
+                    "Speed of light derivation",
+                    "Relativity foundation"
+                ],
+                "proofs": [
+                    "Radio wave generation",
+                    "Light as electromagnetic wave",
+                    "Modern electronics"
+                ],
+                "confidence": 0.99,
+                "discovery_date": "1861-1862",
+                "discoverers": ["James Clerk Maxwell"],
+                "revolutions": ["electromagnetism", "relativity"]
+            },
+            "special_relativity": {
+                "name": "Special Relativity",
+                "category": "fundamental_physics",
+                "domains": ["relativity", "space_time", "motion"],
+                "statement": "Laws of physics are identical in all inertial frames, and light speed is constant",
+                "statement_latex": "ds^2 = -c^2dt^2 + dx^2 + dy^2 + dz^2",
+                "formulations": {
+                    "postulates": [
+                        "Physics laws are same in all inertial frames",
+                        "Light speed is constant in vacuum regardless of source motion"
+                    ],
+                    "effects": [
+                        "Time dilation: \\Delta t' = \\frac{\\Delta t}{\\sqrt{1-v^2/c^2}}",
+                        "Length contraction: L' = L\\sqrt{1-v^2/c^2}",
+                        "Relativistic momentum: p = \\frac{mv}{\\sqrt{1-v^2/c^2}}"
+                    ]
+                },
+                "implications": [
+                    "Relativity of simultaneity",
+                    "Mass-energy equivalence",
+                    "Magnetic fields as relativistic effects"
+                ],
+                "proofs": [
+                    "Muon lifetime experiments",
+                    "Particle accelerator results",
+                    "GPS satellite timing"
+                ],
+                "confidence": 0.99,
+                "discovery_date": "1905",
+                "discoverers": ["Albert Einstein"],
+                "revolutions": ["modern_physics"]
+            },
+            "schrodinger_equation": {
+                "name": "Schrödinger Equation",
+                "category": "fundamental_physics",
+                "domains": ["quantum", "wave_function", "evolution"],
+                "statement": "Describes how the quantum state of a physical system changes with time",
+                "statement_latex": "i\\hbar\\frac{\\partial}{\\partial t}\\Psi(\\vec{r},t) = \\left[-\\frac{\\hbar^2}{2m}\\nabla^2 + V(\\vec{r},t)\\right]\\Psi(\\vec{r},t)",
+                "formulation": "Time-dependent wave equation for quantum systems",
+                "implications": [
+                    "Quantized energy levels",
+                    "Quantum tunneling",
+                    "Atomic and molecular structure"
+                ],
+                "proofs": [
+                    "Hydrogen atom spectrum",
+                    "Quantum chemistry predictions",
+                    "Scanning tunneling microscopy"
+                ],
+                "confidence": 0.98,
+                "discovery_date": "1926",
+                "discoverers": ["Erwin Schrödinger"],
+                "revolutions": ["quantum_mechanics"]
+            },
+            "dirac_equation": {
+                "name": "Dirac Equation",
+                "category": "fundamental_physics",
+                "domains": ["quantum", "relativity", "antimatter"],
+                "statement": "Relativistic wave equation describing spin-1/2 particles",
+                "statement_latex": "(i\\hbar\\gamma^\\mu\\partial_\\mu - mc)\\psi = 0",
+                "formulation": "Combines quantum mechanics and special relativity",
+                "implications": [
+                    "Prediction of antimatter",
+                    "Electron spin naturally emerges",
+                    "Fine structure of hydrogen"
+                ],
+                "proofs": [
+                    "Discovery of positron (1932)",
+                    "Electron magnetic moment",
+                    "Relativistic quantum chemistry"
+                ],
+                "confidence": 0.97,
+                "discovery_date": "1928",
+                "discoverers": ["Paul Dirac"],
+                "revolutions": ["quantum_electrodynamics"]
+            },
 
-    // Back button
-    document.getElementById('back-btn').addEventListener('click', () => {
-      window.location.hash = '';
-      showMainView();
-    });
+            // === COSMOLOGY ===
+            "hubble_expansion": {
+                "name": "Hubble-Lemaître Law",
+                "category": "cosmology",
+                "domains": ["expansion", "cosmology"],
+                "statement": "Galaxies recede at a speed proportional to their distance",
+                "statement_latex": "v = H_0 d",
+                "implications": [
+                    "Expanding universe",
+                    "Big Bang as origin",
+                    "Finite age of the universe"
+                ],
+                "confidence": 0.95,
+                "discovery_date": "1927-1929",
+                "discoverers": ["Georges Lemaître", "Edwin Hubble"]
+            },
+            "dark_energy_dominance": {
+                "name": "Dark Energy Dominance",
+                "category": "cosmology",
+                "domains": ["cosmology", "dark_energy", "expansion"],
+                "statement": "Dark energy drives the accelerated expansion of the universe",
+                "statement_latex": "\\Omega_{\\Lambda} \\approx 0.68",
+                "formulation": "The cosmological constant or equivalent dark energy component dominates the universe's energy density, causing accelerated expansion",
+                "implications": [
+                    "Accelerated cosmic expansion",
+                    "Future dilution of matter",
+                    "Ultimate fate of the universe"
+                ],
+                "proofs": [
+                    "Type Ia supernova observations (1998)",
+                    "Cosmic microwave background (Planck)",
+                    "Large-scale structure surveys"
+                ],
+                "confidence": 0.94,
+                "discovery_date": "1998",
+                "discoverers": ["Saul Perlmutter", "Brian Schmidt", "Adam Riess"],
+                "revolutions": ["cosmology"]
+            },
+            "cosmological_principle": {
+                "name": "Cosmological Principle",
+                "category": "cosmology",
+                "domains": ["cosmology", "universe_structure"],
+                "statement": "The universe is homogeneous and isotropic on large scales",
+                "statement_latex": null,
+                "formulation": "No preferred location or direction exists in the universe at cosmological scales",
+                "implications": [
+                    "Simplified cosmological models",
+                    "Uniform cosmic microwave background",
+                    "Large-scale structure formation"
+                ],
+                "proofs": [
+                    "CMB isotropy (COBE, Planck)",
+                    "Galaxy distribution surveys",
+                    "Isotropic expansion rates"
+                ],
+                "confidence": 0.95,
+                "discovery_date": "1930s",
+                "discoverers": ["Edwin Hubble", "Georges Lemaître"],
+                "revolutions": ["cosmology"]
+            },
+            "cosmic_inflation": {
+                "name": "Cosmic Inflation",
+                "category": "cosmology",
+                "domains": ["cosmology", "early_universe", "expansion"],
+                "statement": "Exponential expansion of the universe in the first fraction of a second",
+                "statement_latex": "a(t) \\propto e^{Ht}",
+                "formulation": "Rapid accelerated expansion driven by vacuum energy",
+                "implications": [
+                    "Horizon problem solution",
+                    "Flatness problem solution",
+                    "Primordial density fluctuations"
+                ],
+                "proofs": [
+                    "CMB temperature anisotropies",
+                    "Large-scale structure statistics",
+                    "Gravitational wave background (predicted)"
+                ],
+                "confidence": 0.85,
+                "discovery_date": "1980",
+                "discoverers": ["Alan Guth", "Andrei Linde", "Paul Steinhardt"],
+                "revolutions": ["cosmology"]
+            },
 
-    // Hash-based navigation
-    function handleHash() {
-      const hash = window.location.hash.slice(1);
-      if (hash.startsWith('proof/')) {
-        const lawId = hash.split('/')[1];
-        showProofView(lawId);
-      } else {
-        showMainView();
-      }
-    }
+            // === INFORMATION AND COMPLEXITY ===
+            "bekenstein": {
+                "name": "Bekenstein Bound",
+                "category": "information",
+                "domains": ["information", "gravity", "holography"],
+                "statement": "Maximum amount of information contained in a region of space",
+                "statement_latex": "I \\leq \\frac{2\\pi R E}{\\hbar c \\ln 2}",
+                "implications": [
+                    "Holographic principle",
+                    "Black hole entropy",
+                    "Fundamental computational limits"
+                ],
+                "confidence": 0.90,
+                "discovery_date": "1973",
+                "discoverers": ["Jacob Bekenstein"]
+            },
+            "landauer": {
+                "name": "Landauer's Principle",
+                "category": "information",
+                "domains": ["information", "thermodynamics", "computation"],
+                "statement": "Erasing one bit of information dissipates at least kT ln(2) of energy",
+                "statement_latex": "E \\geq kT \\ln 2",
+                "implications": [
+                    "Information/entropy link",
+                    "Energy limits of computation",
+                    "Reversible computers"
+                ],
+                "confidence": 0.85,
+                "discovery_date": "1961",
+                "discoverers": ["Rolf Landauer"]
+            },
+            "shannon_entropy": {
+                "name": "Shannon's Information Entropy",
+                "category": "information",
+                "domains": ["information", "communication", "probability"],
+                "statement": "The entropy of a message quantifies its information content or uncertainty",
+                "statement_latex": "H(X) = -\\sum_{i} p(x_i) \\log p(x_i)",
+                "formulation": "Information entropy measures the average amount of information required to describe a random variable",
+                "implications": [
+                    "Foundation of information theory",
+                    "Limits of data compression",
+                    "Error correction in communication systems"
+                ],
+                "proofs": [
+                    "Communication channel experiments",
+                    "Data compression algorithms",
+                    "Error-correcting codes"
+                ],
+                "confidence": 0.97,
+                "discovery_date": "1948",
+                "discoverers": ["Claude Shannon"],
+                "revolutions": ["information_theory"]
+            },
+            "church_turing": {
+                "name": "Church-Turing Thesis",
+                "category": "information",
+                "domains": ["computation", "mathematics", "logic"],
+                "statement": "Any function that can be computed by an algorithm can be computed by a Turing machine",
+                "statement_latex": null,
+                "formulation": "Formal definition of effective calculability and computability",
+                "implications": [
+                    "Universal computation concept",
+                    "Limits of algorithmic computation",
+                    "Foundation of computer science"
+                ],
+                "proofs": [
+                    "Equivalence of computational models",
+                    "Practical implementation in modern computers",
+                    "Theoretical computer science developments"
+                ],
+                "confidence": 0.95,
+                "discovery_date": "1936",
+                "discoverers": ["Alonzo Church", "Alan Turing"],
+                "revolutions": ["computer_science"]
+            },
 
-    window.addEventListener('load', () => {
-      handleHash();
-      renderLibrary();
-    });
-    
-    window.addEventListener('hashchange', handleHash);
-  </script>
+            // === BIOLOGY AND COMPLEX SYSTEMS ===
+            "natural_selection": {
+                "name": "Natural Selection",
+                "category": "biology",
+                "domains": ["evolution", "biology", "complex_systems"],
+                "statement": "Traits that confer survival and reproductive advantages propagate in populations",
+                "statement_latex": null,
+                "formulation": "Differential survival and reproduction of organisms based on heritable traits",
+                "implications": [
+                    "Evolution of species",
+                    "Adaptation to environments",
+                    "Biodiversity"
+                ],
+                "proofs": [
+                    "Fossil record transitions",
+                    "Antibiotic resistance in bacteria",
+                    "Galápagos finch studies"
+                ],
+                "confidence": 0.96,
+                "discovery_date": "1859",
+                "discoverers": ["Charles Darwin", "Alfred Russel Wallace"],
+                "revolutions": ["evolutionary_biology"]
+            },
+
+            // === MATHEMATICS ===
+            "bayes_theorem": {
+                "name": "Bayes' Theorem",
+                "category": "mathematics",
+                "domains": ["probability", "statistics", "decision_theory"],
+                "statement": "The probability of an event is updated based on new evidence",
+                "statement_latex": "P(A|B) = \\frac{P(B|A)P(A)}{P(B)}",
+                "formulation": "Relates conditional probabilities to update beliefs with new data",
+                "implications": [
+                    "Foundation of Bayesian inference",
+                    "Machine learning and AI",
+                    "Decision-making under uncertainty"
+                ],
+                "proofs": [
+                    "Derived from basic probability axioms",
+                    "Applications in statistical modeling",
+                    "Success in predictive algorithms"
+                ],
+                "confidence": 1.0,
+                "discovery_date": "1763",
+                "discoverers": ["Thomas Bayes"],
+                "revolutions": ["statistics", "machine_learning"]
+            },
+            "godel_incompleteness": {
+                "name": "Gödel's Incompleteness Theorems",
+                "category": "mathematics",
+                "domains": ["mathematics", "logic", "foundations"],
+                "statement": "In any consistent formal system, there are true statements that cannot be proved",
+                "statement_latex": null,
+                "formulation": "First theorem: Systems containing basic arithmetic are incomplete\nSecond theorem: Such systems cannot prove their own consistency",
+                "implications": [
+                    "Limits of formal mathematics",
+                    "Undecidable problems",
+                    "Foundational crisis in mathematics"
+                ],
+                "proofs": [
+                    "Gödel numbering construction",
+                    "Self-referential statements",
+                    "Formal logic derivations"
+                ],
+                "confidence": 1.0,
+                "discovery_date": "1931",
+                "discoverers": ["Kurt Gödel"],
+                "revolutions": ["mathematical_logic"]
+            },
+
+            // === CHEMISTRY ===
+            "periodic_law": {
+                "name": "Periodic Law",
+                "category": "chemistry",
+                "domains": ["chemistry", "elements", "periodicity"],
+                "statement": "Properties of elements are periodic functions of their atomic numbers",
+                "statement_latex": null,
+                "formulation": "Elements exhibit repeating patterns in their chemical behavior when arranged by atomic number",
+                "implications": [
+                    "Periodic table organization",
+                    "Prediction of new elements",
+                    "Chemical bonding patterns"
+                ],
+                "proofs": [
+                    "Success of periodic table predictions",
+                    "Atomic spectroscopy",
+                    "Quantum mechanical explanation"
+                ],
+                "confidence": 0.98,
+                "discovery_date": "1869",
+                "discoverers": ["Dmitri Mendeleev"],
+                "revolutions": ["chemistry"]
+            }
+        };
+
+        // ==================== MATHJAX FUNCTIONS ====================
+
+        // MathJax Configuration
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams'
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+
+        function renderMathJax() {
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function formatLatex(latexString) {
+            if (!latexString) return '';
+            // Clean and format LaTeX for MathJax
+            return latexString.replace(/\\\\/g, '\\');
+        }
+
+        function createFormulaHTML(latexString, isDisplay = true) {
+            if (!latexString) return '';
+            const formatted = formatLatex(latexString);
+            return isDisplay ? `$$${formatted}$$` : `$${formatted}$`;
+        }
+
+        // ==================== MAIN FUNCTIONS ====================
+
+        function getRandomLaws(n) {
+            const keys = Object.keys(universalLaws);
+            const result = [];
+            const usedKeys = new Set();
+            
+            while (result.length < n && result.length < keys.length) {
+                const randomKey = keys[Math.floor(Math.random() * keys.length)];
+                if (!usedKeys.has(randomKey)) {
+                    usedKeys.add(randomKey);
+                    result.push(universalLaws[randomKey]);
+                }
+            }
+            return result;
+        }
+
+        function mapQuestion(question) {
+            const questionLower = question.toLowerCase();
+            let bestScore = 0;
+            let bestType = null;
+
+            const questionTypes = {
+                "fundamentality_info": {
+                    "keywords": ["information", "fundamental", "matter", "bit", "primitive", "computation", "entropy", "holography"],
+                    "laws": ["bekenstein", "landauer", "shannon_entropy", "church_turing"],
+                    "synthesis_template": "Information appears as a fundamental entity, perhaps more primitive than matter itself, with deep connections to computation and entropy."
+                },
+                "relativity": {
+                    "keywords": ["relativity", "einstein", "space-time", "gravitation", "mass-energy", "spacetime", "curvature", "light speed", "inertial frames"],
+                    "laws": ["general_relativity", "mass_energy_equivalence", "special_relativity"],
+                    "synthesis_template": "Relativity revolutionizes our understanding of space, time, gravitation, and the fundamental relationship between mass and energy."
+                },
+                "quantum": {
+                    "keywords": ["quantum", "uncertainty", "schrödinger", "heisenberg", "born", "pauli", "superposition", "fermions", "wave function", "dirac", "antimatter", "exclusion"],
+                    "laws": ["quantum_mechanics", "heisenberg_uncertainty", "pauli_exclusion_principle", "born_rule", "schrodinger_equation", "dirac_equation"],
+                    "synthesis_template": "The quantum world reveals a probabilistic and counter-intuitive reality governed by wave functions, uncertainty, and exotic particle behavior."
+                },
+                "thermodynamics": {
+                    "keywords": ["entropy", "thermodynamics", "disorder", "order", "energy", "heat", "temperature", "conservation", "isolated system"],
+                    "laws": ["thermodynamics_2", "landauer", "conservation_energy"],
+                    "synthesis_template": "Thermodynamics governs energy transformations, defines the arrow of time, and establishes fundamental limits for physical processes."
+                },
+                "cosmology": {
+                    "keywords": ["universe", "expansion", "big bang", "cosmology", "dark energy", "homogeneous", "isotropic", "inflation", "hubble", "cosmic", "primordial"],
+                    "laws": ["hubble_expansion", "general_relativity", "dark_energy_dominance", "cosmological_principle", "cosmic_inflation"],
+                    "synthesis_template": "Modern cosmology reveals an expanding universe born from an extreme primordial state, with dark energy driving accelerated expansion."
+                },
+                "classical_mechanics": {
+                    "keywords": ["newton", "motion", "force", "mechanics", "inertia", "momentum", "conservation", "collisions", "action-reaction"],
+                    "laws": ["newtons_third_law", "newtons_first_law", "conservation_momentum"],
+                    "synthesis_template": "Classical mechanics governs the motion of macroscopic objects under forces, with conservation laws providing fundamental constraints."
+                },
+                "electromagnetism": {
+                    "keywords": ["electromagnetism", "maxwell", "electric", "magnetic", "fields", "waves", "light", "radiation"],
+                    "laws": ["maxwell_equations"],
+                    "synthesis_template": "Electromagnetism unifies electricity and magnetism, revealing light as an electromagnetic wave and laying foundations for modern physics."
+                },
+                "evolution": {
+                    "keywords": ["evolution", "natural selection", "darwin", "biology", "adaptation", "species", "reproduction", "survival"],
+                    "laws": ["natural_selection"],
+                    "synthesis_template": "Natural selection drives the evolution of life through differential survival and reproduction of adapted traits."
+                },
+                "probability_statistics": {
+                    "keywords": ["probability", "bayes", "statistics", "inference", "information", "entropy", "uncertainty", "decision theory"],
+                    "laws": ["bayes_theorem", "shannon_entropy"],
+                    "synthesis_template": "Probability and statistics provide tools to quantify uncertainty, update beliefs with evidence, and measure information content."
+                },
+                "mathematics_logic": {
+                    "keywords": ["mathematics", "logic", "gödel", "incompleteness", "computation", "proof", "foundations"],
+                    "laws": ["godel_incompleteness", "church_turing"],
+                    "synthesis_template": "Mathematical logic reveals fundamental limits of formal systems and defines the nature of computation and provability."
+                },
+                "chemistry_matter": {
+                    "keywords": ["chemistry", "elements", "periodic", "mendeleev", "atoms", "matter", "structure"],
+                    "laws": ["periodic_law"],
+                    "synthesis_template": "The periodic law reveals fundamental patterns in elemental properties, organizing matter based on atomic structure."
+                },
+                "symmetry_conservation": {
+                    "keywords": ["symmetry", "conservation", "energy", "momentum", "noether", "invariance"],
+                    "laws": ["conservation_energy", "conservation_momentum"],
+                    "synthesis_template": "Fundamental symmetries in nature give rise to conservation laws that constrain all physical processes."
+                }
+            };
+
+            for (const [type, data] of Object.entries(questionTypes)) {
+                const score = data.keywords.filter(word => 
+                    questionLower.includes(word)
+                ).length;
+                
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestType = type;
+                }
+            }
+
+            return bestType ? questionTypes[bestType] : null;
+        }
+
+        function generateResponse(question) {
+            const questionType = mapQuestion(question);
+            
+            if (!questionType) {
+                const randomLaws = getRandomLaws(3);
+                return `### 🔍 No Direct Match
+
+**Question** : "${question}"
+
+No specific category was identified. Here are some relevant universal laws:
+
+${randomLaws.map(law => 
+    `- **${law.name}** : ${law.statement}`
+).join('\n')}
+
+**Suggestions** : Rephrase using terms like "information","big bang", "cosmology", "dark energy", "homogeneous", "isotropic"  , "relativity", "quantum", "expansion", etc.`;
+            }
+
+            const invokedLaws = questionType.laws.map(key => universalLaws[key]);
+            const averageConfidence = invokedLaws.reduce((sum, law) => sum + law.confidence, 0) / invokedLaws.length;
+
+            let markdown = `### 🌟 QLang Analysis
+
+**Question** : "${question}"
+
+**Identified category** : ${questionType.keywords.join(', ')}
+
+**Synthesis** : ${questionType.synthesis_template}
+
+---
+
+## 📜 Invoked Universal Laws
+
+`;
+
+            invokedLaws.forEach(law => {
+                const formulaHTML = law.statement_latex ? createFormulaHTML(law.statement_latex, true) : '';
+                
+                markdown += `### ${law.name}
+
+**Domain** : ${law.domains.map(d => `\`${d}\``).join(', ')}
+
+**Statement** : ${law.statement}
+
+${formulaHTML ? `**Mathematical formulation** : 
+
+${formulaHTML}
+
+` : ''}
+
+**Implications** : ${law.implications.join('; ')}
+
+**Confidence level** : ${(law.confidence * 100).toFixed(0)}%
+
+---
+`;
+            });
+
+            markdown += `**Global confidence** : ${(averageConfidence * 100).toFixed(1)}%
+**Number of invoked laws** : ${invokedLaws.length}`;
+
+            return markdown;
+        }
+
+        function showLibrary() {
+            const categories = {};
+            const allDomains = new Set();
+            
+            Object.values(universalLaws).forEach(law => {
+                if (!categories[law.category]) {
+                    categories[law.category] = [];
+                }
+                categories[law.category].push(law);
+                
+                // Add all domains to the set
+                law.domains.forEach(domain => allDomains.add(domain));
+            });
+
+            let html = `<h2>📚 Library of Universal Laws</h2>
+                       <p><strong>${Object.keys(universalLaws).length} laws cataloged</strong></p>`;
+
+            for (const [category, laws] of Object.entries(categories)) {
+                const categoryName = category.replace(/_/g, ' ').toUpperCase();
+                html += `<div class="library-section">
+                        <h3>${categoryName} (${laws.length} laws)</h3>`;
+                
+                laws.forEach(law => {
+                    const formula = law.statement_latex ? 
+                        `<div class="latex-container">${createFormulaHTML(law.statement_latex, true)}</div>` : '';
+                    
+                    html += `<div class="law-card">
+                            <h4>${law.name} <span class="category-badge">${categoryName}</span></h4>
+                            <p><strong>Statement:</strong> ${law.statement}</p>
+                            ${formula}
+                            <div>${law.domains.map(d => `<span class="domain-tag">${d}</span>`).join('')}</div>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" style="width: ${law.confidence * 100}%"></div>
+                            </div>
+                            <div class="law-meta">
+                                <span>Confidence: ${(law.confidence * 100).toFixed(0)}%</span>
+                                <span>${law.discovery_date}</span>
+                                <span>${Array.isArray(law.discoverers) ? law.discoverers.join(', ') : law.discoverers}</span>
+                            </div>
+                        </div>`;
+                });
+                
+                html += `</div>`;
+            }
+
+            document.getElementById('response').innerHTML = html;
+            // Update stats
+            updateStats();
+            // Force MathJax rendering after HTML insertion
+            setTimeout(renderMathJax, 100);
+        }
+
+        function showRandomLaw() {
+            const laws = Object.values(universalLaws);
+            const randomLaw = laws[Math.floor(Math.random() * laws.length)];
+            const formula = randomLaw.statement_latex ? 
+                `<div class="latex-container">${createFormulaHTML(randomLaw.statement_latex, true)}</div>` : '';
+            
+            const html = `<div class="law-card">
+                <h3>🎲 Random Law</h3>
+                <h4>${randomLaw.name} <span class="category-badge">${randomLaw.category.replace(/_/g, ' ').toUpperCase()}</span></h4>
+                <p><strong>Statement:</strong> ${randomLaw.statement}</p>
+                ${formula}
+                <p><strong>Domain:</strong> ${randomLaw.domains.join(', ')}</p>
+                <p><strong>Implications:</strong> ${randomLaw.implications.join('; ')}</p>
+                <p><strong>Discoverers:</strong> ${Array.isArray(randomLaw.discoverers) ? randomLaw.discoverers.join(', ') : randomLaw.discoverers}</p>
+                <p><strong>Date:</strong> ${randomLaw.discovery_date}</p>
+                <div class="confidence-bar">
+                    <div class="confidence-fill" style="width: ${randomLaw.confidence * 100}%"></div>
+                </div>
+                <div class="law-meta">
+                    <span>Confidence level: ${(randomLaw.confidence * 100).toFixed(0)}%</span>
+                </div>
+            </div>`;
+            
+            document.getElementById('response').innerHTML = html;
+            setTimeout(renderMathJax, 100);
+        }
+
+        function updateStats() {
+            // Count laws
+            document.getElementById('law-count').textContent = Object.keys(universalLaws).length;
+            
+            // Count categories
+            const categories = new Set();
+            Object.values(universalLaws).forEach(law => categories.add(law.category));
+            document.getElementById('category-count').textContent = categories.size;
+            
+            // Count domains
+            const domains = new Set();
+            Object.values(universalLaws).forEach(law => {
+                law.domains.forEach(domain => domains.add(domain));
+            });
+            document.getElementById('domain-count').textContent = domains.size;
+        }
+
+        // ==================== USER INTERFACE FUNCTIONS ====================
+
+        async function askQLang() {
+            const question = document.getElementById('question').value.trim();
+            const responseDiv = document.getElementById('response');
+
+            if (!question) {
+                responseDiv.innerHTML = "<p>🌠 Please ask a cosmic question.</p>";
+                return;
+            }
+
+            responseDiv.innerHTML = "<p>🌀 Consulting universal archives...</p>";
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            try {
+                const responseMarkdown = generateResponse(question);
+                const responseHTML = marked.parse(responseMarkdown);
+                responseDiv.innerHTML = responseHTML;
+                // Force MathJax rendering after HTML insertion
+                setTimeout(renderMathJax, 100);
+            } catch (error) {
+                responseDiv.innerHTML = `<p>❌ Error in the space-time continuum: ${error.message}</p>`;
+            }
+        }
+
+        // ==================== INITIALIZATION ====================
+
+        function init() {
+            // Update stats
+            updateStats();
+            
+            // Display library on startup
+            showLibrary();
+            
+            console.log('QLang initialized with', Object.keys(universalLaws).length, 'universal laws');
+        }
+
+        // Initialization on page load
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Allow using Enter key
+        document.getElementById('question').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                askQLang();
+            }
+        });
+
+        // Focus on question field
+        document.getElementById('question').focus();
+    </script>
 </body>
 </html>
