@@ -8,13 +8,24 @@
   <!-- MathJax 3 -->
   <script>
     window.MathJax = {
-      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-      svg: { fontCache: 'global' },
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        renderActions: {
+          addMenu: [0, '', '']
+        }
+      },
       startup: {
-        ready() {
-          MathJax.startup.defaultReady();
-          // Once MathJax is ready, render the library
-          renderLibrary();
+        pageReady: () => {
+          return MathJax.startup.defaultPageReady().then(() => {
+            console.log('MathJax is ready');
+            renderLibrary();
+          });
         }
       }
     };
