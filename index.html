@@ -3,121 +3,323 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QLang v 1.0 — Library of Universal Laws</title>
+    <title>QLang v1.0 — Library of Universal Laws</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
+        :root {
+            --primary: #0c2461;
+            --secondary: #1e3799;
+            --accent: #ff6b6b;
+            --light: rgba(255, 255, 255, 0.1);
+            --lighter: rgba(255, 255, 255, 0.05);
+            --text: white;
+            --card-bg: white;
+            --card-text: #333;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 1000px; 
+            max-width: 1200px; 
             margin: 0 auto; 
             padding: 20px;
-            background: linear-gradient(135deg, #0c2461 0%, #1e3799 100%);
-            color: white;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--text);
             line-height: 1.6;
+            min-height: 100vh;
         }
+        
         .container {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--light);
             padding: 30px;
             border-radius: 15px;
             backdrop-filter: blur(10px);
             margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
-        .library-section {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 15px 0;
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
         }
-        input, select { 
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #4a69bd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .search-container {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        input { 
             width: 100%; 
             padding: 15px; 
             margin-bottom: 15px;
             border: none;
             border-radius: 8px;
             font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
         }
+        
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
         button { 
-            padding: 15px 30px; 
-            background: #ff6b6b;
+            padding: 15px 25px; 
+            background: var(--accent);
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
             transition: all 0.3s;
-            margin: 5px;
+            flex: 1;
+            min-width: 150px;
         }
+        
         button:hover {
             background: #ff5252;
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
+        
+        button.secondary {
+            background: #4a69bd;
+        }
+        
+        button.secondary:hover {
+            background: #3c5aa8;
+        }
+        
         #response { 
-            background: white;
-            color: #333;
+            background: var(--card-bg);
+            color: var(--card-text);
             border-radius: 10px;
             padding: 25px;
             margin-top: 25px;
             min-height: 100px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
+        
+        .library-section {
+            background: var(--lighter);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .library-section h3 {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffd700;
+        }
+        
         .law-card {
             background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            margin: 10px 0;
+            padding: 20px;
+            margin: 15px 0;
             border-radius: 8px;
-            border-left: 4px solid #ff6b6b;
+            border-left: 4px solid var(--accent);
+            transition: transform 0.3s;
         }
+        
+        .law-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .law-card h4 {
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+        
         .domain-tag {
             display: inline-block;
             background: #4a69bd;
-            padding: 2px 8px;
-            border-radius: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
             font-size: 0.8em;
-            margin: 2px;
+            margin: 5px 5px 5px 0;
             color: white;
         }
+        
         .confidence-bar {
             height: 8px;
             background: #333;
             border-radius: 4px;
-            margin: 5px 0;
+            margin: 10px 0;
+            overflow: hidden;
         }
+        
         .confidence-fill {
             height: 100%;
-            background: #ff6b6b;
+            background: var(--accent);
             border-radius: 4px;
+            transition: width 1s ease-in-out;
         }
+        
         .math-formula {
             background: #f8f9fa;
-            padding: 10px;
+            padding: 15px;
             border-radius: 5px;
-            margin: 10px 0;
+            margin: 15px 0;
             border-left: 3px solid #4a69bd;
             color: #333;
+            overflow-x: auto;
         }
+        
         .latex-container {
             text-align: center;
             margin: 15px 0;
             padding: 15px;
             background: #f1f3f4;
             border-radius: 8px;
+            overflow-x: auto;
+        }
+        
+        .law-meta {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .category-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            font-size: 0.7rem;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .stat-card {
+            background: var(--lighter);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🌌 QLang v 1.0 — Library of Universal Laws</h1>
-        <p>Explore cosmic knowledge through the fundamental laws of the universe.</p>
+        <div class="header">
+            <h1>🌌 QLang — Library of Universal Laws</h1>
+            <p>Explore cosmic knowledge through the fundamental laws of the universe</p>
+        </div>
         
-        <input type="text" id="question" placeholder="Ask your cosmic question...">
-        <button onclick="askQLang()">✨ Query the Universe</button>
-        <button onclick="showLibrary()">📚 View Library</button>
-        <button onclick="showRandomLaw()">🎲 Random Law</button>
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="law-count">0</div>
+                <div class="stat-label">Universal Laws</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="category-count">0</div>
+                <div class="stat-label">Categories</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="domain-count">0</div>
+                <div class="stat-label">Domains</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="search-container">
+                <input type="text" id="question" placeholder="Ask your cosmic question...">
+            </div>
+            <div class="button-group">
+                <button onclick="askQLang()">✨ Query the Universe</button>
+                <button onclick="showLibrary()" class="secondary">📚 View Library</button>
+                <button onclick="showRandomLaw()" class="secondary">🎲 Random Law</button>
+            </div>
+        </div>
         
         <div id="response">
-            <p>The library contains <span id="law-count">0</span> universal laws.</p>
+            <p>Welcome to QLang! Explore the fundamental laws that govern our universe.</p>
+        </div>
+        
+        <div class="footer">
+            <p>QLang v1.0 — A comprehensive library of universal laws spanning physics, cosmology, information theory, and more</p>
         </div>
     </div>
 
@@ -311,169 +513,6 @@
                 "discoverers": ["Max Born"],
                 "revolutions": ["quantum_mechanics"]
             },
-
-            // === COSMOLOGY ===
-            "hubble_expansion": {
-                "name": "Hubble-Lemaître Law",
-                "category": "cosmology",
-                "domains": ["expansion", "cosmology"],
-                "statement": "Galaxies recede at a speed proportional to their distance",
-                "statement_latex": "v = H_0 d",
-                "implications": [
-                    "Expanding universe",
-                    "Big Bang as origin",
-                    "Finite age of the universe"
-                ],
-                "confidence": 0.95,
-                "discovery_date": "1927-1929",
-                "discoverers": ["Georges Lemaître", "Edwin Hubble"]
-            },
-            "dark_energy_dominance": {
-                "name": "Dark Energy Dominance",
-                "category": "cosmology",
-                "domains": ["cosmology", "dark_energy", "expansion"],
-                "statement": "Dark energy drives the accelerated expansion of the universe",
-                "statement_latex": "\\Omega_{\\Lambda} \\approx 0.68",
-                "formulation": "The cosmological constant or equivalent dark energy component dominates the universe's energy density, causing accelerated expansion",
-                "implications": [
-                    "Accelerated cosmic expansion",
-                    "Future dilution of matter",
-                    "Ultimate fate of the universe"
-                ],
-                "proofs": [
-                    "Type Ia supernova observations (1998)",
-                    "Cosmic microwave background (Planck)",
-                    "Large-scale structure surveys"
-                ],
-                "confidence": 0.94,
-                "discovery_date": "1998",
-                "discoverers": ["Saul Perlmutter", "Brian Schmidt", "Adam Riess"],
-                "revolutions": ["cosmology"]
-            },
-            "cosmological_principle": {
-                "name": "Cosmological Principle",
-                "category": "cosmology",
-                "domains": ["cosmology", "universe_structure"],
-                "statement": "The universe is homogeneous and isotropic on large scales",
-                "statement_latex": null,
-                "formulation": "No preferred location or direction exists in the universe at cosmological scales",
-                "implications": [
-                    "Simplified cosmological models",
-                    "Uniform cosmic microwave background",
-                    "Large-scale structure formation"
-                ],
-                "proofs": [
-                    "CMB isotropy (COBE, Planck)",
-                    "Galaxy distribution surveys",
-                    "Isotropic expansion rates"
-                ],
-                "confidence": 0.95,
-                "discovery_date": "1930s",
-                "discoverers": ["Edwin Hubble", "Georges Lemaître"],
-                "revolutions": ["cosmology"]
-            },
-
-            // === INFORMATION AND COMPLEXITY ===
-            "bekenstein": {
-                "name": "Bekenstein Bound",
-                "category": "information",
-                "domains": ["information", "gravity", "holography"],
-                "statement": "Maximum amount of information contained in a region of space",
-                "statement_latex": "I \\leq \\frac{2\\pi R E}{\\hbar c \\ln 2}",
-                "implications": [
-                    "Holographic principle",
-                    "Black hole entropy",
-                    "Fundamental computational limits"
-                ],
-                "confidence": 0.90,
-                "discovery_date": "1973",
-                "discoverers": ["Jacob Bekenstein"]
-            },
-            "landauer": {
-                "name": "Landauer's Principle",
-                "category": "information",
-                "domains": ["information", "thermodynamics", "computation"],
-                "statement": "Erasing one bit of information dissipates at least kT ln(2) of energy",
-                "statement_latex": "E \\geq kT \\ln 2",
-                "implications": [
-                    "Information/entropy link",
-                    "Energy limits of computation",
-                    "Reversible computers"
-                ],
-                "confidence": 0.85,
-                "discovery_date": "1961",
-                "discoverers": ["Rolf Landauer"]
-            },
-            "shannon_entropy": {
-                "name": "Shannon's Information Entropy",
-                "category": "information",
-                "domains": ["information", "communication", "probability"],
-                "statement": "The entropy of a message quantifies its information content or uncertainty",
-                "statement_latex": "H(X) = -\\sum_{i} p(x_i) \\log p(x_i)",
-                "formulation": "Information entropy measures the average amount of information required to describe a random variable",
-                "implications": [
-                    "Foundation of information theory",
-                    "Limits of data compression",
-                    "Error correction in communication systems"
-                ],
-                "proofs": [
-                    "Communication channel experiments",
-                    "Data compression algorithms",
-                    "Error-correcting codes"
-                ],
-                "confidence": 0.97,
-                "discovery_date": "1948",
-                "discoverers": ["Claude Shannon"],
-                "revolutions": ["information_theory"]
-            },
-
-            // === BIOLOGY AND COMPLEX SYSTEMS ===
-            "natural_selection": {
-                "name": "Natural Selection",
-                "category": "biology",
-                "domains": ["evolution", "biology", "complex_systems"],
-                "statement": "Traits that confer survival and reproductive advantages propagate in populations",
-                "statement_latex": null,
-                "formulation": "Differential survival and reproduction of organisms based on heritable traits",
-                "implications": [
-                    "Evolution of species",
-                    "Adaptation to environments",
-                    "Biodiversity"
-                ],
-                "proofs": [
-                    "Fossil record transitions",
-                    "Antibiotic resistance in bacteria",
-                    "Galápagos finch studies"
-                ],
-                "confidence": 0.96,
-                "discovery_date": "1859",
-                "discoverers": ["Charles Darwin", "Alfred Russel Wallace"],
-                "revolutions": ["evolutionary_biology"]
-            },
-
-            // === MATHEMATICS ===
-            "bayes_theorem": {
-                "name": "Bayes' Theorem",
-                "category": "mathematics",
-                "domains": ["probability", "statistics", "decision_theory"],
-                "statement": "The probability of an event is updated based on new evidence",
-                "statement_latex": "P(A|B) = \\frac{P(B|A)P(A)}{P(B)}",
-                "formulation": "Relates conditional probabilities to update beliefs with new data",
-                "implications": [
-                    "Foundation of Bayesian inference",
-                    "Machine learning and AI",
-                    "Decision-making under uncertainty"
-                ],
-                "proofs": [
-                    "Derived from basic probability axioms",
-                    "Applications in statistical modeling",
-                    "Success in predictive algorithms"
-                ],
-                "confidence": 1.0,
-                "discovery_date": "1763",
-                "discoverers": ["Thomas Bayes"],
-                "revolutions": ["statistics", "machine_learning"]
-            },
             "conservation_energy": {
                 "name": "Conservation of Energy",
                 "category": "fundamental_physics",
@@ -616,6 +655,67 @@
                 "discoverers": ["Paul Dirac"],
                 "revolutions": ["quantum_electrodynamics"]
             },
+
+            // === COSMOLOGY ===
+            "hubble_expansion": {
+                "name": "Hubble-Lemaître Law",
+                "category": "cosmology",
+                "domains": ["expansion", "cosmology"],
+                "statement": "Galaxies recede at a speed proportional to their distance",
+                "statement_latex": "v = H_0 d",
+                "implications": [
+                    "Expanding universe",
+                    "Big Bang as origin",
+                    "Finite age of the universe"
+                ],
+                "confidence": 0.95,
+                "discovery_date": "1927-1929",
+                "discoverers": ["Georges Lemaître", "Edwin Hubble"]
+            },
+            "dark_energy_dominance": {
+                "name": "Dark Energy Dominance",
+                "category": "cosmology",
+                "domains": ["cosmology", "dark_energy", "expansion"],
+                "statement": "Dark energy drives the accelerated expansion of the universe",
+                "statement_latex": "\\Omega_{\\Lambda} \\approx 0.68",
+                "formulation": "The cosmological constant or equivalent dark energy component dominates the universe's energy density, causing accelerated expansion",
+                "implications": [
+                    "Accelerated cosmic expansion",
+                    "Future dilution of matter",
+                    "Ultimate fate of the universe"
+                ],
+                "proofs": [
+                    "Type Ia supernova observations (1998)",
+                    "Cosmic microwave background (Planck)",
+                    "Large-scale structure surveys"
+                ],
+                "confidence": 0.94,
+                "discovery_date": "1998",
+                "discoverers": ["Saul Perlmutter", "Brian Schmidt", "Adam Riess"],
+                "revolutions": ["cosmology"]
+            },
+            "cosmological_principle": {
+                "name": "Cosmological Principle",
+                "category": "cosmology",
+                "domains": ["cosmology", "universe_structure"],
+                "statement": "The universe is homogeneous and isotropic on large scales",
+                "statement_latex": null,
+                "formulation": "No preferred location or direction exists in the universe at cosmological scales",
+                "implications": [
+                    "Simplified cosmological models",
+                    "Uniform cosmic microwave background",
+                    "Large-scale structure formation"
+                ],
+                "proofs": [
+                    "CMB isotropy (COBE, Planck)",
+                    "Galaxy distribution surveys",
+                    "Isotropic expansion rates"
+                ],
+                "confidence": 0.95,
+                "discovery_date": "1930s",
+                "discoverers": ["Edwin Hubble", "Georges Lemaître"],
+                "revolutions": ["cosmology"]
+            },
             "cosmic_inflation": {
                 "name": "Cosmic Inflation",
                 "category": "cosmology",
@@ -637,6 +737,60 @@
                 "discovery_date": "1980",
                 "discoverers": ["Alan Guth", "Andrei Linde", "Paul Steinhardt"],
                 "revolutions": ["cosmology"]
+            },
+
+            // === INFORMATION AND COMPLEXITY ===
+            "bekenstein": {
+                "name": "Bekenstein Bound",
+                "category": "information",
+                "domains": ["information", "gravity", "holography"],
+                "statement": "Maximum amount of information contained in a region of space",
+                "statement_latex": "I \\leq \\frac{2\\pi R E}{\\hbar c \\ln 2}",
+                "implications": [
+                    "Holographic principle",
+                    "Black hole entropy",
+                    "Fundamental computational limits"
+                ],
+                "confidence": 0.90,
+                "discovery_date": "1973",
+                "discoverers": ["Jacob Bekenstein"]
+            },
+            "landauer": {
+                "name": "Landauer's Principle",
+                "category": "information",
+                "domains": ["information", "thermodynamics", "computation"],
+                "statement": "Erasing one bit of information dissipates at least kT ln(2) of energy",
+                "statement_latex": "E \\geq kT \\ln 2",
+                "implications": [
+                    "Information/entropy link",
+                    "Energy limits of computation",
+                    "Reversible computers"
+                ],
+                "confidence": 0.85,
+                "discovery_date": "1961",
+                "discoverers": ["Rolf Landauer"]
+            },
+            "shannon_entropy": {
+                "name": "Shannon's Information Entropy",
+                "category": "information",
+                "domains": ["information", "communication", "probability"],
+                "statement": "The entropy of a message quantifies its information content or uncertainty",
+                "statement_latex": "H(X) = -\\sum_{i} p(x_i) \\log p(x_i)",
+                "formulation": "Information entropy measures the average amount of information required to describe a random variable",
+                "implications": [
+                    "Foundation of information theory",
+                    "Limits of data compression",
+                    "Error correction in communication systems"
+                ],
+                "proofs": [
+                    "Communication channel experiments",
+                    "Data compression algorithms",
+                    "Error-correcting codes"
+                ],
+                "confidence": 0.97,
+                "discovery_date": "1948",
+                "discoverers": ["Claude Shannon"],
+                "revolutions": ["information_theory"]
             },
             "church_turing": {
                 "name": "Church-Turing Thesis",
@@ -660,6 +814,54 @@
                 "discoverers": ["Alonzo Church", "Alan Turing"],
                 "revolutions": ["computer_science"]
             },
+
+            // === BIOLOGY AND COMPLEX SYSTEMS ===
+            "natural_selection": {
+                "name": "Natural Selection",
+                "category": "biology",
+                "domains": ["evolution", "biology", "complex_systems"],
+                "statement": "Traits that confer survival and reproductive advantages propagate in populations",
+                "statement_latex": null,
+                "formulation": "Differential survival and reproduction of organisms based on heritable traits",
+                "implications": [
+                    "Evolution of species",
+                    "Adaptation to environments",
+                    "Biodiversity"
+                ],
+                "proofs": [
+                    "Fossil record transitions",
+                    "Antibiotic resistance in bacteria",
+                    "Galápagos finch studies"
+                ],
+                "confidence": 0.96,
+                "discovery_date": "1859",
+                "discoverers": ["Charles Darwin", "Alfred Russel Wallace"],
+                "revolutions": ["evolutionary_biology"]
+            },
+
+            // === MATHEMATICS ===
+            "bayes_theorem": {
+                "name": "Bayes' Theorem",
+                "category": "mathematics",
+                "domains": ["probability", "statistics", "decision_theory"],
+                "statement": "The probability of an event is updated based on new evidence",
+                "statement_latex": "P(A|B) = \\frac{P(B|A)P(A)}{P(B)}",
+                "formulation": "Relates conditional probabilities to update beliefs with new data",
+                "implications": [
+                    "Foundation of Bayesian inference",
+                    "Machine learning and AI",
+                    "Decision-making under uncertainty"
+                ],
+                "proofs": [
+                    "Derived from basic probability axioms",
+                    "Applications in statistical modeling",
+                    "Success in predictive algorithms"
+                ],
+                "confidence": 1.0,
+                "discovery_date": "1763",
+                "discoverers": ["Thomas Bayes"],
+                "revolutions": ["statistics", "machine_learning"]
+            },
             "godel_incompleteness": {
                 "name": "Gödel's Incompleteness Theorems",
                 "category": "mathematics",
@@ -682,6 +884,8 @@
                 "discoverers": ["Kurt Gödel"],
                 "revolutions": ["mathematical_logic"]
             },
+
+            // === CHEMISTRY ===
             "periodic_law": {
                 "name": "Periodic Law",
                 "category": "chemistry",
@@ -904,34 +1108,43 @@ ${formulaHTML}
 
         function showLibrary() {
             const categories = {};
+            const allDomains = new Set();
             
             Object.values(universalLaws).forEach(law => {
                 if (!categories[law.category]) {
                     categories[law.category] = [];
                 }
                 categories[law.category].push(law);
+                
+                // Add all domains to the set
+                law.domains.forEach(domain => allDomains.add(domain));
             });
 
             let html = `<h2>📚 Library of Universal Laws</h2>
                        <p><strong>${Object.keys(universalLaws).length} laws cataloged</strong></p>`;
 
             for (const [category, laws] of Object.entries(categories)) {
+                const categoryName = category.replace(/_/g, ' ').toUpperCase();
                 html += `<div class="library-section">
-                        <h3>${category.replace(/_/g, ' ').toUpperCase()} (${laws.length} laws)</h3>`;
+                        <h3>${categoryName} (${laws.length} laws)</h3>`;
                 
                 laws.forEach(law => {
                     const formula = law.statement_latex ? 
                         `<div class="latex-container">${createFormulaHTML(law.statement_latex, true)}</div>` : '';
                     
                     html += `<div class="law-card">
-                            <h4>${law.name}</h4>
-                            <p><strong>Statement :</strong> ${law.statement}</p>
+                            <h4>${law.name} <span class="category-badge">${categoryName}</span></h4>
+                            <p><strong>Statement:</strong> ${law.statement}</p>
                             ${formula}
                             <div>${law.domains.map(d => `<span class="domain-tag">${d}</span>`).join('')}</div>
                             <div class="confidence-bar">
                                 <div class="confidence-fill" style="width: ${law.confidence * 100}%"></div>
                             </div>
-                            <small>Confidence: ${(law.confidence * 100).toFixed(0)}% | ${law.discovery_date} | ${Array.isArray(law.discoverers) ? law.discoverers.join(', ') : law.discoverers}</small>
+                            <div class="law-meta">
+                                <span>Confidence: ${(law.confidence * 100).toFixed(0)}%</span>
+                                <span>${law.discovery_date}</span>
+                                <span>${Array.isArray(law.discoverers) ? law.discoverers.join(', ') : law.discoverers}</span>
+                            </div>
                         </div>`;
                 });
                 
@@ -939,6 +1152,8 @@ ${formulaHTML}
             }
 
             document.getElementById('response').innerHTML = html;
+            // Update stats
+            updateStats();
             // Force MathJax rendering after HTML insertion
             setTimeout(renderMathJax, 100);
         }
@@ -951,21 +1166,40 @@ ${formulaHTML}
             
             const html = `<div class="law-card">
                 <h3>🎲 Random Law</h3>
-                <h4>${randomLaw.name}</h4>
-                <p><strong>Statement :</strong> ${randomLaw.statement}</p>
+                <h4>${randomLaw.name} <span class="category-badge">${randomLaw.category.replace(/_/g, ' ').toUpperCase()}</span></h4>
+                <p><strong>Statement:</strong> ${randomLaw.statement}</p>
                 ${formula}
-                <p><strong>Domain :</strong> ${randomLaw.domains.join(', ')}</p>
-                <p><strong>Implications :</strong> ${randomLaw.implications.join('; ')}</p>
-                <p><strong>Discoverers :</strong> ${Array.isArray(randomLaw.discoverers) ? randomLaw.discoverers.join(', ') : randomLaw.discoverers}</p>
-                <p><strong>Date :</strong> ${randomLaw.discovery_date}</p>
+                <p><strong>Domain:</strong> ${randomLaw.domains.join(', ')}</p>
+                <p><strong>Implications:</strong> ${randomLaw.implications.join('; ')}</p>
+                <p><strong>Discoverers:</strong> ${Array.isArray(randomLaw.discoverers) ? randomLaw.discoverers.join(', ') : randomLaw.discoverers}</p>
+                <p><strong>Date:</strong> ${randomLaw.discovery_date}</p>
                 <div class="confidence-bar">
                     <div class="confidence-fill" style="width: ${randomLaw.confidence * 100}%"></div>
                 </div>
-                <small>Confidence level: ${(randomLaw.confidence * 100).toFixed(0)}%</small>
+                <div class="law-meta">
+                    <span>Confidence level: ${(randomLaw.confidence * 100).toFixed(0)}%</span>
+                </div>
             </div>`;
             
             document.getElementById('response').innerHTML = html;
             setTimeout(renderMathJax, 100);
+        }
+
+        function updateStats() {
+            // Count laws
+            document.getElementById('law-count').textContent = Object.keys(universalLaws).length;
+            
+            // Count categories
+            const categories = new Set();
+            Object.values(universalLaws).forEach(law => categories.add(law.category));
+            document.getElementById('category-count').textContent = categories.size;
+            
+            // Count domains
+            const domains = new Set();
+            Object.values(universalLaws).forEach(law => {
+                law.domains.forEach(domain => domains.add(domain));
+            });
+            document.getElementById('domain-count').textContent = domains.size;
         }
 
         // ==================== USER INTERFACE FUNCTIONS ====================
@@ -997,8 +1231,8 @@ ${formulaHTML}
         // ==================== INITIALIZATION ====================
 
         function init() {
-            // Update law counter
-            document.getElementById('law-count').textContent = Object.keys(universalLaws).length;
+            // Update stats
+            updateStats();
             
             // Display library on startup
             showLibrary();
