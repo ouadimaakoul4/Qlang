@@ -7,13 +7,31 @@
 
   <!-- MathJax 3 -->
     <script>
-
- window.MathJax = {
+<script>
+window.MathJax = {
   startup: {
     ready() {
+      const MathJax = window.MathJax;
       MathJax.startup.defaultReady();
+      
+      // Initialize the library after MathJax is ready
+      MathJax.startup.promise.then(() => {
+        renderLibrary();
+      });
+    }
+  }
+};
+
+// Make sure universalLaws is defined
+const universalLaws = window.universalLaws || {};
+
 function renderLibrary(filterCategory = 'all', searchTerm = '') {
   const container = document.getElementById('laws-container');
+  if (!container) {
+    console.error('laws-container element not found');
+    return;
+  }
+  
   container.innerHTML = '';
   let lawsToShow = Object.entries(universalLaws);
 
@@ -28,12 +46,17 @@ function renderLibrary(filterCategory = 'all', searchTerm = '') {
     lawsToShow = lawsToShow.filter(([id, law]) => 
       law.name.toLowerCase().includes(term) || 
       law.description.toLowerCase().includes(term) ||
-      law.statement_latex.toLowerCase().includes(term)
+      (law.statement_latex && law.statement_latex.toLowerCase().includes(term))
     );
   }
 
   if (lawsToShow.length === 0) {
     container.innerHTML = '<p class="no-results">No laws match your search criteria.</p>';
+    
+    // Re-typeset even for no results
+    if (window.MathJax && window.MathJax.typeset) {
+      MathJax.typeset([container]);
+    }
     return;
   }
 
@@ -41,22 +64,26 @@ function renderLibrary(filterCategory = 'all', searchTerm = '') {
     const card = document.createElement('div');
     card.className = 'law-card';
     card.innerHTML = `
-      <span class="category-tag ${law.category}">${law.category.charAt(0).toUpperCase() + law.category.slice(1)}</span>
-      <h3>${law.name}</h3>
+      <span class="category-tag ${law.category}">${law.category?.charAt(0).toUpperCase() + law.category?.slice(1) || 'Unknown'}</span>
+      <h3>${law.name || 'Unnamed Law'}</h3>
       <div class="equation-clickable" data-law-id="${id}">
-        $$${law.statement_latex}$$
+        $${law.statement_latex || '\\text{No equation available}'}$
       </div>
-      <p class="law-description">${law.description}</p>
+      <p class="law-description">${law.description || 'No description available.'}</p>
     `;
     container.appendChild(card);
   }
 
-  // ✅ Appel de MathJax.typeset APRES le rendu du DOM
-  if (window.MathJax && window.MathJax.startup) {
-    window.MathJax.startup.promise.then(() => {
-      MathJax.typeset([container]);
-
-      // Ensuite, attacher les écouteurs d'événements
+  // ✅ Call MathJax.typeset AFTER DOM rendering
+  if (window.MathJax && window.MathJax.typeset) {
+    MathJax.typeset([container]).then(() => {
+      // Attach event listeners after typesetting
+      document.querySelectorAll('.equation-clickable').forEach(el => {
+        // Remove existing listeners to prevent duplicates
+        el.replaceWith(el.cloneNode(true));
+      });
+      
+      // Re-select and attach new listeners
       document.querySelectorAll('.equation-clickable').forEach(el => {
         el.addEventListener('click', () => {
           window.location.hash = `proof/${el.dataset.lawId}`;
@@ -64,44 +91,76 @@ function renderLibrary(filterCategory = 'all', searchTerm = '') {
         });
       });
     }).catch(err => {
-      console.error("Erreur MathJax :", err);
+      console.error("MathJax error:", err);
     });
   } else {
-    // Si MathJax n'est pas chargé, réessayer
+    // If MathJax isn't loaded, retry
+    console.warn('MathJax not available, retrying...');
     setTimeout(() => renderLibrary(filterCategory, searchTerm), 500);
   }
 }
 
 function showProofView(lawId) {
   const law = universalLaws[lawId];
-  if (!law) return;
+  if (!law) {
+    console.error('Law not found:', lawId);
+    return;
+  }
 
-  document.getElementById('main-view').style.display = 'none';
-  document.getElementById('proof-view').style.display = 'block';
+  const mainView = document.getElementById('main-view');
+  const proofView = document.getElementById('proof-view');
+  
+  if (mainView) mainView.style.display = 'none';
+  if (proofView) proofView.style.display = 'block';
 
-  const html = marked.parse(law.full_explanation);
-  document.getElementById('proof-content').innerHTML = html;
+  const proofContent = document.getElementById('proof-content');
+  if (proofContent) {
+    // Use marked if available, otherwise use plain text
+    const html = window.marked && law.full_explanation ? 
+      marked.parse(law.full_explanation) : 
+      (law.full_explanation || '<p>No proof available.</p>');
+    
+    proofContent.innerHTML = html;
 
-  // Réafficher les équations dans la preuve
-  if (window.MathJax) {
-    MathJax.typesetClear([document.getElementById('proof-content')]);
-    MathJax.typeset([document.getElementById('proof-content')]);
+    // Re-render equations in the proof
+    if (window.MathJax && window.MathJax.typeset) {
+      MathJax.typesetClear([proofContent]);
+      MathJax.typeset([proofContent]);
+    }
   }
 }
 
 function showMainView() {
-  document.getElementById('main-view').style.display = 'block';
-  document.getElementById('proof-view').style.display = 'none';
+  const mainView = document.getElementById('main-view');
+  const proofView = document.getElementById('proof-view');
+  
+  if (mainView) mainView.style.display = 'block';
+  if (proofView) proofView.style.display = 'none';
 }
-       }
-  }
-};
-  </script>
-<!-- Polyfill fiable -->
-<script src="https://cdn.jsdelivr.net/npm/polyfill-io@3.0.1/dist/polyfill.min.js" defer></script>
 
-<!-- MathJax 3 - Version recommandée -->
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+// Handle browser back/forward buttons
+window.addEventListener('hashchange', () => {
+  const hash = window.location.hash;
+  if (hash.startsWith('#proof/')) {
+    const lawId = hash.replace('#proof/', '');
+    showProofView(lawId);
+  } else {
+    showMainView();
+  }
+});
+
+// Initialize based on current hash
+window.addEventListener('DOMContentLoaded', () => {
+  const hash = window.location.hash;
+  if (hash.startsWith('#proof/')) {
+    const lawId = hash.replace('#proof/', '');
+    showProofView(lawId);
+  }
+});
+</script>
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <style>
     :root {
