@@ -307,24 +307,27 @@
             <div class="search-container">
                 <input type="text" id="question" placeholder="Ask your cosmic question...">
             </div>
-<!-- Add this to the controls section -->
-<div class="button-group">
-    <button onclick="showByCategory('fundamental_physics')" class="secondary">⚛️ Physics</button>
-    <button onclick="showByCategory('cosmology')" class="secondary">🌌 Cosmology</button>
-    <button onclick="showByCategory('information')" class="secondary">💡 Information</button>
-</div>
+            
+            <!-- Category buttons -->
+            <div class="button-group">
+                <button onclick="showByCategory('fundamental_physics')" class="secondary">⚛️ Physics</button>
+                <button onclick="showByCategory('cosmology')" class="secondary">🌌 Cosmology</button>
+                <button onclick="showByCategory('information')" class="secondary">💡 Information</button>
+            </div>
 
-<!-- Add filter controls -->
-<div class="filters" style="margin: 15px 0; display: none;" id="filters">
-    <input type="text" id="domainFilter" placeholder="Filter by domain (quantum, relativity...)" style="margin-bottom: 10px;">
-    <input type="range" id="confidenceFilter" min="0" max="100" value="0" style="width: 100%;">
-    <label for="confidenceFilter">Minimum Confidence: <span id="confidenceValue">0%</span></label>
-</div>
+            <!-- Main action buttons -->
             <div class="button-group">
                 <button onclick="askQLang()">✨ Query the Universe</button>
                 <button onclick="showLibrary()" class="secondary">📚 View Library</button>
                 <button onclick="showRandomLaw()" class="secondary">🎲 Random Law</button>
             </div>
+        </div>
+
+        <!-- Filter controls (hidden by default) -->
+        <div class="filters" style="margin: 15px 0; display: none;" id="filters">
+            <input type="text" id="domainFilter" placeholder="Filter by domain (quantum, relativity...)" style="margin-bottom: 10px;">
+            <input type="range" id="confidenceFilter" min="0" max="100" value="0" style="width: 100%;">
+            <label for="confidenceFilter">Minimum Confidence: <span id="confidenceValue">0%</span></label>
         </div>
         
         <div id="response">
@@ -334,160 +337,12 @@
         <div class="footer">
             <p>QLang v1.0 — A comprehensive library of universal laws spanning physics, cosmology, information theory, and more</p>
         </div>
-
     </div>
 
     <script>
-
-// Add these new functions to enhance functionality
-
-function showByCategory(category) {
-    const laws = Object.values(universalLaws).filter(law => law.category === category);
-    
-    let html = `<h2>${category.replace(/_/g, ' ').toUpperCase()} Laws</h2>`;
-    
-    laws.forEach(law => {
-        const formula = law.statement_latex ? 
-            `<div class="latex-container">${createFormulaHTML(law.statement_latex, true)}</div>` : '';
-        
-        html += `<div class="law-card">
-            <h4>${law.name}</h4>
-            <p><strong>Statement:</strong> ${law.statement}</p>
-            ${formula}
-            <div>${law.domains.map(d => `<span class="domain-tag">${d}</span>`).join('')}</div>
-            <p><strong>Implications:</strong> ${law.implications.join('; ')}</p>
-            <div class="confidence-bar">
-                <div class="confidence-fill" style="width: ${law.confidence * 100}%"></div>
-            </div>
-            <div class="law-meta">
-                <span>Confidence: ${(law.confidence * 100).toFixed(0)}%</span>
-                <span>${law.discovery_date}</span>
-            </div>
-        </div>`;
-    });
-    
-    document.getElementById('response').innerHTML = html;
-    document.getElementById('filters').style.display = 'block';
-    setTimeout(renderMathJax, 100);
-}
-
-// Enhanced search functionality
-function searchLaws(query) {
-    const results = Object.values(universalLaws).filter(law => 
-        law.name.toLowerCase().includes(query.toLowerCase()) ||
-        law.statement.toLowerCase().includes(query.toLowerCase()) ||
-        law.domains.some(domain => domain.toLowerCase().includes(query.toLowerCase())) ||
-        (law.implications && law.implications.some(imp => imp.toLowerCase().includes(query.toLowerCase())))
-    );
-    
-    return results;
-}
-
-// Add to the existing askQLang function
-async function askQLang() {
-    const question = document.getElementById('question').value.trim();
-    const responseDiv = document.getElementById('response');
-
-    if (!question) {
-        responseDiv.innerHTML = "<p>🌠 Please ask a cosmic question.</p>";
-        return;
-    }
-
-    // First, check for direct matches in the library
-    const directMatches = searchLaws(question);
-    if (directMatches.length > 0) {
-        let html = `<h3>🔍 Direct Matches Found</h3>`;
-        directMatches.forEach(law => {
-            html += `<div class="law-card">
-                <h4>${law.name}</h4>
-                <p>${law.statement}</p>
-            </div>`;
-        });
-        responseDiv.innerHTML = html;
-        return;
-    }
-
-    // Continue with existing question mapping logic...
-    responseDiv.innerHTML = "<p>🌀 Consulting universal archives...</p>";
-    // ... rest of existing function
-}
-
-// Add citation functionality
-function generateCitation(law) {
-    const discoverers = Array.isArray(law.discoverers) ? law.discoverers.join(' & ') : law.discoverers;
-    return `${law.name} (${law.discovery_date}) by ${discoverers}. ${law.statement}`;
-}
-
-// Add to law-card generation
-function createLawCard(law, showDetails = false) {
-    const formula = law.statement_latex ? 
-        `<div class="latex-container">${createFormulaHTML(law.statement_latex, true)}</div>` : '';
-    
-    let details = '';
-    if (showDetails) {
-        details = `
-            <p><strong>Formulation:</strong> ${law.formulation || law.statement}</p>
-            <p><strong>Implications:</strong> ${law.implications.join('; ')}</p>
-            <p><strong>Proofs:</strong> ${law.proofs ? law.proofs.join('; ') : 'Experimental verification'}</p>
-            ${law.limitations ? `<p><strong>Limitations:</strong> ${law.limitations}</p>` : ''}
-        `;
-    }
-    
-    return `<div class="law-card">
-        <h4>${law.name} <span class="category-badge">${law.category.replace(/_/g, ' ')}</span></h4>
-        <p><strong>Statement:</strong> ${law.statement}</p>
-        ${formula}
-        <div>${law.domains.map(d => `<span class="domain-tag">${d}</span>`).join('')}</div>
-        ${details}
-        <div class="confidence-bar">
-            <div class="confidence-fill" style="width: ${law.confidence * 100}%"></div>
-        </div>
-        <div class="law-meta">
-            <span>Confidence: ${(law.confidence * 100).toFixed(0)}%</span>
-            <span>${law.discovery_date}</span>
-            <span>${Array.isArray(law.discoverers) ? law.discoverers.join(', ') : law.discoverers}</span>
-        </div>
-    </div>`;
-}
-
         // ==================== LIBRARY OF UNIVERSAL LAWS ====================
         const universalLaws = {
-
- // Consider adding these to your universalLaws object:
-
-"noether_theorem": {
-    "name": "Noether's Theorem",
-    "category": "fundamental_physics",
-    "domains": ["symmetry", "conservation", "mathematics"],
-    "statement": "Every differentiable symmetry of a physical system corresponds to a conservation law",
-    "statement_latex": null,
-    "formulation": "Continuous symmetries imply conserved quantities",
-    "implications": [
-        "Time symmetry → energy conservation",
-        "Space symmetry → momentum conservation",
-        "Rotation symmetry → angular momentum conservation"
-    ],
-    "confidence": 0.99,
-    "discovery_date": "1918",
-    "discoverers": ["Emmy Noether"]
-},
-
-"quantum_superposition": {
-    "name": "Quantum Superposition Principle",
-    "category": "fundamental_physics", 
-    "domains": ["quantum", "superposition", "wave_function"],
-    "statement": "A quantum system can exist in multiple states simultaneously until measured",
-    "statement_latex": "|\\psi\\rangle = \\sum c_i |\\phi_i\\rangle",
-    "formulation": "Wave function as linear combination of basis states",
-    "implications": [
-        "Quantum computing advantage",
-        "Double-slit interference",
-        "Schrödinger's cat paradox"
-    ],
-    "confidence": 0.98,
-    "discovery_date": "1926",
-    "discoverers": ["Erwin Schrödinger", "Paul Dirac"]
-},           // === FUNDAMENTAL PHYSICS ===
+            // === FUNDAMENTAL PHYSICS ===
             "thermodynamics_2": {
                 "name": "Second Law of Thermodynamics",
                 "category": "fundamental_physics",
@@ -511,216 +366,142 @@ function createLawCard(law, showDetails = false) {
                 "discoverers": ["Rudolf Clausius", "William Thomson"],
                 "revolutions": ["thermodynamics", "cosmology"]
             },
-"quantum_entanglement": {
-    "name": "Quantum Entanglement Principle",
-    "category": "fundamental_physics",
-    "domains": ["quantum", "entanglement", "nonlocality", "correlation"],
-    "statement": "Quantum systems can become entangled such that the state of one particle instantly influences another, regardless of distance",
-    "statement_latex": "|\\Psi\\rangle = \\frac{1}{\\sqrt{2}}(|0\\rangle_A|1\\rangle_B - |1\\rangle_A|0\\rangle_B)",
-    "formulation": "Entangled particles share a single quantum state described by a non-separable wave function",
-    "implications": [
-        "Quantum non-locality",
-        "Violation of Bell inequalities", 
-        "Quantum teleportation protocols",
-        "Quantum computing advantage",
-        "Fundamental challenge to local realism"
-    ],
-    "proofs": [
-        "Aspect experiments (1980s)",
-        "Violation of Bell's inequality",
-        "Quantum teleportation demonstrations",
-        "Quantum cryptography systems"
-    ],
-    "limitations": "No faster-than-light communication possible",
-    "confidence": 0.98,
-    "discovery_date": "1935",
-    "discoverers": ["Albert Einstein", "Boris Podolsky", "Nathan Rosen"],
-    "revolutions": ["quantum_information", "foundations_of_physics"],
-    
-    "explanation": "Quantum entanglement creates 'spooky action at a distance' where measuring one entangled particle instantly determines the state of its partner, no matter how far apart they are. While this violates classical intuition about locality, it cannot be used for faster-than-light communication due to the no-communication theorem. Entanglement is the key resource behind quantum computing, quantum cryptography, and represents one of the most profound departures from classical physics."
-},
-"bell_inequality": {
-    "name": "Bell's Theorem and Inequality",
-    "category": "fundamental_physics", 
-    "domains": ["quantum", "foundations", "nonlocality", "entanglement"],
-    "statement": "No local hidden variable theory can reproduce all predictions of quantum mechanics",
-    "statement_latex": "|E(a,b) - E(a,b')| + |E(a',b) + E(a',b')| \\leq 2",
-    "formulation": "Mathematical inequality that distinguishes between local hidden variable theories and quantum mechanics",
-    "implications": [
-        "Quantum mechanics is inherently non-local",
-        "Reality is either non-local or contextual",
-        "Experimental test of quantum foundations",
-        "No complete local deterministic theory possible"
-    ],
-    "proofs": [
-        "Aspect experiments (1982)",
-        "Loophole-free Bell tests (2015+)",
-        "Consistent violation of inequality in experiments"
-    ],
-    "confidence": 0.97,
-    "discovery_date": "1964",
-    "discoverers": ["John Stewart Bell"],
-    "revolutions": ["quantum_foundations"],
-    
-    "explanation": "Bell's theorem demonstrates that any theory maintaining both locality and realism must satisfy certain inequalities. Quantum mechanics predicts violations of these inequalities, which have been consistently observed experimentally. This proves that the universe cannot be described by local hidden variable theories - either information can travel faster than light (non-locality) or properties don't exist until measured (anti-realism)."
-},
-"cosmic_microwave_background": {
-    "name": "Cosmic Microwave Background Radiation",
-    "category": "cosmology",
-    "domains": ["cosmology", "big_bang", "radiation", "early_universe"],
-    "statement": "The universe is filled with thermal radiation remnant from the early hot, dense phase",
-    "statement_latex": "T_{CMB} = 2.72548 \\pm 0.00057\\,K",
-    "formulation": "Blackbody spectrum at 2.7K with tiny anisotropies encoding early universe information",
-    "implications": [
-        "Strong evidence for Big Bang theory",
-        "Universe was once hot and dense",
-        "Seeds of cosmic structure formation",
-        "Precision measurements of cosmological parameters"
-    ],
-    "proofs": [
-        "Discovery by Penzias and Wilson (1965)",
-        "COBE satellite blackbody spectrum (1992)",
-        "WMAP and Planck satellite anisotropy maps",
-        "Statistical properties match inflation predictions"
-    ],
-    "confidence": 0.99,
-    "discovery_date": "1965",
-    "discoverers": ["Arno Penzias", "Robert Wilson"],
-    "revolutions": ["big_bang_cosmology"],
-    
-    "explanation": "The CMB is the oldest light in the universe, emitted when atoms first formed 380,000 years after the Big Bang. Its nearly perfect blackbody spectrum and tiny temperature fluctuations provide a snapshot of the early universe and have revolutionized cosmology. The precise measurements of CMB anisotropies have determined the age, composition, and geometry of the universe with unprecedented accuracy."
-},
-"butterfly_effect": {
-    "name": "Butterfly Effect (Sensitive Dependence on Initial Conditions)",
-    "category": "complex_systems",
-    "domains": ["chaos_theory", "nonlinear_dynamics", "predictability"],
-    "statement": "In chaotic systems, small differences in initial conditions can lead to vastly different outcomes",
-    "statement_latex": "\\delta(t) \\approx \\delta(0) e^{\\lambda t}",
-    "formulation": "Exponential divergence of trajectories in phase space characterized by positive Lyapunov exponents",
-    "implications": [
-        "Fundamental limits to long-term prediction",
-        "Weather forecasting limitations",
-        "Emergence of patterns from simple rules",
-        "Importance of microscopic details in macroscopic outcomes"
-    ],
-    "proofs": [
-        "Lorenz's weather model simulations",
-        "Double pendulum experiments",
-        "Fluid turbulence studies",
-        "Planetary orbit stability calculations"
-    ],
-    "limitations": "Applies primarily to deterministic nonlinear systems",
-    "confidence": 0.95,
-    "discovery_date": "1963",
-    "discoverers": ["Edward Lorenz"],
-    "revolutions": ["chaos_theory", "complex_systems"],
-    
-    "explanation": "The butterfly effect demonstrates that in complex, nonlinear systems, tiny perturbations can amplify exponentially over time, making long-term prediction impossible despite deterministic equations. This revealed fundamental limits to predictability in weather, climate, and many physical systems, while also explaining how complex patterns can emerge from simple deterministic rules."
-},
-"hebbian_learning": {
-    "name": "Hebb's Rule (Neural Plasticity)",
-    "category": "neuroscience",
-    "domains": ["neuroscience", "learning", "plasticity", "computation"],
-    "statement": "Neurons that fire together, wire together",
-    "statement_latex": "\\Delta w_{ij} = \\eta x_i x_j",
-    "formulation": "Synaptic strength increases when pre- and post-synaptic neurons are simultaneously active",
-    "implications": [
-        "Biological basis of learning and memory",
-        "Formation of neural assemblies",
-        "Unsupervised learning in neural networks",
-        "Cellular mechanism for associative learning"
-    ],
-    "proofs": [
-        "Long-term potentiation (LTP) experiments",
-        "Neural circuit formation studies",
-        "Computational models of learning",
-        "Brain plasticity research"
-    ],
-    "confidence": 0.96,
-    "discovery_date": "1949",
-    "discoverers": ["Donald Hebb"],
-    "revolutions": ["computational_neuroscience", "connectionism"],
-    
-    "explanation": "Hebb's rule provides the fundamental mechanism for how experiences shape neural circuitry. When two neurons repeatedly activate together, their connection strengthens, forming the biological basis of associative learning and memory formation. This principle has influenced both neuroscience and artificial intelligence, serving as the foundation for modern neural networks and our understanding of how brains learn from experience."
-},
 
-"stellar_nucleosynthesis": {
-    "name": "Stellar Nucleosynthesis",
-    "category": "astrophysics",
-    "domains": ["astrophysics", "nucleosynthesis", "stars", "elements"],
-    "statement": "Stars create chemical elements through nuclear fusion processes",
-    "statement_latex": "4^1H \\rightarrow ^4He + 2e^+ + 2\\nu_e + \\gamma",
-    "formulation": "Nuclear fusion in stellar cores transforms lighter elements into heavier ones, releasing energy",
-    "implications": [
-        "Origin of chemical elements beyond hydrogen and helium",
-        "Stellar energy source and lifetimes",
-        "Galactic chemical evolution",
-        "We are made of stardust"
-    ],
-    "proofs": [
-        "Stellar spectroscopy showing elemental abundances",
-        "Solar neutrino detection",
-        "Supernova observations creating heavy elements",
-        "Nuclear reaction cross-section measurements"
-    ],
-    "confidence": 0.98,
-    "discovery_date": "1957",
-    "discoverers": ["Margaret Burbidge", "Geoffrey Burbidge", "William Fowler", "Fred Hoyle"],
-    "revolutions": ["nuclear_astrophysics", "cosmochemistry"],
-    
-    "explanation": "Stellar nucleosynthesis explains how stars serve as cosmic furnaces that forge the elements of the periodic table. Hydrogen fuses into helium, then progressively heavier elements up to iron in massive stars. Elements heavier than iron are created in supernova explosions and neutron star mergers. This process explains the chemical composition of the universe and reveals that most atoms in our bodies were forged in long-dead stars."
-},
-"gauge_symmetry": {
-    "name": "Gauge Symmetry Principle",
-    "category": "fundamental_physics",
-    "domains": ["quantum_field_theory", "symmetry", "forces", "standard_model"],
-    "statement": "Fundamental forces arise from local gauge symmetries",
-    "statement_latex": "\\mathcal{L} = \\bar{\\psi}(i\\gamma^\\mu D_\\mu - m)\\psi - \\frac{1}{4}F_{\\mu\\nu}F^{\\mu\\nu}",
-    "formulation": "Requiring Lagrangian invariance under local symmetry transformations necessitates the introduction of gauge fields",
-    "implications": [
-        "Unification of forces through symmetry principles",
-        "Prediction of force-carrying particles (gauge bosons)",
-        "Foundation of the Standard Model",
-        "Charge conservation as consequence of symmetry"
-    ],
-    "proofs": [
-        "Success of quantum electrodynamics (QED)",
-        "Prediction and discovery of W and Z bosons",
-        "Accuracy of Standard Model predictions",
-        "Experimental verification of gauge theories"
-    ],
-    "confidence": 0.97,
-    "discovery_date": "1954",
-    "discoverers": ["Chen Ning Yang", "Robert Mills"],
-    "revolutions": ["particle_physics", "quantum_field_theory"],
-    
-    "explanation": "Gauge symmetry is the profound principle that the fundamental forces of nature emerge from requiring that physical laws remain unchanged under local symmetry transformations. Electromagnetism arises from U(1) gauge symmetry, the weak force from SU(2), and the strong force from SU(3). This framework not only explains known forces but provides the mathematical structure for potential unification of all fundamental interactions."
-},
+            "noether_theorem": {
+                "name": "Noether's Theorem",
+                "category": "fundamental_physics",
+                "domains": ["symmetry", "conservation", "mathematics"],
+                "statement": "Every differentiable symmetry of a physical system corresponds to a conservation law",
+                "statement_latex": null,
+                "formulation": "Continuous symmetries imply conserved quantities",
+                "implications": [
+                    "Time symmetry → energy conservation",
+                    "Space symmetry → momentum conservation",
+                    "Rotation symmetry → angular momentum conservation"
+                ],
+                "confidence": 0.99,
+                "discovery_date": "1918",
+                "discoverers": ["Emmy Noether"]
+            },
 
+            "quantum_superposition": {
+                "name": "Quantum Superposition Principle",
+                "category": "fundamental_physics", 
+                "domains": ["quantum", "superposition", "wave_function"],
+                "statement": "A quantum system can exist in multiple states simultaneously until measured",
+                "statement_latex": "|\\psi\\rangle = \\sum c_i |\\phi_i\\rangle",
+                "formulation": "Wave function as linear combination of basis states",
+                "implications": [
+                    "Quantum computing advantage",
+                    "Double-slit interference",
+                    "Schrödinger's cat paradox"
+                ],
+                "confidence": 0.98,
+                "discovery_date": "1926",
+                "discoverers": ["Erwin Schrödinger", "Paul Dirac"]
+            },
+
+            "quantum_entanglement": {
+                "name": "Quantum Entanglement Principle",
+                "category": "fundamental_physics",
+                "domains": ["quantum", "entanglement", "nonlocality", "correlation"],
+                "statement": "Quantum systems can become entangled such that the state of one particle instantly influences another, regardless of distance",
+                "statement_latex": "|\\Psi\\rangle = \\frac{1}{\\sqrt{2}}(|0\\rangle_A|1\\rangle_B - |1\\rangle_A|0\\rangle_B)",
+                "formulation": "Entangled particles share a single quantum state described by a non-separable wave function",
+                "implications": [
+                    "Quantum non-locality",
+                    "Violation of Bell inequalities", 
+                    "Quantum teleportation protocols",
+                    "Quantum computing advantage",
+                    "Fundamental challenge to local realism"
+                ],
+                "proofs": [
+                    "Aspect experiments (1980s)",
+                    "Violation of Bell's inequality",
+                    "Quantum teleportation demonstrations",
+                    "Quantum cryptography systems"
+                ],
+                "limitations": "No faster-than-light communication possible",
+                "confidence": 0.98,
+                "discovery_date": "1935",
+                "discoverers": ["Albert Einstein", "Boris Podolsky", "Nathan Rosen"],
+                "revolutions": ["quantum_information", "foundations_of_physics"]
+            },
+
+            "bell_inequality": {
+                "name": "Bell's Theorem and Inequality",
+                "category": "fundamental_physics", 
+                "domains": ["quantum", "foundations", "nonlocality", "entanglement"],
+                "statement": "No local hidden variable theory can reproduce all predictions of quantum mechanics",
+                "statement_latex": "|E(a,b) - E(a,b')| + |E(a',b) + E(a',b')| \\leq 2",
+                "formulation": "Mathematical inequality that distinguishes between local hidden variable theories and quantum mechanics",
+                "implications": [
+                    "Quantum mechanics is inherently non-local",
+                    "Reality is either non-local or contextual",
+                    "Experimental test of quantum foundations",
+                    "No complete local deterministic theory possible"
+                ],
+                "proofs": [
+                    "Aspect experiments (1982)",
+                    "Loophole-free Bell tests (2015+)",
+                    "Consistent violation of inequality in experiments"
+                ],
+                "confidence": 0.97,
+                "discovery_date": "1964",
+                "discoverers": ["John Stewart Bell"],
+                "revolutions": ["quantum_foundations"]
+            },
+
+            "gauge_symmetry": {
+                "name": "Gauge Symmetry Principle",
+                "category": "fundamental_physics",
+                "domains": ["quantum_field_theory", "symmetry", "forces", "standard_model"],
+                "statement": "Fundamental forces arise from local gauge symmetries",
+                "statement_latex": "\\mathcal{L} = \\bar{\\psi}(i\\gamma^\\mu D_\\mu - m)\\psi - \\frac{1}{4}F_{\\mu\\nu}F^{\\mu\\nu}",
+                "formulation": "Requiring Lagrangian invariance under local symmetry transformations necessitates the introduction of gauge fields",
+                "implications": [
+                    "Unification of forces through symmetry principles",
+                    "Prediction of force-carrying particles (gauge bosons)",
+                    "Foundation of the Standard Model",
+                    "Charge conservation as consequence of symmetry"
+                ],
+                "proofs": [
+                    "Success of quantum electrodynamics (QED)",
+                    "Prediction and discovery of W and Z bosons",
+                    "Accuracy of Standard Model predictions",
+                    "Experimental verification of gauge theories"
+                ],
+                "confidence": 0.97,
+                "discovery_date": "1954",
+                "discoverers": ["Chen Ning Yang", "Robert Mills"],
+                "revolutions": ["particle_physics", "quantum_field_theory"]
+            },
 
             "general_relativity": {
                 "name": "General Relativity",
                 "category": "fundamental_physics",
                 "domains": ["gravitation", "space_time", "cosmology"],
-                "statement": "Matter and energy curve spacetime, and this curvature dictates motion",
+                "statement": "Matter and energy curve spacetime, and this curvature dictates motion.",
                 "statement_latex": "G_{\\mu\\nu} = \\frac{8\\pi G}{c^4} T_{\\mu\\nu}",
-                "formulation": "Einstein's equation relating geometry and material content",
+                "formulation": "Einstein's equation relating geometry and material content.",
                 "implications": [
-                    "Light deflection by masses",
+                    "Light deflection by massive bodies",
                     "Gravitational waves",
-                    "Expansion of the universe",
+                    "Cosmic expansion",
                     "Black holes"
                 ],
                 "proofs": [
-                    "Stellar deflection during eclipses (1919)",
-                    "Gravitational redshift",
-                    "Gravitational waves (LIGO 2015)"
+                    "Stellar light deflection during solar eclipse (1919)",
+                    "Gravitational redshift experiments",
+                    "Detection of gravitational waves (LIGO, 2015)"
                 ],
+                "limitations": "Breaks down at quantum scales or singularities.",
                 "confidence": 0.98,
                 "discovery_date": "1915",
                 "discoverers": ["Albert Einstein"],
                 "revolutions": ["gravitation", "cosmology"]
             },
+
             "quantum_mechanics": {
                 "name": "Principles of Quantum Mechanics",
                 "category": "fundamental_physics",
@@ -743,6 +524,7 @@ function createLawCard(law, showDetails = false) {
                 "discovery_date": "1925-1927",
                 "discoverers": ["Heisenberg", "Schrödinger", "Dirac", "Bohr"]
             },
+
             "mass_energy_equivalence": {
                 "name": "Mass-Energy Equivalence",
                 "category": "fundamental_physics",
@@ -758,6 +540,7 @@ function createLawCard(law, showDetails = false) {
                 "discovery_date": "1905",
                 "discoverers": ["Albert Einstein"]
             },
+
             "heisenberg_uncertainty": {
                 "name": "Heisenberg Uncertainty Principle",
                 "category": "fundamental_physics",
@@ -773,6 +556,7 @@ function createLawCard(law, showDetails = false) {
                 "discovery_date": "1927",
                 "discoverers": ["Werner Heisenberg"]
             },
+
             "newtons_third_law": {
                 "name": "Newton's Third Law of Motion",
                 "category": "fundamental_physics",
@@ -795,6 +579,7 @@ function createLawCard(law, showDetails = false) {
                 "discoverers": ["Isaac Newton"],
                 "revolutions": ["classical_mechanics"]
             },
+
             "pauli_exclusion_principle": {
                 "name": "Pauli Exclusion Principle",
                 "category": "fundamental_physics",
@@ -817,6 +602,7 @@ function createLawCard(law, showDetails = false) {
                 "discoverers": ["Wolfgang Pauli"],
                 "revolutions": ["quantum_mechanics"]
             },
+
             "newtons_first_law": {
                 "name": "Newton's First Law of Motion",
                 "category": "fundamental_physics",
@@ -839,6 +625,7 @@ function createLawCard(law, showDetails = false) {
                 "discoverers": ["Isaac Newton"],
                 "revolutions": ["classical_mechanics"]
             },
+
             "born_rule": {
                 "name": "Born Rule",
                 "category": "fundamental_physics",
@@ -861,6 +648,7 @@ function createLawCard(law, showDetails = false) {
                 "discoverers": ["Max Born"],
                 "revolutions": ["quantum_mechanics"]
             },
+
             "conservation_energy": {
                 "name": "Conservation of Energy",
                 "category": "fundamental_physics",
@@ -883,6 +671,7 @@ function createLawCard(law, showDetails = false) {
                 "discoverers": ["Julius von Mayer", "James Joule", "Hermann von Helmholtz"],
                 "revolutions": ["thermodynamics"]
             },
+
             "conservation_momentum": {
                 "name": "Conservation of Momentum",
                 "category": "fundamental_physics", 
@@ -905,6 +694,7 @@ function createLawCard(law, showDetails = false) {
                 "discoverers": ["René Descartes"],
                 "revolutions": ["classical_mechanics"]
             },
+
             "maxwell_equations": {
                 "name": "Maxwell's Equations",
                 "category": "fundamental_physics",
@@ -927,32 +717,7 @@ function createLawCard(law, showDetails = false) {
                 "discoverers": ["James Clerk Maxwell"],
                 "revolutions": ["electromagnetism", "relativity"]
             },
-"general_relativity": {
-    "name": "General Relativity",
-    "category": "fundamental_physics",
-    "domains": ["gravitation", "space_time", "cosmology"],
-    "statement": "Matter and energy curve spacetime, and this curvature dictates motion.",
-    "statement_latex": "G_{\\mu\\nu} = \\frac{8\\pi G}{c^4} T_{\\mu\\nu}",
-    "formulation": "Einstein's equation relating geometry and material content.",
-    "implications": [
-        "Light deflection by massive bodies",
-        "Gravitational waves",
-        "Cosmic expansion",
-        "Black holes"
-    ],
-    "proofs": [
-        "Stellar light deflection during solar eclipse (1919)",
-        "Gravitational redshift experiments",
-        "Detection of gravitational waves (LIGO, 2015)"
-    ],
-    "limitations": "Breaks down at quantum scales or singularities.",
-    "confidence": 0.98,
-    "discovery_date": "1915",
-    "discoverers": ["Albert Einstein"],
-    "revolutions": ["gravitation", "cosmology"],
 
-    "explanation": "General Relativity describes gravity not as a force but as the curvature of spacetime caused by mass and energy. This revolutionary idea replaced Newton’s view of absolute space and time, unifying them into a four-dimensional continuum. Massive bodies distort spacetime, and this curvature directs the motion of planets, light, and matter. The theory predicts phenomena such as black holes, time dilation, and gravitational waves, all confirmed by experiment. It remains one of the most elegant and verified frameworks in modern physics."
-},
             "special_relativity": {
                 "name": "Special Relativity",
                 "category": "fundamental_physics",
@@ -985,6 +750,7 @@ function createLawCard(law, showDetails = false) {
                 "discoverers": ["Albert Einstein"],
                 "revolutions": ["modern_physics"]
             },
+
             "schrodinger_equation": {
                 "name": "Schrödinger Equation",
                 "category": "fundamental_physics",
@@ -1007,6 +773,7 @@ function createLawCard(law, showDetails = false) {
                 "discoverers": ["Erwin Schrödinger"],
                 "revolutions": ["quantum_mechanics"]
             },
+
             "dirac_equation": {
                 "name": "Dirac Equation",
                 "category": "fundamental_physics",
@@ -1046,6 +813,32 @@ function createLawCard(law, showDetails = false) {
                 "discovery_date": "1927-1929",
                 "discoverers": ["Georges Lemaître", "Edwin Hubble"]
             },
+
+            "cosmic_microwave_background": {
+                "name": "Cosmic Microwave Background Radiation",
+                "category": "cosmology",
+                "domains": ["cosmology", "big_bang", "radiation", "early_universe"],
+                "statement": "The universe is filled with thermal radiation remnant from the early hot, dense phase",
+                "statement_latex": "T_{CMB} = 2.72548 \\pm 0.00057\\,K",
+                "formulation": "Blackbody spectrum at 2.7K with tiny anisotropies encoding early universe information",
+                "implications": [
+                    "Strong evidence for Big Bang theory",
+                    "Universe was once hot and dense",
+                    "Seeds of cosmic structure formation",
+                    "Precision measurements of cosmological parameters"
+                ],
+                "proofs": [
+                    "Discovery by Penzias and Wilson (1965)",
+                    "COBE satellite blackbody spectrum (1992)",
+                    "WMAP and Planck satellite anisotropy maps",
+                    "Statistical properties match inflation predictions"
+                ],
+                "confidence": 0.99,
+                "discovery_date": "1965",
+                "discoverers": ["Arno Penzias", "Robert Wilson"],
+                "revolutions": ["big_bang_cosmology"]
+            },
+
             "dark_energy_dominance": {
                 "name": "Dark Energy Dominance",
                 "category": "cosmology",
@@ -1068,6 +861,7 @@ function createLawCard(law, showDetails = false) {
                 "discoverers": ["Saul Perlmutter", "Brian Schmidt", "Adam Riess"],
                 "revolutions": ["cosmology"]
             },
+
             "cosmological_principle": {
                 "name": "Cosmological Principle",
                 "category": "cosmology",
@@ -1090,6 +884,7 @@ function createLawCard(law, showDetails = false) {
                 "discoverers": ["Edwin Hubble", "Georges Lemaître"],
                 "revolutions": ["cosmology"]
             },
+
             "cosmic_inflation": {
                 "name": "Cosmic Inflation",
                 "category": "cosmology",
@@ -1113,6 +908,32 @@ function createLawCard(law, showDetails = false) {
                 "revolutions": ["cosmology"]
             },
 
+            // === ASTROPHYSICS ===
+            "stellar_nucleosynthesis": {
+                "name": "Stellar Nucleosynthesis",
+                "category": "astrophysics",
+                "domains": ["astrophysics", "nucleosynthesis", "stars", "elements"],
+                "statement": "Stars create chemical elements through nuclear fusion processes",
+                "statement_latex": "4^1H \\rightarrow ^4He + 2e^+ + 2\\nu_e + \\gamma",
+                "formulation": "Nuclear fusion in stellar cores transforms lighter elements into heavier ones, releasing energy",
+                "implications": [
+                    "Origin of chemical elements beyond hydrogen and helium",
+                    "Stellar energy source and lifetimes",
+                    "Galactic chemical evolution",
+                    "We are made of stardust"
+                ],
+                "proofs": [
+                    "Stellar spectroscopy showing elemental abundances",
+                    "Solar neutrino detection",
+                    "Supernova observations creating heavy elements",
+                    "Nuclear reaction cross-section measurements"
+                ],
+                "confidence": 0.98,
+                "discovery_date": "1957",
+                "discoverers": ["Margaret Burbidge", "Geoffrey Burbidge", "William Fowler", "Fred Hoyle"],
+                "revolutions": ["nuclear_astrophysics", "cosmochemistry"]
+            },
+
             // === INFORMATION AND COMPLEXITY ===
             "bekenstein": {
                 "name": "Bekenstein Bound",
@@ -1129,6 +950,7 @@ function createLawCard(law, showDetails = false) {
                 "discovery_date": "1973",
                 "discoverers": ["Jacob Bekenstein"]
             },
+
             "landauer": {
                 "name": "Landauer's Principle",
                 "category": "information",
@@ -1144,6 +966,7 @@ function createLawCard(law, showDetails = false) {
                 "discovery_date": "1961",
                 "discoverers": ["Rolf Landauer"]
             },
+
             "shannon_entropy": {
                 "name": "Shannon's Information Entropy",
                 "category": "information",
@@ -1166,6 +989,7 @@ function createLawCard(law, showDetails = false) {
                 "discoverers": ["Claude Shannon"],
                 "revolutions": ["information_theory"]
             },
+
             "church_turing": {
                 "name": "Church-Turing Thesis",
                 "category": "information",
@@ -1187,6 +1011,59 @@ function createLawCard(law, showDetails = false) {
                 "discovery_date": "1936",
                 "discoverers": ["Alonzo Church", "Alan Turing"],
                 "revolutions": ["computer_science"]
+            },
+
+            // === COMPLEX SYSTEMS ===
+            "butterfly_effect": {
+                "name": "Butterfly Effect (Sensitive Dependence on Initial Conditions)",
+                "category": "complex_systems",
+                "domains": ["chaos_theory", "nonlinear_dynamics", "predictability"],
+                "statement": "In chaotic systems, small differences in initial conditions can lead to vastly different outcomes",
+                "statement_latex": "\\delta(t) \\approx \\delta(0) e^{\\lambda t}",
+                "formulation": "Exponential divergence of trajectories in phase space characterized by positive Lyapunov exponents",
+                "implications": [
+                    "Fundamental limits to long-term prediction",
+                    "Weather forecasting limitations",
+                    "Emergence of patterns from simple rules",
+                    "Importance of microscopic details in macroscopic outcomes"
+                ],
+                "proofs": [
+                    "Lorenz's weather model simulations",
+                    "Double pendulum experiments",
+                    "Fluid turbulence studies",
+                    "Planetary orbit stability calculations"
+                ],
+                "limitations": "Applies primarily to deterministic nonlinear systems",
+                "confidence": 0.95,
+                "discovery_date": "1963",
+                "discoverers": ["Edward Lorenz"],
+                "revolutions": ["chaos_theory", "complex_systems"]
+            },
+
+            // === NEUROSCIENCE ===
+            "hebbian_learning": {
+                "name": "Hebb's Rule (Neural Plasticity)",
+                "category": "neuroscience",
+                "domains": ["neuroscience", "learning", "plasticity", "computation"],
+                "statement": "Neurons that fire together, wire together",
+                "statement_latex": "\\Delta w_{ij} = \\eta x_i x_j",
+                "formulation": "Synaptic strength increases when pre- and post-synaptic neurons are simultaneously active",
+                "implications": [
+                    "Biological basis of learning and memory",
+                    "Formation of neural assemblies",
+                    "Unsupervised learning in neural networks",
+                    "Cellular mechanism for associative learning"
+                ],
+                "proofs": [
+                    "Long-term potentiation (LTP) experiments",
+                    "Neural circuit formation studies",
+                    "Computational models of learning",
+                    "Brain plasticity research"
+                ],
+                "confidence": 0.96,
+                "discovery_date": "1949",
+                "discoverers": ["Donald Hebb"],
+                "revolutions": ["computational_neuroscience", "connectionism"]
             },
 
             // === BIOLOGY AND COMPLEX SYSTEMS ===
@@ -1236,6 +1113,7 @@ function createLawCard(law, showDetails = false) {
                 "discoverers": ["Thomas Bayes"],
                 "revolutions": ["statistics", "machine_learning"]
             },
+
             "godel_incompleteness": {
                 "name": "Gödel's Incompleteness Theorems",
                 "category": "mathematics",
@@ -1317,6 +1195,85 @@ function createLawCard(law, showDetails = false) {
             return isDisplay ? `$$${formatted}$$` : `$${formatted}$`;
         }
 
+        // ==================== ENHANCED FUNCTIONS ====================
+
+        function showByCategory(category) {
+            const laws = Object.values(universalLaws).filter(law => law.category === category);
+            
+            let html = `<h2>${category.replace(/_/g, ' ').toUpperCase()} Laws</h2>`;
+            
+            laws.forEach(law => {
+                const formula = law.statement_latex ? 
+                    `<div class="latex-container">${createFormulaHTML(law.statement_latex, true)}</div>` : '';
+                
+                html += `<div class="law-card">
+                    <h4>${law.name}</h4>
+                    <p><strong>Statement:</strong> ${law.statement}</p>
+                    ${formula}
+                    <div>${law.domains.map(d => `<span class="domain-tag">${d}</span>`).join('')}</div>
+                    <p><strong>Implications:</strong> ${law.implications.join('; ')}</p>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" style="width: ${law.confidence * 100}%"></div>
+                    </div>
+                    <div class="law-meta">
+                        <span>Confidence: ${(law.confidence * 100).toFixed(0)}%</span>
+                        <span>${law.discovery_date}</span>
+                    </div>
+                </div>`;
+            });
+            
+            document.getElementById('response').innerHTML = html;
+            document.getElementById('filters').style.display = 'block';
+            setTimeout(renderMathJax, 100);
+        }
+
+        function searchLaws(query) {
+            const results = Object.values(universalLaws).filter(law => 
+                law.name.toLowerCase().includes(query.toLowerCase()) ||
+                law.statement.toLowerCase().includes(query.toLowerCase()) ||
+                law.domains.some(domain => domain.toLowerCase().includes(query.toLowerCase())) ||
+                (law.implications && law.implications.some(imp => imp.toLowerCase().includes(query.toLowerCase())))
+            );
+            
+            return results;
+        }
+
+        function createLawCard(law, showDetails = false) {
+            const formula = law.statement_latex ? 
+                `<div class="latex-container">${createFormulaHTML(law.statement_latex, true)}</div>` : '';
+            
+            let details = '';
+            if (showDetails) {
+                details = `
+                    <p><strong>Formulation:</strong> ${law.formulation || law.statement}</p>
+                    <p><strong>Implications:</strong> ${law.implications.join('; ')}</p>
+                    <p><strong>Proofs:</strong> ${law.proofs ? law.proofs.join('; ') : 'Experimental verification'}</p>
+                    ${law.limitations ? `<p><strong>Limitations:</strong> ${law.limitations}</p>` : ''}
+                `;
+            }
+            
+            return `<div class="law-card">
+                <h4>${law.name} <span class="category-badge">${law.category.replace(/_/g, ' ')}</span></h4>
+                <p><strong>Statement:</strong> ${law.statement}</p>
+                ${formula}
+                <div>${law.domains.map(d => `<span class="domain-tag">${d}</span>`).join('')}</div>
+                ${details}
+                <div class="confidence-bar">
+                    <div class="confidence-fill" style="width: ${law.confidence * 100}%"></div>
+                </div>
+                <div class="law-meta">
+                    <span>Confidence: ${(law.confidence * 100).toFixed(0)}%</span>
+                    <span>${law.discovery_date}</span>
+                    <span>${Array.isArray(law.discoverers) ? law.discoverers.join(', ') : law.discoverers}</span>
+                </div>
+            </div>`;
+        }
+
+        function generateCitation(law) {
+            const discoverers = Array.isArray(law.discoverers) ? law.discoverers.join(' & ') : law.discoverers;
+            return `${law.name} (${law.discovery_date}) by ${discoverers}. ${law.statement}`;
+        }
+
         // ==================== MAIN FUNCTIONS ====================
 
         function getRandomLaws(n) {
@@ -1352,7 +1309,7 @@ function createLawCard(law, showDetails = false) {
                 },
                 "quantum": {
                     "keywords": ["quantum", "uncertainty", "schrödinger", "heisenberg", "born", "pauli", "superposition", "fermions", "wave function", "dirac", "antimatter", "exclusion"],
-                    "laws": ["quantum_mechanics", "heisenberg_uncertainty", "pauli_exclusion_principle", "born_rule", "schrodinger_equation", "dirac_equation"],
+                    "laws": ["quantum_mechanics", "heisenberg_uncertainty", "pauli_exclusion_principle", "born_rule", "schrodinger_equation", "dirac_equation", "quantum_entanglement", "bell_inequality", "quantum_superposition"],
                     "synthesis_template": "The quantum world reveals a probabilistic and counter-intuitive reality governed by wave functions, uncertainty, and exotic particle behavior."
                 },
                 "thermodynamics": {
@@ -1362,30 +1319,29 @@ function createLawCard(law, showDetails = false) {
                 },
                 "cosmology": {
                     "keywords": ["universe", "expansion", "big bang", "cosmology", "dark energy", "homogeneous", "isotropic", "inflation", "hubble", "cosmic", "primordial"],
-                    "laws": ["hubble_expansion", "general_relativity", "dark_energy_dominance", "cosmological_principle", "cosmic_inflation"],
+                    "laws": ["hubble_expansion", "general_relativity", "dark_energy_dominance", "cosmological_principle", "cosmic_inflation", "cosmic_microwave_background"],
                     "synthesis_template": "Modern cosmology reveals an expanding universe born from an extreme primordial state, with dark energy driving accelerated expansion."
                 },
-// Add to appropriate categories in mapQuestion function
-"chaos_theory": {
-    "keywords": ["chaos", "butterfly effect", "sensitive dependence", "nonlinear", "unpredictable", "complex systems"],
-    "laws": ["butterfly_effect"],
-    "synthesis_template": "Chaos theory reveals how deterministic systems can produce unpredictable, complex behavior through sensitive dependence on initial conditions."
-},
-"neuroscience": {
-    "keywords": ["neural", "brain", "learning", "plasticity", "hebb", "neurons", "synaptic"],
-    "laws": ["hebbian_learning"],
-    "synthesis_template": "Neural plasticity and learning operate through fundamental rules where co-active neurons strengthen their connections."
-},
-"astrophysics": {
-    "keywords": ["stars", "nucleosynthesis", "elements", "stellar", "fusion", "supernova"],
-    "laws": ["stellar_nucleosynthesis"],
-    "synthesis_template": "Stars serve as cosmic element factories, creating the chemical diversity of the universe through nuclear fusion processes."
-},
-"gauge_theory": {
-    "keywords": ["gauge", "symmetry", "yang-mills", "standard model", "force unification"],
-    "laws": ["gauge_symmetry"],
-    "synthesis_template": "Fundamental forces emerge from local gauge symmetries, providing the mathematical foundation for particle physics unification."
-},
+                "chaos_theory": {
+                    "keywords": ["chaos", "butterfly effect", "sensitive dependence", "nonlinear", "unpredictable", "complex systems"],
+                    "laws": ["butterfly_effect"],
+                    "synthesis_template": "Chaos theory reveals how deterministic systems can produce unpredictable, complex behavior through sensitive dependence on initial conditions."
+                },
+                "neuroscience": {
+                    "keywords": ["neural", "brain", "learning", "plasticity", "hebb", "neurons", "synaptic"],
+                    "laws": ["hebbian_learning"],
+                    "synthesis_template": "Neural plasticity and learning operate through fundamental rules where co-active neurons strengthen their connections."
+                },
+                "astrophysics": {
+                    "keywords": ["stars", "nucleosynthesis", "elements", "stellar", "fusion", "supernova"],
+                    "laws": ["stellar_nucleosynthesis"],
+                    "synthesis_template": "Stars serve as cosmic element factories, creating the chemical diversity of the universe through nuclear fusion processes."
+                },
+                "gauge_theory": {
+                    "keywords": ["gauge", "symmetry", "yang-mills", "standard model", "force unification"],
+                    "laws": ["gauge_symmetry", "noether_theorem"],
+                    "synthesis_template": "Fundamental forces emerge from local gauge symmetries, providing the mathematical foundation for particle physics unification."
+                },
                 "classical_mechanics": {
                     "keywords": ["newton", "motion", "force", "mechanics", "inertia", "momentum", "conservation", "collisions", "action-reaction"],
                     "laws": ["newtons_third_law", "newtons_first_law", "conservation_momentum"],
@@ -1418,7 +1374,7 @@ function createLawCard(law, showDetails = false) {
                 },
                 "symmetry_conservation": {
                     "keywords": ["symmetry", "conservation", "energy", "momentum", "noether", "invariance"],
-                    "laws": ["conservation_energy", "conservation_momentum"],
+                    "laws": ["conservation_energy", "conservation_momentum", "noether_theorem"],
                     "synthesis_template": "Fundamental symmetries in nature give rise to conservation laws that constrain all physical processes."
                 }
             };
@@ -1605,6 +1561,21 @@ ${formulaHTML}
 
             if (!question) {
                 responseDiv.innerHTML = "<p>🌠 Please ask a cosmic question.</p>";
+                return;
+            }
+
+            // First, check for direct matches in the library
+            const directMatches = searchLaws(question);
+            if (directMatches.length > 0) {
+                let html = `<h3>🔍 Direct Matches Found</h3>`;
+                directMatches.forEach(law => {
+                    html += `<div class="law-card">
+                        <h4>${law.name}</h4>
+                        <p>${law.statement}</p>
+                    </div>`;
+                });
+                responseDiv.innerHTML = html;
+                setTimeout(renderMathJax, 100);
                 return;
             }
 
