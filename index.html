@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QLang — Library of Universal Laws</title>
+    <title>QLang v 1.0 — Library of Universal Laws</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -14,7 +14,7 @@
             margin: 0 auto; 
             padding: 20px;
             background: linear-gradient(135deg, #0c2461 0%, #1e3799 100%);
-            color: #f0f0f0; /* Lighter text for better contrast */
+            color: white;
             line-height: 1.6;
         }
         .container {
@@ -37,8 +37,6 @@
             border: none;
             border-radius: 8px;
             font-size: 16px;
-            background: #fff;
-            color: #333;
         }
         button { 
             padding: 15px 30px; 
@@ -113,17 +111,10 @@
         <h1>🌌 QLang — Library of Universal Laws</h1>
         <p>Explore cosmic knowledge through the fundamental laws of the universe.</p>
         
-        <input type="text" id="question" list="question-suggestions" placeholder="Ask your cosmic question..." aria-label="Enter a cosmic question">
-        <datalist id="question-suggestions">
-            <!-- Populated dynamically -->
-        </datalist>
-        <select id="category-filter" aria-label="Filter laws by category">
-            <option value="all">All Categories</option>
-            <!-- Populated dynamically -->
-        </select>
-        <button onclick="askQLang()" aria-label="Query the universe">✨ Query the Universe</button>
-        <button onclick="showLibrary()" aria-label="View full library">📚 View Library</button>
-        <button onclick="showRandomLaw()" aria-label="Show a random law">🎲 Random Law</button>
+        <input type="text" id="question" placeholder="Ask your cosmic question...">
+        <button onclick="askQLang()">✨ Query the Universe</button>
+        <button onclick="showLibrary()">📚 View Library</button>
+        <button onclick="showRandomLaw()">🎲 Random Law</button>
         
         <div id="response">
             <p>The library contains <span id="law-count">0</span> universal laws.</p>
@@ -132,593 +123,592 @@
 
     <script>
         // ==================== LIBRARY OF UNIVERSAL LAWS ====================
-        let // Add this to your universalLaws object (replace the empty {} with this):
-universalLaws = {
-    // === FUNDAMENTAL PHYSICS ===
-    "thermodynamics_2": {
-        "name": "Second Law of Thermodynamics",
-        "category": "fundamental_physics",
-        "domains": ["thermodynamics", "entropy", "time_arrow"],
-        "statement": "The entropy of an isolated system can only increase or remain constant",
-        "statement_latex": "\\Delta S \\geq 0",
-        "formulation": "In any natural process, the total entropy of the universe increases",
-        "implications": [
-            "Irreversible time arrow",
-            "Impossibility of perpetual motion",
-            "Heat death of the universe as final state"
-        ],
-        "proofs": [
-            "Calorimetry experiments",
-            "Real heat engines",
-            "Statistical foundations (Boltzmann)"
-        ],
-        "limitations": "Open systems and far from equilibrium",
-        "confidence": 0.99,
-        "discovery_date": "1850",
-        "discoverers": ["Rudolf Clausius", "William Thomson"],
-        "revolutions": ["thermodynamics", "cosmology"]
-    },
-    "general_relativity": {
-        "name": "General Relativity",
-        "category": "fundamental_physics",
-        "domains": ["gravitation", "space_time", "cosmology"],
-        "statement": "Matter and energy curve spacetime, and this curvature dictates motion",
-        "statement_latex": "G_{\\mu\\nu} = \\frac{8\\pi G}{c^4} T_{\\mu\\nu}",
-        "formulation": "Einstein's equation relating geometry and material content",
-        "implications": [
-            "Light deflection by masses",
-            "Gravitational waves",
-            "Expansion of the universe",
-            "Black holes"
-        ],
-        "proofs": [
-            "Stellar deflection during eclipses (1919)",
-            "Gravitational redshift",
-            "Gravitational waves (LIGO 2015)"
-        ],
-        "confidence": 0.98,
-        "discovery_date": "1915",
-        "discoverers": ["Albert Einstein"],
-        "revolutions": ["gravitation", "cosmology"]
-    },
-    "quantum_mechanics": {
-        "name": "Principles of Quantum Mechanics",
-        "category": "fundamental_physics",
-        "domains": ["quantum", "uncertainty", "superposition"],
-        "statement": "System described by a wave function, unitary evolution, probabilistic measurement",
-        "statement_latex": "i\\hbar\\frac{\\partial}{\\partial t}\\Psi = \\hat{H}\\Psi",
-        "formulation": "Schrödinger equation describing temporal evolution",
-        "implications": [
-            "Wave-particle duality",
-            "Quantum entanglement",
-            "Uncertainty principle",
-            "Tunnel effect"
-        ],
-        "proofs": [
-            "Stern-Gerlach experiment",
-            "Interferences with individual particles",
-            "Quantum computers"
-        ],
-        "confidence": 0.99,
-        "discovery_date": "1925-1927",
-        "discoverers": ["Heisenberg", "Schrödinger", "Dirac", "Bohr"]
-    },
-    "mass_energy_equivalence": {
-        "name": "Mass-Energy Equivalence",
-        "category": "fundamental_physics",
-        "domains": ["relativity", "energy", "mass"],
-        "statement": "Mass and energy are equivalent and convertible",
-        "statement_latex": "E = mc^2",
-        "implications": [
-            "Nuclear energy",
-            "Particle creation and annihilation",
-            "Spacetime curvature by energy"
-        ],
-        "confidence": 0.99,
-        "discovery_date": "1905",
-        "discoverers": ["Albert Einstein"]
-    },
-    "heisenberg_uncertainty": {
-        "name": "Heisenberg Uncertainty Principle",
-        "category": "fundamental_physics",
-        "domains": ["quantum", "uncertainty", "measurement"],
-        "statement": "Impossibility of simultaneously knowing with precision certain pairs of properties",
-        "statement_latex": "\\Delta x \\Delta p \\geq \\frac{\\hbar}{2}",
-        "implications": [
-            "Fundamental measurement limits",
-            "Probabilistic nature of quantum reality",
-            "Zero-point energy"
-        ],
-        "confidence": 0.98,
-        "discovery_date": "1927",
-        "discoverers": ["Werner Heisenberg"]
-    },
-    "newtons_third_law": {
-        "name": "Newton's Third Law of Motion",
-        "category": "fundamental_physics",
-        "domains": ["mechanics", "force", "interaction"],
-        "statement": "For every action, there is an equal and opposite reaction",
-        "statement_latex": "\\vec{F}_{12} = -\\vec{F}_{21}",
-        "formulation": "The force exerted by object 1 on object 2 is equal in magnitude and opposite in direction to the force exerted by object 2 on object 1",
-        "implications": [
-            "Conservation of momentum",
-            "Reciprocity in physical interactions",
-            "Rocket propulsion mechanics"
-        ],
-        "proofs": [
-            "Experimental observations of collisions",
-            "Rocket launch dynamics",
-            "Balance of forces in static systems"
-        ],
-        "confidence": 0.99,
-        "discovery_date": "1687",
-        "discoverers": ["Isaac Newton"],
-        "revolutions": ["classical_mechanics"]
-    },
-    "pauli_exclusion_principle": {
-        "name": "Pauli Exclusion Principle",
-        "category": "fundamental_physics",
-        "domains": ["quantum", "matter", "fermions"],
-        "statement": "No two fermions can occupy the same quantum state simultaneously",
-        "statement_latex": null,
-        "formulation": "Fermions (e.g., electrons) obey antisymmetric wave functions, preventing identical quantum states",
-        "implications": [
-            "Structure of atoms and electron shells",
-            "Stability of matter",
-            "Behavior of neutron stars and white dwarfs"
-        ],
-        "proofs": [
-            "Atomic spectra",
-            "Periodic table structure",
-            "Degenerate matter in astrophysics"
-        ],
-        "confidence": 0.98,
-        "discovery_date": "1925",
-        "discoverers": ["Wolfgang Pauli"],
-        "revolutions": ["quantum_mechanics"]
-    },
-    "newtons_first_law": {
-        "name": "Newton's First Law of Motion",
-        "category": "fundamental_physics",
-        "domains": ["mechanics", "force"],
-        "statement": "A body remains at rest or in uniform motion unless acted upon by a force",
-        "statement_latex": "\\vec{F} = 0 \\implies \\vec{a} = 0",
-        "formulation": "Objects maintain their state of motion in the absence of net external forces",
-        "implications": [
-            "Foundation of inertia",
-            "Conservation of momentum",
-            "Reference frames"
-        ],
-        "proofs": [
-            "Galilean experiments",
-            "Motion of planets",
-            "Modern dynamics"
-        ],
-        "confidence": 0.99,
-        "discovery_date": "1687",
-        "discoverers": ["Isaac Newton"],
-        "revolutions": ["classical_mechanics"]
-    },
-    "born_rule": {
-        "name": "Born Rule",
-        "category": "fundamental_physics",
-        "domains": ["quantum", "probability", "measurement"],
-        "statement": "The probability of a quantum measurement outcome is the square of the wave function amplitude",
-        "statement_latex": "P(x) = |\\psi(x)|^2",
-        "formulation": "Measurement probabilities are derived from the wave function",
-        "implications": [
-            "Probabilistic nature of quantum mechanics",
-            "Interpretation of wave function",
-            "Quantum measurement problem"
-        ],
-        "proofs": [
-            "Double-slit experiment",
-            "Quantum state tomography",
-            "Photon detection"
-        ],
-        "confidence": 0.98,
-        "discovery_date": "1926",
-        "discoverers": ["Max Born"],
-        "revolutions": ["quantum_mechanics"]
-    },
-    "conservation_energy": {
-        "name": "Conservation of Energy",
-        "category": "fundamental_physics",
-        "domains": ["energy", "symmetry", "thermodynamics"],
-        "statement": "Energy cannot be created or destroyed, only transformed",
-        "statement_latex": "\\frac{dE}{dt} = 0",
-        "formulation": "Total energy in an isolated system remains constant over time",
-        "implications": [
-            "No perpetual motion machines",
-            "Energy transformation efficiency limits",
-            "Time translation symmetry"
-        ],
-        "proofs": [
-            "Noether's theorem",
-            "Calorimetry experiments",
-            "Mechanical equivalent of heat"
-        ],
-        "confidence": 0.99,
-        "discovery_date": "1842",
-        "discoverers": ["Julius von Mayer", "James Joule", "Hermann von Helmholtz"],
-        "revolutions": ["thermodynamics"]
-    },
-    "conservation_momentum": {
-        "name": "Conservation of Momentum",
-        "category": "fundamental_physics", 
-        "domains": ["mechanics", "symmetry", "collisions"],
-        "statement": "Total momentum of an isolated system remains constant",
-        "statement_latex": "\\frac{d\\vec{p}}{dt} = 0",
-        "formulation": "In the absence of external forces, momentum is conserved",
-        "implications": [
-            "Rocket propulsion",
-            "Collision analysis",
-            "Space translation symmetry"
-        ],
-        "proofs": [
-            "Collision experiments",
-            "Noether's theorem",
-            "Astronomical observations"
-        ],
-        "confidence": 0.99,
-        "discovery_date": "1644",
-        "discoverers": ["René Descartes"],
-        "revolutions": ["classical_mechanics"]
-    },
-    "maxwell_equations": {
-        "name": "Maxwell's Equations",
-        "category": "fundamental_physics",
-        "domains": ["electromagnetism", "waves", "light"],
-        "statement": "Fundamental laws governing electricity, magnetism, and electromagnetic waves",
-        "statement_latex": "\\nabla \\cdot \\vec{E} = \\frac{\\rho}{\\epsilon_0}, \\quad \\nabla \\cdot \\vec{B} = 0, \\quad \\nabla \\times \\vec{E} = -\\frac{\\partial \\vec{B}}{\\partial t}, \\quad \\nabla \\times \\vec{B} = \\mu_0\\vec{J} + \\mu_0\\epsilon_0\\frac{\\partial \\vec{E}}{\\partial t}",
-        "formulation": "Set of four differential equations describing electromagnetic fields",
-        "implications": [
-            "Electromagnetic wave propagation",
-            "Speed of light derivation",
-            "Relativity foundation"
-        ],
-        "proofs": [
-            "Radio wave generation",
-            "Light as electromagnetic wave",
-            "Modern electronics"
-        ],
-        "confidence": 0.99,
-        "discovery_date": "1861-1862",
-        "discoverers": ["James Clerk Maxwell"],
-        "revolutions": ["electromagnetism", "relativity"]
-    },
-    "special_relativity": {
-        "name": "Special Relativity",
-        "category": "fundamental_physics",
-        "domains": ["relativity", "space_time", "motion"],
-        "statement": "Laws of physics are identical in all inertial frames, and light speed is constant",
-        "statement_latex": "ds^2 = -c^2dt^2 + dx^2 + dy^2 + dz^2",
-        "formulations": {
-            "postulates": [
-                "Physics laws are same in all inertial frames",
-                "Light speed is constant in vacuum regardless of source motion"
-            ],
-            "effects": [
-                "Time dilation: \\Delta t' = \\frac{\\Delta t}{\\sqrt{1-v^2/c^2}}",
-                "Length contraction: L' = L\\sqrt{1-v^2/c^2}",
-                "Relativistic momentum: p = \\frac{mv}{\\sqrt{1-v^2/c^2}}"
-            ]
-        },
-        "implications": [
-            "Relativity of simultaneity",
-            "Mass-energy equivalence",
-            "Magnetic fields as relativistic effects"
-        ],
-        "proofs": [
-            "Muon lifetime experiments",
-            "Particle accelerator results",
-            "GPS satellite timing"
-        ],
-        "confidence": 0.99,
-        "discovery_date": "1905",
-        "discoverers": ["Albert Einstein"],
-        "revolutions": ["modern_physics"]
-    },
-    "schrodinger_equation": {
-        "name": "Schrödinger Equation",
-        "category": "fundamental_physics",
-        "domains": ["quantum", "wave_function", "evolution"],
-        "statement": "Describes how the quantum state of a physical system changes with time",
-        "statement_latex": "i\\hbar\\frac{\\partial}{\\partial t}\\Psi(\\vec{r},t) = \\left[-\\frac{\\hbar^2}{2m}\\nabla^2 + V(\\vec{r},t)\\right]\\Psi(\\vec{r},t)",
-        "formulation": "Time-dependent wave equation for quantum systems",
-        "implications": [
-            "Quantized energy levels",
-            "Quantum tunneling",
-            "Atomic and molecular structure"
-        ],
-        "proofs": [
-            "Hydrogen atom spectrum",
-            "Quantum chemistry predictions",
-            "Scanning tunneling microscopy"
-        ],
-        "confidence": 0.98,
-        "discovery_date": "1926",
-        "discoverers": ["Erwin Schrödinger"],
-        "revolutions": ["quantum_mechanics"]
-    },
-    "dirac_equation": {
-        "name": "Dirac Equation",
-        "category": "fundamental_physics",
-        "domains": ["quantum", "relativity", "antimatter"],
-        "statement": "Relativistic wave equation describing spin-1/2 particles",
-        "statement_latex": "(i\\hbar\\gamma^\\mu\\partial_\\mu - mc)\\psi = 0",
-        "formulation": "Combines quantum mechanics and special relativity",
-        "implications": [
-            "Prediction of antimatter",
-            "Electron spin naturally emerges",
-            "Fine structure of hydrogen"
-        ],
-        "proofs": [
-            "Discovery of positron (1932)",
-            "Electron magnetic moment",
-            "Relativistic quantum chemistry"
-        ],
-        "confidence": 0.97,
-        "discovery_date": "1928",
-        "discoverers": ["Paul Dirac"],
-        "revolutions": ["quantum_electrodynamics"]
-    },
+        const universalLaws = {
+            // === FUNDAMENTAL PHYSICS ===
+            "thermodynamics_2": {
+                "name": "Second Law of Thermodynamics",
+                "category": "fundamental_physics",
+                "domains": ["thermodynamics", "entropy", "time_arrow"],
+                "statement": "The entropy of an isolated system can only increase or remain constant",
+                "statement_latex": "\\Delta S \\geq 0",
+                "formulation": "In any natural process, the total entropy of the universe increases",
+                "implications": [
+                    "Irreversible time arrow",
+                    "Impossibility of perpetual motion",
+                    "Heat death of the universe as final state"
+                ],
+                "proofs": [
+                    "Calorimetry experiments",
+                    "Real heat engines",
+                    "Statistical foundations (Boltzmann)"
+                ],
+                "limitations": "Open systems and far from equilibrium",
+                "confidence": 0.99,
+                "discovery_date": "1850",
+                "discoverers": ["Rudolf Clausius", "William Thomson"],
+                "revolutions": ["thermodynamics", "cosmology"]
+            },
+            "general_relativity": {
+                "name": "General Relativity",
+                "category": "fundamental_physics",
+                "domains": ["gravitation", "space_time", "cosmology"],
+                "statement": "Matter and energy curve spacetime, and this curvature dictates motion",
+                "statement_latex": "G_{\\mu\\nu} = \\frac{8\\pi G}{c^4} T_{\\mu\\nu}",
+                "formulation": "Einstein's equation relating geometry and material content",
+                "implications": [
+                    "Light deflection by masses",
+                    "Gravitational waves",
+                    "Expansion of the universe",
+                    "Black holes"
+                ],
+                "proofs": [
+                    "Stellar deflection during eclipses (1919)",
+                    "Gravitational redshift",
+                    "Gravitational waves (LIGO 2015)"
+                ],
+                "confidence": 0.98,
+                "discovery_date": "1915",
+                "discoverers": ["Albert Einstein"],
+                "revolutions": ["gravitation", "cosmology"]
+            },
+            "quantum_mechanics": {
+                "name": "Principles of Quantum Mechanics",
+                "category": "fundamental_physics",
+                "domains": ["quantum", "uncertainty", "superposition"],
+                "statement": "System described by a wave function, unitary evolution, probabilistic measurement",
+                "statement_latex": "i\\hbar\\frac{\\partial}{\\partial t}\\Psi = \\hat{H}\\Psi",
+                "formulation": "Schrödinger equation describing temporal evolution",
+                "implications": [
+                    "Wave-particle duality",
+                    "Quantum entanglement",
+                    "Uncertainty principle",
+                    "Tunnel effect"
+                ],
+                "proofs": [
+                    "Stern-Gerlach experiment",
+                    "Interferences with individual particles",
+                    "Quantum computers"
+                ],
+                "confidence": 0.99,
+                "discovery_date": "1925-1927",
+                "discoverers": ["Heisenberg", "Schrödinger", "Dirac", "Bohr"]
+            },
+            "mass_energy_equivalence": {
+                "name": "Mass-Energy Equivalence",
+                "category": "fundamental_physics",
+                "domains": ["relativity", "energy", "mass"],
+                "statement": "Mass and energy are equivalent and convertible",
+                "statement_latex": "E = mc^2",
+                "implications": [
+                    "Nuclear energy",
+                    "Particle creation and annihilation",
+                    "Spacetime curvature by energy"
+                ],
+                "confidence": 0.99,
+                "discovery_date": "1905",
+                "discoverers": ["Albert Einstein"]
+            },
+            "heisenberg_uncertainty": {
+                "name": "Heisenberg Uncertainty Principle",
+                "category": "fundamental_physics",
+                "domains": ["quantum", "uncertainty", "measurement"],
+                "statement": "Impossibility of simultaneously knowing with precision certain pairs of properties",
+                "statement_latex": "\\Delta x \\Delta p \\geq \\frac{\\hbar}{2}",
+                "implications": [
+                    "Fundamental measurement limits",
+                    "Probabilistic nature of quantum reality",
+                    "Zero-point energy"
+                ],
+                "confidence": 0.98,
+                "discovery_date": "1927",
+                "discoverers": ["Werner Heisenberg"]
+            },
+            "newtons_third_law": {
+                "name": "Newton's Third Law of Motion",
+                "category": "fundamental_physics",
+                "domains": ["mechanics", "force", "interaction"],
+                "statement": "For every action, there is an equal and opposite reaction",
+                "statement_latex": "\\vec{F}_{12} = -\\vec{F}_{21}",
+                "formulation": "The force exerted by object 1 on object 2 is equal in magnitude and opposite in direction to the force exerted by object 2 on object 1",
+                "implications": [
+                    "Conservation of momentum",
+                    "Reciprocity in physical interactions",
+                    "Rocket propulsion mechanics"
+                ],
+                "proofs": [
+                    "Experimental observations of collisions",
+                    "Rocket launch dynamics",
+                    "Balance of forces in static systems"
+                ],
+                "confidence": 0.99,
+                "discovery_date": "1687",
+                "discoverers": ["Isaac Newton"],
+                "revolutions": ["classical_mechanics"]
+            },
+            "pauli_exclusion_principle": {
+                "name": "Pauli Exclusion Principle",
+                "category": "fundamental_physics",
+                "domains": ["quantum", "matter", "fermions"],
+                "statement": "No two fermions can occupy the same quantum state simultaneously",
+                "statement_latex": null,
+                "formulation": "Fermions (e.g., electrons) obey antisymmetric wave functions, preventing identical quantum states",
+                "implications": [
+                    "Structure of atoms and electron shells",
+                    "Stability of matter",
+                    "Behavior of neutron stars and white dwarfs"
+                ],
+                "proofs": [
+                    "Atomic spectra",
+                    "Periodic table structure",
+                    "Degenerate matter in astrophysics"
+                ],
+                "confidence": 0.98,
+                "discovery_date": "1925",
+                "discoverers": ["Wolfgang Pauli"],
+                "revolutions": ["quantum_mechanics"]
+            },
+            "newtons_first_law": {
+                "name": "Newton's First Law of Motion",
+                "category": "fundamental_physics",
+                "domains": ["mechanics", "force"],
+                "statement": "A body remains at rest or in uniform motion unless acted upon by a force",
+                "statement_latex": "\\vec{F} = 0 \\implies \\vec{a} = 0",
+                "formulation": "Objects maintain their state of motion in the absence of net external forces",
+                "implications": [
+                    "Foundation of inertia",
+                    "Conservation of momentum",
+                    "Reference frames"
+                ],
+                "proofs": [
+                    "Galilean experiments",
+                    "Motion of planets",
+                    "Modern dynamics"
+                ],
+                "confidence": 0.99,
+                "discovery_date": "1687",
+                "discoverers": ["Isaac Newton"],
+                "revolutions": ["classical_mechanics"]
+            },
+            "born_rule": {
+                "name": "Born Rule",
+                "category": "fundamental_physics",
+                "domains": ["quantum", "probability", "measurement"],
+                "statement": "The probability of a quantum measurement outcome is the square of the wave function amplitude",
+                "statement_latex": "P(x) = |\\psi(x)|^2",
+                "formulation": "Measurement probabilities are derived from the wave function",
+                "implications": [
+                    "Probabilistic nature of quantum mechanics",
+                    "Interpretation of wave function",
+                    "Quantum measurement problem"
+                ],
+                "proofs": [
+                    "Double-slit experiment",
+                    "Quantum state tomography",
+                    "Photon detection"
+                ],
+                "confidence": 0.98,
+                "discovery_date": "1926",
+                "discoverers": ["Max Born"],
+                "revolutions": ["quantum_mechanics"]
+            },
 
-    // === COSMOLOGY ===
-    "hubble_expansion": {
-        "name": "Hubble-Lemaître Law",
-        "category": "cosmology",
-        "domains": ["expansion", "cosmology"],
-        "statement": "Galaxies recede at a speed proportional to their distance",
-        "statement_latex": "v = H_0 d",
-        "implications": [
-            "Expanding universe",
-            "Big Bang as origin",
-            "Finite age of the universe"
-        ],
-        "confidence": 0.95,
-        "discovery_date": "1927-1929",
-        "discoverers": ["Georges Lemaître", "Edwin Hubble"]
-    },
-    "dark_energy_dominance": {
-        "name": "Dark Energy Dominance",
-        "category": "cosmology",
-        "domains": ["cosmology", "dark_energy", "expansion"],
-        "statement": "Dark energy drives the accelerated expansion of the universe",
-        "statement_latex": "\\Omega_{\\Lambda} \\approx 0.68",
-        "formulation": "The cosmological constant or equivalent dark energy component dominates the universe's energy density, causing accelerated expansion",
-        "implications": [
-            "Accelerated cosmic expansion",
-            "Future dilution of matter",
-            "Ultimate fate of the universe"
-        ],
-        "proofs": [
-            "Type Ia supernova observations (1998)",
-            "Cosmic microwave background (Planck)",
-            "Large-scale structure surveys"
-        ],
-        "confidence": 0.94,
-        "discovery_date": "1998",
-        "discoverers": ["Saul Perlmutter", "Brian Schmidt", "Adam Riess"],
-        "revolutions": ["cosmology"]
-    },
-    "cosmological_principle": {
-        "name": "Cosmological Principle",
-        "category": "cosmology",
-        "domains": ["cosmology", "universe_structure"],
-        "statement": "The universe is homogeneous and isotropic on large scales",
-        "statement_latex": null,
-        "formulation": "No preferred location or direction exists in the universe at cosmological scales",
-        "implications": [
-            "Simplified cosmological models",
-            "Uniform cosmic microwave background",
-            "Large-scale structure formation"
-        ],
-        "proofs": [
-            "CMB isotropy (COBE, Planck)",
-            "Galaxy distribution surveys",
-            "Isotropic expansion rates"
-        ],
-        "confidence": 0.95,
-        "discovery_date": "1930s",
-        "discoverers": ["Edwin Hubble", "Georges Lemaître"],
-        "revolutions": ["cosmology"]
-    },
-    "cosmic_inflation": {
-        "name": "Cosmic Inflation",
-        "category": "cosmology",
-        "domains": ["cosmology", "early_universe", "expansion"],
-        "statement": "Exponential expansion of the universe in the first fraction of a second",
-        "statement_latex": "a(t) \\propto e^{Ht}",
-        "formulation": "Rapid accelerated expansion driven by vacuum energy",
-        "implications": [
-            "Horizon problem solution",
-            "Flatness problem solution",
-            "Primordial density fluctuations"
-        ],
-        "proofs": [
-            "CMB temperature anisotropies",
-            "Large-scale structure statistics",
-            "Gravitational wave background (predicted)"
-        ],
-        "confidence": 0.85,
-        "discovery_date": "1980",
-        "discoverers": ["Alan Guth", "Andrei Linde", "Paul Steinhardt"],
-        "revolutions": ["cosmology"]
-    },
+            // === COSMOLOGY ===
+            "hubble_expansion": {
+                "name": "Hubble-Lemaître Law",
+                "category": "cosmology",
+                "domains": ["expansion", "cosmology"],
+                "statement": "Galaxies recede at a speed proportional to their distance",
+                "statement_latex": "v = H_0 d",
+                "implications": [
+                    "Expanding universe",
+                    "Big Bang as origin",
+                    "Finite age of the universe"
+                ],
+                "confidence": 0.95,
+                "discovery_date": "1927-1929",
+                "discoverers": ["Georges Lemaître", "Edwin Hubble"]
+            },
+            "dark_energy_dominance": {
+                "name": "Dark Energy Dominance",
+                "category": "cosmology",
+                "domains": ["cosmology", "dark_energy", "expansion"],
+                "statement": "Dark energy drives the accelerated expansion of the universe",
+                "statement_latex": "\\Omega_{\\Lambda} \\approx 0.68",
+                "formulation": "The cosmological constant or equivalent dark energy component dominates the universe's energy density, causing accelerated expansion",
+                "implications": [
+                    "Accelerated cosmic expansion",
+                    "Future dilution of matter",
+                    "Ultimate fate of the universe"
+                ],
+                "proofs": [
+                    "Type Ia supernova observations (1998)",
+                    "Cosmic microwave background (Planck)",
+                    "Large-scale structure surveys"
+                ],
+                "confidence": 0.94,
+                "discovery_date": "1998",
+                "discoverers": ["Saul Perlmutter", "Brian Schmidt", "Adam Riess"],
+                "revolutions": ["cosmology"]
+            },
+            "cosmological_principle": {
+                "name": "Cosmological Principle",
+                "category": "cosmology",
+                "domains": ["cosmology", "universe_structure"],
+                "statement": "The universe is homogeneous and isotropic on large scales",
+                "statement_latex": null,
+                "formulation": "No preferred location or direction exists in the universe at cosmological scales",
+                "implications": [
+                    "Simplified cosmological models",
+                    "Uniform cosmic microwave background",
+                    "Large-scale structure formation"
+                ],
+                "proofs": [
+                    "CMB isotropy (COBE, Planck)",
+                    "Galaxy distribution surveys",
+                    "Isotropic expansion rates"
+                ],
+                "confidence": 0.95,
+                "discovery_date": "1930s",
+                "discoverers": ["Edwin Hubble", "Georges Lemaître"],
+                "revolutions": ["cosmology"]
+            },
 
-    // === INFORMATION AND COMPLEXITY ===
-    "bekenstein": {
-        "name": "Bekenstein Bound",
-        "category": "information",
-        "domains": ["information", "gravity", "holography"],
-        "statement": "Maximum amount of information contained in a region of space",
-        "statement_latex": "I \\leq \\frac{2\\pi R E}{\\hbar c \\ln 2}",
-        "implications": [
-            "Holographic principle",
-            "Black hole entropy",
-            "Fundamental computational limits"
-        ],
-        "confidence": 0.90,
-        "discovery_date": "1973",
-        "discoverers": ["Jacob Bekenstein"]
-    },
-    "landauer": {
-        "name": "Landauer's Principle",
-        "category": "information",
-        "domains": ["information", "thermodynamics", "computation"],
-        "statement": "Erasing one bit of information dissipates at least kT ln(2) of energy",
-        "statement_latex": "E \\geq kT \\ln 2",
-        "implications": [
-            "Information/entropy link",
-            "Energy limits of computation",
-            "Reversible computers"
-        ],
-        "confidence": 0.85,
-        "discovery_date": "1961",
-        "discoverers": ["Rolf Landauer"]
-    },
-    "shannon_entropy": {
-        "name": "Shannon's Information Entropy",
-        "category": "information",
-        "domains": ["information", "communication", "probability"],
-        "statement": "The entropy of a message quantifies its information content or uncertainty",
-        "statement_latex": "H(X) = -\\sum_{i} p(x_i) \\log p(x_i)",
-        "formulation": "Information entropy measures the average amount of information required to describe a random variable",
-        "implications": [
-            "Foundation of information theory",
-            "Limits of data compression",
-            "Error correction in communication systems"
-        ],
-        "proofs": [
-            "Communication channel experiments",
-            "Data compression algorithms",
-            "Error-correcting codes"
-        ],
-        "confidence": 0.97,
-        "discovery_date": "1948",
-        "discoverers": ["Claude Shannon"],
-        "revolutions": ["information_theory"]
-    },
-    "church_turing": {
-        "name": "Church-Turing Thesis",
-        "category": "information",
-        "domains": ["computation", "mathematics", "logic"],
-        "statement": "Any function that can be computed by an algorithm can be computed by a Turing machine",
-        "statement_latex": null,
-        "formulation": "Formal definition of effective calculability and computability",
-        "implications": [
-            "Universal computation concept",
-            "Limits of algorithmic computation",
-            "Foundation of computer science"
-        ],
-        "proofs": [
-            "Equivalence of computational models",
-            "Practical implementation in modern computers",
-            "Theoretical computer science developments"
-        ],
-        "confidence": 0.95,
-        "discovery_date": "1936",
-        "discoverers": ["Alonzo Church", "Alan Turing"],
-        "revolutions": ["computer_science"]
-    },
+            // === INFORMATION AND COMPLEXITY ===
+            "bekenstein": {
+                "name": "Bekenstein Bound",
+                "category": "information",
+                "domains": ["information", "gravity", "holography"],
+                "statement": "Maximum amount of information contained in a region of space",
+                "statement_latex": "I \\leq \\frac{2\\pi R E}{\\hbar c \\ln 2}",
+                "implications": [
+                    "Holographic principle",
+                    "Black hole entropy",
+                    "Fundamental computational limits"
+                ],
+                "confidence": 0.90,
+                "discovery_date": "1973",
+                "discoverers": ["Jacob Bekenstein"]
+            },
+            "landauer": {
+                "name": "Landauer's Principle",
+                "category": "information",
+                "domains": ["information", "thermodynamics", "computation"],
+                "statement": "Erasing one bit of information dissipates at least kT ln(2) of energy",
+                "statement_latex": "E \\geq kT \\ln 2",
+                "implications": [
+                    "Information/entropy link",
+                    "Energy limits of computation",
+                    "Reversible computers"
+                ],
+                "confidence": 0.85,
+                "discovery_date": "1961",
+                "discoverers": ["Rolf Landauer"]
+            },
+            "shannon_entropy": {
+                "name": "Shannon's Information Entropy",
+                "category": "information",
+                "domains": ["information", "communication", "probability"],
+                "statement": "The entropy of a message quantifies its information content or uncertainty",
+                "statement_latex": "H(X) = -\\sum_{i} p(x_i) \\log p(x_i)",
+                "formulation": "Information entropy measures the average amount of information required to describe a random variable",
+                "implications": [
+                    "Foundation of information theory",
+                    "Limits of data compression",
+                    "Error correction in communication systems"
+                ],
+                "proofs": [
+                    "Communication channel experiments",
+                    "Data compression algorithms",
+                    "Error-correcting codes"
+                ],
+                "confidence": 0.97,
+                "discovery_date": "1948",
+                "discoverers": ["Claude Shannon"],
+                "revolutions": ["information_theory"]
+            },
 
-    // === BIOLOGY AND COMPLEX SYSTEMS ===
-    "natural_selection": {
-        "name": "Natural Selection",
-        "category": "biology",
-        "domains": ["evolution", "biology", "complex_systems"],
-        "statement": "Traits that confer survival and reproductive advantages propagate in populations",
-        "statement_latex": null,
-        "formulation": "Differential survival and reproduction of organisms based on heritable traits",
-        "implications": [
-            "Evolution of species",
-            "Adaptation to environments",
-            "Biodiversity"
-        ],
-        "proofs": [
-            "Fossil record transitions",
-            "Antibiotic resistance in bacteria",
-            "Galápagos finch studies"
-        ],
-        "confidence": 0.96,
-        "discovery_date": "1859",
-        "discoverers": ["Charles Darwin", "Alfred Russel Wallace"],
-        "revolutions": ["evolutionary_biology"]
-    },
+            // === BIOLOGY AND COMPLEX SYSTEMS ===
+            "natural_selection": {
+                "name": "Natural Selection",
+                "category": "biology",
+                "domains": ["evolution", "biology", "complex_systems"],
+                "statement": "Traits that confer survival and reproductive advantages propagate in populations",
+                "statement_latex": null,
+                "formulation": "Differential survival and reproduction of organisms based on heritable traits",
+                "implications": [
+                    "Evolution of species",
+                    "Adaptation to environments",
+                    "Biodiversity"
+                ],
+                "proofs": [
+                    "Fossil record transitions",
+                    "Antibiotic resistance in bacteria",
+                    "Galápagos finch studies"
+                ],
+                "confidence": 0.96,
+                "discovery_date": "1859",
+                "discoverers": ["Charles Darwin", "Alfred Russel Wallace"],
+                "revolutions": ["evolutionary_biology"]
+            },
 
-    // === MATHEMATICS ===
-    "bayes_theorem": {
-        "name": "Bayes' Theorem",
-        "category": "mathematics",
-        "domains": ["probability", "statistics", "decision_theory"],
-        "statement": "The probability of an event is updated based on new evidence",
-        "statement_latex": "P(A|B) = \\frac{P(B|A)P(A)}{P(B)}",
-        "formulation": "Relates conditional probabilities to update beliefs with new data",
-        "implications": [
-            "Foundation of Bayesian inference",
-            "Machine learning and AI",
-            "Decision-making under uncertainty"
-        ],
-        "proofs": [
-            "Derived from basic probability axioms",
-            "Applications in statistical modeling",
-            "Success in predictive algorithms"
-        ],
-        "confidence": 1.0,
-        "discovery_date": "1763",
-        "discoverers": ["Thomas Bayes"],
-        "revolutions": ["statistics", "machine_learning"]
-    },
-    "godel_incompleteness": {
-        "name": "Gödel's Incompleteness Theorems",
-        "category": "mathematics",
-        "domains": ["mathematics", "logic", "foundations"],
-        "statement": "In any consistent formal system, there are true statements that cannot be proved",
-        "statement_latex": null,
-        "formulation": "First theorem: Systems containing basic arithmetic are incomplete\nSecond theorem: Such systems cannot prove their own consistency",
-        "implications": [
-            "Limits of formal mathematics",
-            "Undecidable problems",
-            "Foundational crisis in mathematics"
-        ],
-        "proofs": [
-            "Gödel numbering construction",
-            "Self-referential statements",
-            "Formal logic derivations"
-        ],
-        "confidence": 1.0,
-        "discovery_date": "1931",
-        "discoverers": ["Kurt Gödel"],
-        "revolutions": ["mathematical_logic"]
-    },
-
-    // === CHEMISTRY ===
-    "periodic_law": {
-        "name": "Periodic Law",
-        "category": "chemistry",
-        "domains": ["chemistry", "elements", "periodicity"],
-        "statement": "Properties of elements are periodic functions of their atomic numbers",
-        "statement_latex": null,
-        "formulation": "Elements exhibit repeating patterns in their chemical behavior when arranged by atomic number",
-        "implications": [
-            "Periodic table organization",
-            "Prediction of new elements",
-            "Chemical bonding patterns"
-        ],
-        "proofs": [
-            "Success of periodic table predictions",
-            "Atomic spectroscopy",
-            "Quantum mechanical explanation"
-        ],
-        "confidence": 0.98,
-        "discovery_date": "1869",
-        "discoverers": ["Dmitri Mendeleev"],
-        "revolutions": ["chemistry"]
-    }
-};
+            // === MATHEMATICS ===
+            "bayes_theorem": {
+                "name": "Bayes' Theorem",
+                "category": "mathematics",
+                "domains": ["probability", "statistics", "decision_theory"],
+                "statement": "The probability of an event is updated based on new evidence",
+                "statement_latex": "P(A|B) = \\frac{P(B|A)P(A)}{P(B)}",
+                "formulation": "Relates conditional probabilities to update beliefs with new data",
+                "implications": [
+                    "Foundation of Bayesian inference",
+                    "Machine learning and AI",
+                    "Decision-making under uncertainty"
+                ],
+                "proofs": [
+                    "Derived from basic probability axioms",
+                    "Applications in statistical modeling",
+                    "Success in predictive algorithms"
+                ],
+                "confidence": 1.0,
+                "discovery_date": "1763",
+                "discoverers": ["Thomas Bayes"],
+                "revolutions": ["statistics", "machine_learning"]
+            },
+            "conservation_energy": {
+                "name": "Conservation of Energy",
+                "category": "fundamental_physics",
+                "domains": ["energy", "symmetry", "thermodynamics"],
+                "statement": "Energy cannot be created or destroyed, only transformed",
+                "statement_latex": "\\frac{dE}{dt} = 0",
+                "formulation": "Total energy in an isolated system remains constant over time",
+                "implications": [
+                    "No perpetual motion machines",
+                    "Energy transformation efficiency limits",
+                    "Time translation symmetry"
+                ],
+                "proofs": [
+                    "Noether's theorem",
+                    "Calorimetry experiments",
+                    "Mechanical equivalent of heat"
+                ],
+                "confidence": 0.99,
+                "discovery_date": "1842",
+                "discoverers": ["Julius von Mayer", "James Joule", "Hermann von Helmholtz"],
+                "revolutions": ["thermodynamics"]
+            },
+            "conservation_momentum": {
+                "name": "Conservation of Momentum",
+                "category": "fundamental_physics", 
+                "domains": ["mechanics", "symmetry", "collisions"],
+                "statement": "Total momentum of an isolated system remains constant",
+                "statement_latex": "\\frac{d\\vec{p}}{dt} = 0",
+                "formulation": "In the absence of external forces, momentum is conserved",
+                "implications": [
+                    "Rocket propulsion",
+                    "Collision analysis",
+                    "Space translation symmetry"
+                ],
+                "proofs": [
+                    "Collision experiments",
+                    "Noether's theorem",
+                    "Astronomical observations"
+                ],
+                "confidence": 0.99,
+                "discovery_date": "1644",
+                "discoverers": ["René Descartes"],
+                "revolutions": ["classical_mechanics"]
+            },
+            "maxwell_equations": {
+                "name": "Maxwell's Equations",
+                "category": "fundamental_physics",
+                "domains": ["electromagnetism", "waves", "light"],
+                "statement": "Fundamental laws governing electricity, magnetism, and electromagnetic waves",
+                "statement_latex": "\\nabla \\cdot \\vec{E} = \\frac{\\rho}{\\epsilon_0}, \\quad \\nabla \\cdot \\vec{B} = 0, \\quad \\nabla \\times \\vec{E} = -\\frac{\\partial \\vec{B}}{\\partial t}, \\quad \\nabla \\times \\vec{B} = \\mu_0\\vec{J} + \\mu_0\\epsilon_0\\frac{\\partial \\vec{E}}{\\partial t}",
+                "formulation": "Set of four differential equations describing electromagnetic fields",
+                "implications": [
+                    "Electromagnetic wave propagation",
+                    "Speed of light derivation",
+                    "Relativity foundation"
+                ],
+                "proofs": [
+                    "Radio wave generation",
+                    "Light as electromagnetic wave",
+                    "Modern electronics"
+                ],
+                "confidence": 0.99,
+                "discovery_date": "1861-1862",
+                "discoverers": ["James Clerk Maxwell"],
+                "revolutions": ["electromagnetism", "relativity"]
+            },
+            "special_relativity": {
+                "name": "Special Relativity",
+                "category": "fundamental_physics",
+                "domains": ["relativity", "space_time", "motion"],
+                "statement": "Laws of physics are identical in all inertial frames, and light speed is constant",
+                "statement_latex": "ds^2 = -c^2dt^2 + dx^2 + dy^2 + dz^2",
+                "formulations": {
+                    "postulates": [
+                        "Physics laws are same in all inertial frames",
+                        "Light speed is constant in vacuum regardless of source motion"
+                    ],
+                    "effects": [
+                        "Time dilation: \\Delta t' = \\frac{\\Delta t}{\\sqrt{1-v^2/c^2}}",
+                        "Length contraction: L' = L\\sqrt{1-v^2/c^2}",
+                        "Relativistic momentum: p = \\frac{mv}{\\sqrt{1-v^2/c^2}}"
+                    ]
+                },
+                "implications": [
+                    "Relativity of simultaneity",
+                    "Mass-energy equivalence",
+                    "Magnetic fields as relativistic effects"
+                ],
+                "proofs": [
+                    "Muon lifetime experiments",
+                    "Particle accelerator results",
+                    "GPS satellite timing"
+                ],
+                "confidence": 0.99,
+                "discovery_date": "1905",
+                "discoverers": ["Albert Einstein"],
+                "revolutions": ["modern_physics"]
+            },
+            "schrodinger_equation": {
+                "name": "Schrödinger Equation",
+                "category": "fundamental_physics",
+                "domains": ["quantum", "wave_function", "evolution"],
+                "statement": "Describes how the quantum state of a physical system changes with time",
+                "statement_latex": "i\\hbar\\frac{\\partial}{\\partial t}\\Psi(\\vec{r},t) = \\left[-\\frac{\\hbar^2}{2m}\\nabla^2 + V(\\vec{r},t)\\right]\\Psi(\\vec{r},t)",
+                "formulation": "Time-dependent wave equation for quantum systems",
+                "implications": [
+                    "Quantized energy levels",
+                    "Quantum tunneling",
+                    "Atomic and molecular structure"
+                ],
+                "proofs": [
+                    "Hydrogen atom spectrum",
+                    "Quantum chemistry predictions",
+                    "Scanning tunneling microscopy"
+                ],
+                "confidence": 0.98,
+                "discovery_date": "1926",
+                "discoverers": ["Erwin Schrödinger"],
+                "revolutions": ["quantum_mechanics"]
+            },
+            "dirac_equation": {
+                "name": "Dirac Equation",
+                "category": "fundamental_physics",
+                "domains": ["quantum", "relativity", "antimatter"],
+                "statement": "Relativistic wave equation describing spin-1/2 particles",
+                "statement_latex": "(i\\hbar\\gamma^\\mu\\partial_\\mu - mc)\\psi = 0",
+                "formulation": "Combines quantum mechanics and special relativity",
+                "implications": [
+                    "Prediction of antimatter",
+                    "Electron spin naturally emerges",
+                    "Fine structure of hydrogen"
+                ],
+                "proofs": [
+                    "Discovery of positron (1932)",
+                    "Electron magnetic moment",
+                    "Relativistic quantum chemistry"
+                ],
+                "confidence": 0.97,
+                "discovery_date": "1928",
+                "discoverers": ["Paul Dirac"],
+                "revolutions": ["quantum_electrodynamics"]
+            },
+            "cosmic_inflation": {
+                "name": "Cosmic Inflation",
+                "category": "cosmology",
+                "domains": ["cosmology", "early_universe", "expansion"],
+                "statement": "Exponential expansion of the universe in the first fraction of a second",
+                "statement_latex": "a(t) \\propto e^{Ht}",
+                "formulation": "Rapid accelerated expansion driven by vacuum energy",
+                "implications": [
+                    "Horizon problem solution",
+                    "Flatness problem solution",
+                    "Primordial density fluctuations"
+                ],
+                "proofs": [
+                    "CMB temperature anisotropies",
+                    "Large-scale structure statistics",
+                    "Gravitational wave background (predicted)"
+                ],
+                "confidence": 0.85,
+                "discovery_date": "1980",
+                "discoverers": ["Alan Guth", "Andrei Linde", "Paul Steinhardt"],
+                "revolutions": ["cosmology"]
+            },
+            "church_turing": {
+                "name": "Church-Turing Thesis",
+                "category": "information",
+                "domains": ["computation", "mathematics", "logic"],
+                "statement": "Any function that can be computed by an algorithm can be computed by a Turing machine",
+                "statement_latex": null,
+                "formulation": "Formal definition of effective calculability and computability",
+                "implications": [
+                    "Universal computation concept",
+                    "Limits of algorithmic computation",
+                    "Foundation of computer science"
+                ],
+                "proofs": [
+                    "Equivalence of computational models",
+                    "Practical implementation in modern computers",
+                    "Theoretical computer science developments"
+                ],
+                "confidence": 0.95,
+                "discovery_date": "1936",
+                "discoverers": ["Alonzo Church", "Alan Turing"],
+                "revolutions": ["computer_science"]
+            },
+            "godel_incompleteness": {
+                "name": "Gödel's Incompleteness Theorems",
+                "category": "mathematics",
+                "domains": ["mathematics", "logic", "foundations"],
+                "statement": "In any consistent formal system, there are true statements that cannot be proved",
+                "statement_latex": null,
+                "formulation": "First theorem: Systems containing basic arithmetic are incomplete\nSecond theorem: Such systems cannot prove their own consistency",
+                "implications": [
+                    "Limits of formal mathematics",
+                    "Undecidable problems",
+                    "Foundational crisis in mathematics"
+                ],
+                "proofs": [
+                    "Gödel numbering construction",
+                    "Self-referential statements",
+                    "Formal logic derivations"
+                ],
+                "confidence": 1.0,
+                "discovery_date": "1931",
+                "discoverers": ["Kurt Gödel"],
+                "revolutions": ["mathematical_logic"]
+            },
+            "periodic_law": {
+                "name": "Periodic Law",
+                "category": "chemistry",
+                "domains": ["chemistry", "elements", "periodicity"],
+                "statement": "Properties of elements are periodic functions of their atomic numbers",
+                "statement_latex": null,
+                "formulation": "Elements exhibit repeating patterns in their chemical behavior when arranged by atomic number",
+                "implications": [
+                    "Periodic table organization",
+                    "Prediction of new elements",
+                    "Chemical bonding patterns"
+                ],
+                "proofs": [
+                    "Success of periodic table predictions",
+                    "Atomic spectroscopy",
+                    "Quantum mechanical explanation"
+                ],
+                "confidence": 0.98,
+                "discovery_date": "1869",
+                "discoverers": ["Dmitri Mendeleev"],
+                "revolutions": ["chemistry"]
+            }
+        };
 
         // ==================== MATHJAX FUNCTIONS ====================
+
+        // MathJax Configuration
         window.MathJax = {
             tex: {
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
@@ -739,6 +729,7 @@ universalLaws = {
 
         function formatLatex(latexString) {
             if (!latexString) return '';
+            // Clean and format LaTeX for MathJax
             return latexString.replace(/\\\\/g, '\\');
         }
 
@@ -749,6 +740,7 @@ universalLaws = {
         }
 
         // ==================== MAIN FUNCTIONS ====================
+
         function getRandomLaws(n) {
             const keys = Object.keys(universalLaws);
             const result = [];
@@ -764,73 +756,73 @@ universalLaws = {
             return result;
         }
 
-        const questionTypes = {
-            "fundamentality_info": {
-                "keywords": ["information", "fundamental", "matter", "bit", "primitive", "computation", "entropy", "holography"],
-                "laws": ["bekenstein", "landauer", "shannon_entropy", "church_turing"],
-                "synthesis_template": "Information appears as a fundamental entity, perhaps more primitive than matter itself, with deep connections to computation and entropy."
-            },
-            "relativity": {
-                "keywords": ["relativity", "einstein", "space-time", "gravitation", "mass-energy", "spacetime", "curvature", "light speed", "inertial frames"],
-                "laws": ["general_relativity", "mass_energy_equivalence", "special_relativity"],
-                "synthesis_template": "Relativity revolutionizes our understanding of space, time, gravitation, and the fundamental relationship between mass and energy."
-            },
-            "quantum": {
-                "keywords": ["quantum", "uncertainty", "schrödinger", "heisenberg", "born", "pauli", "superposition", "fermions", "wave function", "dirac", "antimatter", "exclusion"],
-                "laws": ["quantum_mechanics", "heisenberg_uncertainty", "pauli_exclusion_principle", "born_rule", "schrodinger_equation", "dirac_equation"],
-                "synthesis_template": "The quantum world reveals a probabilistic and counter-intuitive reality governed by wave functions, uncertainty, and exotic particle behavior."
-            },
-            "thermodynamics": {
-                "keywords": ["entropy", "thermodynamics", "disorder", "order", "energy", "heat", "temperature", "conservation", "isolated system"],
-                "laws": ["thermodynamics_2", "landauer", "conservation_energy"],
-                "synthesis_template": "Thermodynamics governs energy transformations, defines the arrow of time, and establishes fundamental limits for physical processes."
-            },
-            "cosmology": {
-                "keywords": ["universe", "expansion", "big bang", "cosmology", "dark energy", "homogeneous", "isotropic", "inflation", "hubble", "cosmic", "primordial"],
-                "laws": ["hubble_expansion", "general_relativity", "dark_energy_dominance", "cosmological_principle", "cosmic_inflation"],
-                "synthesis_template": "Modern cosmology reveals an expanding universe born from an extreme primordial state, with dark energy driving accelerated expansion."
-            },
-            "classical_mechanics": {
-                "keywords": ["newton", "motion", "force", "mechanics", "inertia", "momentum", "conservation", "collisions", "action-reaction"],
-                "laws": ["newtons_third_law", "newtons_first_law", "conservation_momentum"],
-                "synthesis_template": "Classical mechanics governs the motion of macroscopic objects under forces, with conservation laws providing fundamental constraints."
-            },
-            "electromagnetism": {
-                "keywords": ["electromagnetism", "maxwell", "electric", "magnetic", "fields", "waves", "light", "radiation"],
-                "laws": ["maxwell_equations"],
-                "synthesis_template": "Electromagnetism unifies electricity and magnetism, revealing light as an electromagnetic wave and laying foundations for modern physics."
-            },
-            "evolution": {
-                "keywords": ["evolution", "natural selection", "darwin", "biology", "adaptation", "species", "reproduction", "survival"],
-                "laws": ["natural_selection"],
-                "synthesis_template": "Natural selection drives the evolution of life through differential survival and reproduction of adapted traits."
-            },
-            "probability_statistics": {
-                "keywords": ["probability", "bayes", "statistics", "inference", "information", "entropy", "uncertainty", "decision theory"],
-                "laws": ["bayes_theorem", "shannon_entropy"],
-                "synthesis_template": "Probability and statistics provide tools to quantify uncertainty, update beliefs with evidence, and measure information content."
-            },
-            "mathematics_logic": {
-                "keywords": ["mathematics", "logic", "gödel", "incompleteness", "computation", "proof", "foundations"],
-                "laws": ["godel_incompleteness", "church_turing"],
-                "synthesis_template": "Mathematical logic reveals fundamental limits of formal systems and defines the nature of computation and provability."
-            },
-            "chemistry_matter": {
-                "keywords": ["chemistry", "elements", "periodic", "mendeleev", "atoms", "matter", "structure"],
-                "laws": ["periodic_law"],
-                "synthesis_template": "The periodic law reveals fundamental patterns in elemental properties, organizing matter based on atomic structure."
-            },
-            "symmetry_conservation": {
-                "keywords": ["symmetry", "conservation", "energy", "momentum", "noether", "invariance"],
-                "laws": ["conservation_energy", "conservation_momentum"],
-                "synthesis_template": "Fundamental symmetries in nature give rise to conservation laws that constrain all physical processes."
-            }
-        };
-
         function mapQuestion(question) {
             const questionLower = question.toLowerCase();
             let bestScore = 0;
             let bestType = null;
+
+            const questionTypes = {
+                "fundamentality_info": {
+                    "keywords": ["information", "fundamental", "matter", "bit", "primitive", "computation", "entropy", "holography"],
+                    "laws": ["bekenstein", "landauer", "shannon_entropy", "church_turing"],
+                    "synthesis_template": "Information appears as a fundamental entity, perhaps more primitive than matter itself, with deep connections to computation and entropy."
+                },
+                "relativity": {
+                    "keywords": ["relativity", "einstein", "space-time", "gravitation", "mass-energy", "spacetime", "curvature", "light speed", "inertial frames"],
+                    "laws": ["general_relativity", "mass_energy_equivalence", "special_relativity"],
+                    "synthesis_template": "Relativity revolutionizes our understanding of space, time, gravitation, and the fundamental relationship between mass and energy."
+                },
+                "quantum": {
+                    "keywords": ["quantum", "uncertainty", "schrödinger", "heisenberg", "born", "pauli", "superposition", "fermions", "wave function", "dirac", "antimatter", "exclusion"],
+                    "laws": ["quantum_mechanics", "heisenberg_uncertainty", "pauli_exclusion_principle", "born_rule", "schrodinger_equation", "dirac_equation"],
+                    "synthesis_template": "The quantum world reveals a probabilistic and counter-intuitive reality governed by wave functions, uncertainty, and exotic particle behavior."
+                },
+                "thermodynamics": {
+                    "keywords": ["entropy", "thermodynamics", "disorder", "order", "energy", "heat", "temperature", "conservation", "isolated system"],
+                    "laws": ["thermodynamics_2", "landauer", "conservation_energy"],
+                    "synthesis_template": "Thermodynamics governs energy transformations, defines the arrow of time, and establishes fundamental limits for physical processes."
+                },
+                "cosmology": {
+                    "keywords": ["universe", "expansion", "big bang", "cosmology", "dark energy", "homogeneous", "isotropic", "inflation", "hubble", "cosmic", "primordial"],
+                    "laws": ["hubble_expansion", "general_relativity", "dark_energy_dominance", "cosmological_principle", "cosmic_inflation"],
+                    "synthesis_template": "Modern cosmology reveals an expanding universe born from an extreme primordial state, with dark energy driving accelerated expansion."
+                },
+                "classical_mechanics": {
+                    "keywords": ["newton", "motion", "force", "mechanics", "inertia", "momentum", "conservation", "collisions", "action-reaction"],
+                    "laws": ["newtons_third_law", "newtons_first_law", "conservation_momentum"],
+                    "synthesis_template": "Classical mechanics governs the motion of macroscopic objects under forces, with conservation laws providing fundamental constraints."
+                },
+                "electromagnetism": {
+                    "keywords": ["electromagnetism", "maxwell", "electric", "magnetic", "fields", "waves", "light", "radiation"],
+                    "laws": ["maxwell_equations"],
+                    "synthesis_template": "Electromagnetism unifies electricity and magnetism, revealing light as an electromagnetic wave and laying foundations for modern physics."
+                },
+                "evolution": {
+                    "keywords": ["evolution", "natural selection", "darwin", "biology", "adaptation", "species", "reproduction", "survival"],
+                    "laws": ["natural_selection"],
+                    "synthesis_template": "Natural selection drives the evolution of life through differential survival and reproduction of adapted traits."
+                },
+                "probability_statistics": {
+                    "keywords": ["probability", "bayes", "statistics", "inference", "information", "entropy", "uncertainty", "decision theory"],
+                    "laws": ["bayes_theorem", "shannon_entropy"],
+                    "synthesis_template": "Probability and statistics provide tools to quantify uncertainty, update beliefs with evidence, and measure information content."
+                },
+                "mathematics_logic": {
+                    "keywords": ["mathematics", "logic", "gödel", "incompleteness", "computation", "proof", "foundations"],
+                    "laws": ["godel_incompleteness", "church_turing"],
+                    "synthesis_template": "Mathematical logic reveals fundamental limits of formal systems and defines the nature of computation and provability."
+                },
+                "chemistry_matter": {
+                    "keywords": ["chemistry", "elements", "periodic", "mendeleev", "atoms", "matter", "structure"],
+                    "laws": ["periodic_law"],
+                    "synthesis_template": "The periodic law reveals fundamental patterns in elemental properties, organizing matter based on atomic structure."
+                },
+                "symmetry_conservation": {
+                    "keywords": ["symmetry", "conservation", "energy", "momentum", "noether", "invariance"],
+                    "laws": ["conservation_energy", "conservation_momentum"],
+                    "synthesis_template": "Fundamental symmetries in nature give rise to conservation laws that constrain all physical processes."
+                }
+            };
 
             for (const [type, data] of Object.entries(questionTypes)) {
                 const score = data.keywords.filter(word => 
@@ -861,7 +853,7 @@ ${randomLaws.map(law =>
     `- **${law.name}** : ${law.statement}`
 ).join('\n')}
 
-**Suggestions** : Rephrase using terms like "information", "big bang", "cosmology", "dark energy", "homogeneous", "isotropic", "relativity", "quantum", "expansion", etc.`;
+**Suggestions** : Rephrase using terms like "information","big bang", "cosmology", "dark energy", "homogeneous", "isotropic"  , "relativity", "quantum", "expansion", etc.`;
             }
 
             const invokedLaws = questionType.laws.map(key => universalLaws[key]);
@@ -911,7 +903,6 @@ ${formulaHTML}
         }
 
         function showLibrary() {
-            const selectedCategory = document.getElementById('category-filter').value;
             const categories = {};
             
             Object.values(universalLaws).forEach(law => {
@@ -925,8 +916,6 @@ ${formulaHTML}
                        <p><strong>${Object.keys(universalLaws).length} laws cataloged</strong></p>`;
 
             for (const [category, laws] of Object.entries(categories)) {
-                if (selectedCategory !== 'all' && category !== selectedCategory) continue;
-                
                 html += `<div class="library-section">
                         <h3>${category.replace(/_/g, ' ').toUpperCase()} (${laws.length} laws)</h3>`;
                 
@@ -950,6 +939,7 @@ ${formulaHTML}
             }
 
             document.getElementById('response').innerHTML = html;
+            // Force MathJax rendering after HTML insertion
             setTimeout(renderMathJax, 100);
         }
 
@@ -979,6 +969,7 @@ ${formulaHTML}
         }
 
         // ==================== USER INTERFACE FUNCTIONS ====================
+
         async function askQLang() {
             const question = document.getElementById('question').value.trim();
             const responseDiv = document.getElementById('response');
@@ -996,6 +987,7 @@ ${formulaHTML}
                 const responseMarkdown = generateResponse(question);
                 const responseHTML = marked.parse(responseMarkdown);
                 responseDiv.innerHTML = responseHTML;
+                // Force MathJax rendering after HTML insertion
                 setTimeout(renderMathJax, 100);
             } catch (error) {
                 responseDiv.innerHTML = `<p>❌ Error in the space-time continuum: ${error.message}</p>`;
@@ -1003,49 +995,15 @@ ${formulaHTML}
         }
 
         // ==================== INITIALIZATION ====================
-        async function init() {
-            // Load laws from external JSON
-            try {
-                const response = await fetch('laws.json');
-                universalLaws = await response.json();
-            } catch (error) {
-                console.error('Failed to load laws:', error);
-                document.getElementById('response').innerHTML = `<p>❌ Failed to load universal laws: ${error.message}</p>`;
-                return;
-            }
 
+        function init() {
             // Update law counter
             document.getElementById('law-count').textContent = Object.keys(universalLaws).length;
             
-            // Populate autocomplete suggestions
-            const suggestions = Object.values(questionTypes).flatMap(type => type.keywords);
-            const datalist = document.getElementById('question-suggestions');
-            suggestions.forEach(keyword => {
-                const option = document.createElement('option');
-                option.value = keyword;
-                datalist.appendChild(option);
-            });
-
-            // Populate category filter
-            const categories = [...new Set(Object.values(universalLaws).map(law => law.category))];
-            const select = document.getElementById('category-filter');
-            categories.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category;
-                option.textContent = category.replace(/_/g, ' ').toUpperCase();
-                select.appendChild(option);
-            });
-
-            // Update library on category change
-            select.addEventListener('change', showLibrary);
-
             // Display library on startup
             showLibrary();
             
             console.log('QLang initialized with', Object.keys(universalLaws).length, 'universal laws');
-            
-            // Focus on question field
-            document.getElementById('question').focus();
         }
 
         // Initialization on page load
@@ -1057,6 +1015,9 @@ ${formulaHTML}
                 askQLang();
             }
         });
+
+        // Focus on question field
+        document.getElementById('question').focus();
     </script>
 </body>
 </html>
