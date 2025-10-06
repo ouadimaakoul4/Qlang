@@ -13,7 +13,7 @@ Accessible Design: ARIA labels, keyboard navigation, and high-contrast visuals f
 Setup
 
 Clone the Repository:
-git clone https://github.com/yourusername/qlang.git
+git clone https://ouadimaakoul4.github.io/Qlang
 
 
 Serve the Application:
@@ -28,9 +28,6 @@ No local installations required; all dependencies are loaded via CDN:
 marked.js
 MathJax
 Polyfill
-
-
-
 
 
 Contributing
