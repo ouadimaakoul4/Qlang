@@ -353,8 +353,8 @@
                         nom: `Loi de ${auteur} en ${concept.replace(/_/g, ' ')}`,
                         categorie: categorie,
                         domaines: [categorie, "physique_fondamentale"],
-                        enoncé: `Description détaillée du ${concept.replace(/_/g, ' ')} selon les travaux de ${auteur}.`,
-                        enoncé_latex: formule,
+                        : `Description détaillée du ${concept.replace(/_/g, ' ')} selon les travaux de ${auteur}.`,
+                        _latex: formule,
                         description: `Cette loi fondamentale de la ${categorie} décrit le comportement du ${concept.replace(/_/g, ' ')} et a des implications profondes pour notre compréhension de l'univers.`,
                         implications: [
                             "Implication fondamentale pour la théorie",
@@ -413,7 +413,7 @@
 
                     <div>
                         <label><strong>Énoncé court:</strong></label>
-                        <textarea id="enonce-loi" placeholder="Description concise de la loi..." style="width: 100%; height: 60px;"></textarea>
+                        <textarea id="-loi" placeholder="Description concise de la loi..." style="width: 100%; height: 60px;"></textarea>
                     </div>
 
                     <div>
@@ -458,14 +458,14 @@
         function ajouterLoiManuellement() {
             const nom = document.getElementById('nom-loi').value;
             const categorie = document.getElementById('categorie-loi').value;
-            const enonce = document.getElementById('enonce-loi').value;
+            const  = document.getElementById('-loi').value;
             const description = document.getElementById('description-loi').value;
             const latex = document.getElementById('latex-loi').value;
             const formulation = document.getElementById('formulation-loi').value;
             const implicationsTexte = document.getElementById('implications-loi').value;
             const applicationsTexte = document.getElementById('applications-loi').value;
             
-            if (!nom || !enonce) {
+            if (!nom || !) {
                 alert('❌ Veuillez remplir au moins le nom et l\'énoncé de la loi');
                 return;
             }
@@ -479,9 +479,9 @@
                 nom: nom,
                 categorie: categorie,
                 domaines: [categorie, "physique_fondamentale"],
-                enoncé: enonce,
+                : ,
                 description: description || "Description détaillée à compléter.",
-                enoncé_latex: latex || null,
+                _latex: latex || null,
                 formulation_mathematique: formulation || "Formulation mathématique à compléter.",
                 implications: implications,
                 applications: applications,
