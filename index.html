@@ -13,6 +13,7 @@
       startup: {
         ready() {
           MathJax.startup.defaultReady();
+          // Une fois MathJax prêt, on peut attacher les équations
           renderLibrary();
         }
       }
@@ -21,7 +22,7 @@
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
-  <!-- Marked.js for Markdown -->
+  <!-- Marked.js pour le Markdown -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <style>
@@ -30,25 +31,21 @@
       --card-bg: #15152a;
       --text: #e0e0ff;
       --accent: #6a5af9;
-      --accent2: #ff6b6b;
-      --accent3: #4a69bd;
       --equation-hover: #8a7bff;
-      --gradient: linear-gradient(135deg, #0b0b1a 0%, #1a1a3a 100%);
     }
 
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-family: system-ui, -apple-system, sans-serif;
     }
 
     body {
-      background: var(--gradient);
+      background: var(--bg);
       color: var(--text);
       line-height: 1.6;
       padding: 20px;
-      min-height: 100vh;
     }
 
     h1, h2, h3 {
@@ -60,26 +57,6 @@
       margin: 0 auto;
     }
 
-    .header {
-      text-align: center;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid rgba(106, 90, 249, 0.3);
-    }
-
-    .header h1 {
-      font-size: 2.5rem;
-      background: linear-gradient(45deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 0.5rem;
-    }
-
-    .header p {
-      opacity: 0.8;
-      font-size: 1.1rem;
-    }
-
     /* --- Main View --- */
     #main-view {
       display: block;
@@ -88,92 +65,24 @@
     .law-card {
       background: var(--card-bg);
       border-radius: 12px;
-      padding: 25px;
-      margin-bottom: 25px;
+      padding: 20px;
+      margin-bottom: 20px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      border-left: 4px solid var(--accent);
-      transition: transform 0.3s, box-shadow 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .law-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, rgba(106, 90, 249, 0.05) 0%, rgba(0,0,0,0) 100%);
-      z-index: 0;
-    }
-
-    .law-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-    }
-
-    .law-card h3 {
-      color: var(--accent2);
-      margin-bottom: 10px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .law-card .category {
-      display: inline-block;
-      background: rgba(106, 90, 249, 0.2);
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      margin-bottom: 15px;
-      color: var(--accent);
     }
 
     .equation-clickable {
       cursor: pointer;
-      padding: 15px;
-      margin: 15px 0;
+      padding: 12px;
+      margin: 12px 0;
       background: rgba(106, 90, 249, 0.08);
       border-radius: 8px;
       text-align: center;
-      transition: all 0.3s;
-      border: 1px solid rgba(106, 90, 249, 0.2);
-      position: relative;
-      z-index: 1;
+      transition: all 0.2s;
     }
 
     .equation-clickable:hover {
       background: rgba(106, 90, 249, 0.15);
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(106, 90, 249, 0.2);
-    }
-
-    .equation-hint {
-      font-size: 0.8rem;
-      opacity: 0.7;
-      margin-top: 8px;
-    }
-
-    .search-container {
-      margin-bottom: 25px;
-    }
-
-    .search-container input {
-      width: 100%;
-      padding: 12px 20px;
-      border-radius: 8px;
-      border: 1px solid rgba(106, 90, 249, 0.3);
-      background: rgba(20, 20, 40, 0.7);
-      color: var(--text);
-      font-size: 1rem;
-      transition: all 0.3s;
-    }
-
-    .search-container input:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 2px rgba(106, 90, 249, 0.2);
     }
 
     /* --- Proof View --- */
@@ -181,205 +90,90 @@
       display: none;
       background: var(--card-bg);
       border-radius: 12px;
-      padding: 30px;
+      padding: 25px;
       box-shadow: 0 6px 30px rgba(0,0,0,0.4);
-      margin-top: 20px;
-      border-left: 4px solid var(--accent2);
     }
 
     #back-btn {
       background: var(--accent);
       color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 8px 16px;
       border-radius: 6px;
       cursor: pointer;
       margin-bottom: 20px;
       font-weight: bold;
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
     #back-btn:hover {
-      background: var(--accent2);
-      transform: translateY(-2px);
+      opacity: 0.9;
     }
 
     .proof-content h2 {
-      color: var(--accent2);
-      margin-top: 1.5rem;
-      border-bottom: 1px solid rgba(106, 90, 249, 0.3);
-      padding-bottom: 0.5rem;
-    }
-
-    .proof-content h3 {
       color: var(--accent);
-      margin-top: 1.2rem;
+      margin-top: 1.5rem;
     }
 
     .proof-content p, .proof-content li {
       margin-bottom: 1rem;
     }
 
-    .proof-content ul, .proof-content ol {
-      margin-left: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
     blockquote {
       border-left: 3px solid var(--accent);
       padding-left: 15px;
-      margin: 1.5rem 0;
+      margin: 1.2rem 0;
       color: #c0c0ff;
-      font-style: italic;
-    }
-
-    .proof-meta {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-
-    .proof-meta .tag {
-      background: rgba(106, 90, 249, 0.2);
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      color: var(--accent);
-    }
-
-    .proof-equation {
-      text-align: center;
-      padding: 20px;
-      margin: 20px 0;
-      background: rgba(106, 90, 249, 0.08);
-      border-radius: 8px;
-      border: 1px solid rgba(106, 90, 249, 0.2);
-    }
-
-    .proof-section {
-      margin-bottom: 2rem;
-    }
-
-    .proof-section:last-child {
-      margin-bottom: 0;
-    }
-
-    .consequence-card {
-      background: rgba(20, 20, 40, 0.5);
-      border-radius: 8px;
-      padding: 15px;
-      margin: 10px 0;
-      border-left: 3px solid var(--accent3);
-    }
-
-    .consequence-card h4 {
-      color: var(--accent3);
-      margin-bottom: 8px;
-    }
-
-    /* Loading animation */
-    .loading {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(255,255,255,.3);
-      border-radius: 50%;
-      border-top-color: #fff;
-      animation: spin 1s ease-in-out infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* Responsive design */
-    @media (max-width: 768px) {
-      .container {
-        padding: 0 10px;
-      }
-      
-      .header h1 {
-        font-size: 2rem;
-      }
-      
-      .law-card {
-        padding: 20px;
-      }
-      
-      #proof-view {
-        padding: 20px;
-      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <h1>🌌 QLang — Universal Laws</h1>
-      <p>Click on any equation to explore its complete derivation and implications</p>
-    </div>
+    <h1>🌌 QLang — Universal Laws</h1>
 
-    <!-- Search functionality -->
-    <div class="search-container">
-      <input type="text" id="search-input" placeholder="Search for laws, concepts, or equations...">
-    </div>
-
-    <!-- Main View: Library -->
+    <!-- Vue principale : bibliothèque -->
     <div id="main-view">
+      <p>Cliquez sur une équation pour voir sa démonstration complète.</p>
       <div id="laws-container"></div>
     </div>
 
-    <!-- Detailed View: Proof -->
+    <!-- Vue détaillée : démonstration -->
     <div id="proof-view">
-      <button id="back-btn">← Back to Library</button>
+      <button id="back-btn">← Retour à la bibliothèque</button>
       <div id="proof-content"></div>
     </div>
   </div>
 
   <script>
-    // 🔬 Database of Universal Laws
+    // 🔬 Base de données des lois
     const universalLaws = {
       mass_energy: {
         name: "Mass-Energy Equivalence",
         category: "Fundamental Physics",
-        domains: ["relativity", "energy", "mass"],
         statement_latex: "E = mc^2",
-        confidence: 0.99,
-        discovery_date: "1905",
-        discoverers: ["Albert Einstein"],
         full_explanation: `
-## 🧪 Historical Origin
-In September 1905, Albert Einstein published a short paper titled *"Does the Inertia of a Body Depend Upon Its Energy Content?"* as part of his special theory of relativity. He demonstrated that **mass and energy are interchangeable**.
+## 🧪 Origine historique
+En septembre 1905, Albert Einstein publia un court article intitulé *"Does the Inertia of a Body Depend Upon Its Energy Content?"* dans le cadre de sa théorie de la relativité restreinte. Il y démontra que **masse et énergie sont interchangeables**.
 
-## 📐 Conceptual Derivation
-Einstein considered a body at rest emitting two light pulses (photons) of equal energy $\\varepsilon$ in opposite directions. To conserve total momentum, the body remains at rest. But in a moving reference frame, the energy of the photons changes (Doppler effect). By imposing **energy conservation** in all reference frames, he obtained:
+## 📐 Dérivation conceptuelle
+Einstein considéra un corps au repos émettant deux impulsions lumineuses (photons) de même énergie $\\varepsilon$ dans des directions opposées. Pour conserver l’impulsion totale, le corps reste au repos. Mais dans un référentiel en mouvement, l’énergie des photons change (effet Doppler). En imposant la **conservation de l’énergie** dans tous les référentiels, il obtint :
 
 $$
 \\Delta E = \\Delta m \\cdot c^2
 $$
 
-This means that an energy loss $\\Delta E$ corresponds to a mass loss $\\Delta m = \\Delta E / c^2$.
+Cela signifie qu’une perte d’énergie $\\Delta E$ correspond à une perte de masse $\\Delta m = \\Delta E / c^2$.
 
-## 🧠 Fundamental Assumptions
-- Principle of relativity (physical laws are identical in all inertial reference frames)
-- Invariance of the speed of light ($c$ is constant)
-- Conservation of energy and momentum
+## 🧠 Hypothèses fondamentales
+- Principe de relativité (les lois physiques sont identiques dans tous les référentiels inertiels)
+- Invariance de la vitesse de la lumière ($c$ est constante)
+- Conservation de l’énergie et de l’impulsion
 
-## 💥 Major Consequences
-- Explanation of energy released in **nuclear reactions** (fission and fusion)
-- Basis of **particle physics** (pair creation/annihilation)
-- Experimental validation via **missing mass** in atomic nuclei
+## 💥 Conséquences majeures
+- Explication de l’énergie libérée dans les **réactions nucléaires** (fission et fusion)
+- Base de la **physique des particules** (création/annihilation de paires)
+- Validation expérimentale via la **masse manquante** dans les noyaux atomiques
 
-### 🔬 Experimental Evidence
-- Nuclear reactions: The mass defect in nuclear reactions matches the energy released
-- Particle accelerators: Creation of particles from kinetic energy
-- Cosmological observations: Energy content of the universe
-
-> "The mass of a body is a measure of its energy content."  
+> "La masse d’un corps est une mesure de son contenu énergétique."  
 > — Albert Einstein, 1905
 `
       },
@@ -387,159 +181,47 @@ This means that an energy loss $\\Delta E$ corresponds to a mass loss $\\Delta m
       schrodinger: {
         name: "Schrödinger Equation",
         category: "Fundamental Physics",
-        domains: ["quantum", "wave_function", "evolution"],
         statement_latex: "i\\hbar\\frac{\\partial}{\\partial t}\\Psi = \\hat{H}\\Psi",
-        confidence: 0.98,
-        discovery_date: "1926",
-        discoverers: ["Erwin Schrödinger"],
         full_explanation: `
-## 🧪 Historical Origin
-In 1926, Erwin Schrödinger formulated a wave equation describing how the quantum state of a physical system evolves over time. Inspired by de Broglie's wave-particle duality, he sought a **relativistic wave equation**, but started with the non-relativistic case.
+## 🧪 Origine historique
+En 1926, Erwin Schrödinger formula une équation d’onde décrivant comment l’état quantique d’un système physique évolue dans le temps. Inspiré par la dualité onde-particule de de Broglie, il cherchait une **équation d’onde relativiste**, mais commença par le cas non relativiste.
 
-## 📐 Physical Derivation
-We start from the classical energy of a particle:  
+## 📐 Dérivation physique
+On part de l’énergie classique d’une particule :  
 $$
 E = \\frac{p^2}{2m} + V(\\mathbf{r})
 $$
 
-In quantum mechanics, we replace:
+En mécanique quantique, on remplace :
 - $E \\rightarrow i\\hbar \\frac{\\partial}{\\partial t}$
 - $\\mathbf{p} \\rightarrow -i\\hbar \\nabla$
 
-Applying these operators to a wave function $\\Psi(\\mathbf{r}, t)$, we obtain:
+En appliquant ces opérateurs à une fonction d’onde $\\Psi(\\mathbf{r}, t)$, on obtient :
 
 $$
 i\\hbar\\frac{\\partial}{\\partial t}\\Psi(\\mathbf{r},t) = \\left[ -\\frac{\\hbar^2}{2m}\\nabla^2 + V(\\mathbf{r}) \\right] \\Psi(\\mathbf{r},t)
 $$
 
-where $\\hat{H} = -\\frac{\\hbar^2}{2m}\\nabla^2 + V$ is the **Hamiltonian operator**.
+où $\\hat{H} = -\\frac{\\hbar^2}{2m}\\nabla^2 + V$ est l’**opérateur hamiltonien**.
 
-## 🧠 Key Assumptions
-- The wave function $\\Psi$ contains all information about the system
-- The evolution is **deterministic** and **unitary**
-- Observables are Hermitian operators
+## 🧠 Hypothèses clés
+- La fonction d’onde $\\Psi$ contient toute l’information sur le système
+- L’évolution est **déterministe** et **unitaire**
+- Les observables sont des opérateurs hermitiens
 
-## 🔬 Consequences
-- Allows calculation of atomic energy levels (e.g., hydrogen)
-- Basis of quantum chemistry, semiconductors, and quantum computing
-- Probabilistic interpretation via Born's rule ($P = |\\Psi|^2$)
+## 🔬 Conséquences
+- Permet de calculer les niveaux d’énergie des atomes (ex: hydrogène)
+- Base de la chimie quantique, des semi-conducteurs, et de l’informatique quantique
+- Interprétation probabiliste via la règle de Born ($P = |\\Psi|^2$)
 
-### 🔭 Modern Applications
-- Quantum chemistry: Molecular orbital calculations
-- Solid state physics: Band structure of materials
-- Quantum information: Qubit state evolution
-
-> "I don't like it, and I'm sorry I ever had anything to do with it."  
-> — Erwin Schrödinger (on the philosophical implications of quantum mechanics)
-`
-      },
-
-      heisenberg_uncertainty: {
-        name: "Heisenberg Uncertainty Principle",
-        category: "Fundamental Physics",
-        domains: ["quantum", "uncertainty", "measurement"],
-        statement_latex: "\\Delta x \\Delta p \\geq \\frac{\\hbar}{2}",
-        confidence: 0.98,
-        discovery_date: "1927",
-        discoverers: ["Werner Heisenberg"],
-        full_explanation: `
-## 🧪 Historical Context
-In 1927, Werner Heisenberg formulated his uncertainty principle while working at Niels Bohr's institute in Copenhagen. The principle emerged from his matrix mechanics formulation of quantum theory and profound discussions with Bohr about measurement limitations.
-
-## 📐 Mathematical Derivation
-From the Cauchy-Schwarz inequality and the commutation relation $[\\hat{x}, \\hat{p}] = i\\hbar$, we can derive:
-
-$$
-(\\Delta A)^2 (\\Delta B)^2 \\geq \\left|\\frac{1}{2i}\\langle[\\hat{A},\\hat{B}]\\rangle\\right|^2
-$$
-
-For position and momentum ($A=x$, $B=p$):
-
-$$
-\\Delta x \\Delta p \\geq \\frac{\\hbar}{2}
-$$
-
-## 🧠 Physical Interpretation
-- Not a measurement precision limitation, but a fundamental property of quantum systems
-- Results from wave-like nature of quantum objects
-- Applies to any conjugate variables (time-energy, angular momentum components)
-
-## 🔬 Experimental Verification
-- Single-slit diffraction experiments
-- Quantum optics measurements
-- Stern-Gerlach experiments for spin components
-
-### 🔭 Implications for Technology
-- Limits of electron microscopy resolution
-- Fundamental constraints on quantum computing
-- Quantum metrology boundaries
-
-> "The more precisely the position is determined, the less precisely the momentum is known in this instant, and vice versa."  
-> — Werner Heisenberg
-`
-      },
-
-      maxwell_equations: {
-        name: "Maxwell's Equations",
-        category: "Fundamental Physics",
-        domains: ["electromagnetism", "waves", "light"],
-        statement_latex: "\\nabla \\cdot \\vec{E} = \\frac{\\rho}{\\epsilon_0} \\\\ \\nabla \\cdot \\vec{B} = 0 \\\\ \\nabla \\times \\vec{E} = -\\frac{\\partial \\vec{B}}{\\partial t} \\\\ \\nabla \\times \\vec{B} = \\mu_0\\vec{J} + \\mu_0\\epsilon_0\\frac{\\partial \\vec{E}}{\\partial t}",
-        confidence: 0.99,
-        discovery_date: "1861-1865",
-        discoverers: ["James Clerk Maxwell"],
-        full_explanation: `
-## 🧪 Historical Development
-James Clerk Maxwell unified previously separate laws of electricity and magnetism between 1861 and 1865. His key insight was adding the "displacement current" term to Ampère's law, which allowed for self-sustaining electromagnetic waves.
-
-## 📐 The Four Equations
-
-### Gauss's Law for Electricity
-$$
-\\nabla \\cdot \\vec{E} = \\frac{\\rho}{\\epsilon_0}
-$$
-Electric field diverges from electric charges
-
-### Gauss's Law for Magnetism
-$$
-\\nabla \\cdot \\vec{B} = 0
-$$
-No magnetic monopoles exist
-
-### Faraday's Law of Induction
-$$
-\\nabla \\times \\vec{E} = -\\frac{\\partial \\vec{B}}{\\partial t}
-$$
-Changing magnetic fields produce electric fields
-
-### Ampère-Maxwell Law
-$$
-\\nabla \\times \\vec{B} = \\mu_0\\vec{J} + \\mu_0\\epsilon_0\\frac{\\partial \\vec{E}}{\\partial t}
-$$
-Electric currents and changing electric fields produce magnetic fields
-
-## 🧠 Profound Implications
-- Prediction of electromagnetic waves propagating at speed $c = 1/\\sqrt{\\mu_0\\epsilon_0}$
-- Unification of electricity, magnetism, and optics
-- Foundation for special relativity
-
-## 🔬 Experimental Confirmations
-- Heinrich Hertz's radio wave experiments (1887)
-- Confirmation that light is an electromagnetic wave
-- Modern wireless communication technology
-
-### 🔭 Modern Applications
-- All electrical engineering and electronics
-- Radio, television, and wireless communication
-- Fiber optics and photonics
-
-> "The agreement of the results seems to show that light and magnetism are affections of the same substance, and that light is an electromagnetic disturbance propagated through the field according to electromagnetic laws."  
-> — James Clerk Maxwell
+> "Je ne veux plus jamais avoir affaire à la mécanique quantique !"  
+> — Erwin Schrödinger (après avoir vu les implications philosophiques de son équation)
 `
       }
     };
 
     // ----------------------------
-    // Display Functions
+    // Fonctions d'affichage
     // ----------------------------
 
     function renderLibrary() {
@@ -551,22 +233,15 @@ Electric currents and changing electric fields produce magnetic fields
         card.className = 'law-card';
         card.innerHTML = `
           <h3>${law.name}</h3>
-          <div class="category">${law.category}</div>
-          <p><strong>Domains:</strong> ${law.domains.join(', ')}</p>
+          <p><strong>Catégorie :</strong> ${law.category}</p>
           <div class="equation-clickable" data-law-id="${id}">
             $$${law.statement_latex}$$
-            <div class="equation-hint">Click to explore derivation and implications</div>
-          </div>
-          <div class="law-meta">
-            <span>Confidence: ${(law.confidence * 100).toFixed(0)}%</span>
-            <span>${law.discovery_date}</span>
-            <span>${Array.isArray(law.discoverers) ? law.discoverers.join(', ') : law.discoverers}</span>
           </div>
         `;
         container.appendChild(card);
       }
 
-      // Attach event listeners after MathJax rendering
+      // Attacher les écouteurs après rendu MathJax
       document.querySelectorAll('.equation-clickable').forEach(el => {
         el.addEventListener('click', () => {
           window.location.hash = `proof/${el.dataset.lawId}`;
@@ -582,24 +257,10 @@ Electric currents and changing electric fields produce magnetic fields
       document.getElementById('main-view').style.display = 'none';
       document.getElementById('proof-view').style.display = 'block';
 
-      // Create enhanced proof content with metadata
-      let proofHTML = `
-        <div class="proof-meta">
-          <div class="tag">${law.category}</div>
-          <div class="tag">Confidence: ${(law.confidence * 100).toFixed(0)}%</div>
-          <div class="tag">Discovered: ${law.discovery_date}</div>
-        </div>
-        <div class="proof-equation">
-          $$${law.statement_latex}$$
-        </div>
-      `;
+      const html = marked.parse(law.full_explanation);
+      document.getElementById('proof-content').innerHTML = html;
 
-      // Parse the markdown content
-      proofHTML += marked.parse(law.full_explanation);
-      
-      document.getElementById('proof-content').innerHTML = proofHTML;
-
-      // Re-render MathJax on the new content
+      // Relancer MathJax sur le nouveau contenu
       if (window.MathJax) {
         MathJax.typesetClear([document.getElementById('proof-content')]);
         MathJax.typeset([document.getElementById('proof-content')]);
@@ -609,27 +270,6 @@ Electric currents and changing electric fields produce magnetic fields
     function showMainView() {
       document.getElementById('main-view').style.display = 'block';
       document.getElementById('proof-view').style.display = 'none';
-    }
-
-    // ----------------------------
-    // Search Functionality
-    // ----------------------------
-
-    function setupSearch() {
-      const searchInput = document.getElementById('search-input');
-      searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        const cards = document.querySelectorAll('.law-card');
-        
-        cards.forEach(card => {
-          const text = card.textContent.toLowerCase();
-          if (text.includes(searchTerm)) {
-            card.style.display = 'block';
-          } else {
-            card.style.display = 'none';
-          }
-        });
-      });
     }
 
     // ----------------------------
@@ -651,15 +291,7 @@ Electric currents and changing electric fields produce magnetic fields
       }
     }
 
-    // ----------------------------
-    // Initialization
-    // ----------------------------
-
-    window.addEventListener('load', function() {
-      handleHash();
-      setupSearch();
-    });
-    
+    window.addEventListener('load', handleHash);
     window.addEventListener('hashchange', handleHash);
   </script>
 </body>
