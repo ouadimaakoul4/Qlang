@@ -7,17 +7,12 @@
 
   <!-- MathJax 3 -->
     <script>
-    window.MathJax = {
-      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-      svg: { fontCache: 'global' },
-      startup: {
-        ready() {
-          MathJax.startup.defaultReady();
-          // Once MathJax is ready, render the library
-          function renderLibrary(filterCategory = 'all', searchTerm = '') {
+   // ----------------------------
+// Display Functions
+// ----------------------------
+function renderLibrary(filterCategory = 'all', searchTerm = '') {
   const container = document.getElementById('laws-container');
   container.innerHTML = '';
-
   let lawsToShow = Object.entries(universalLaws);
 
   // Apply category filter
@@ -54,10 +49,9 @@
     container.appendChild(card);
   }
 
-  // 👇 CORRECTION FONDAMENTALE : Attendez que MathJax soit prêt
+  // ✅ Appel de MathJax.typeset APRES le rendu du DOM
   if (window.MathJax && window.MathJax.startup) {
     window.MathJax.startup.promise.then(() => {
-      // Rendre les équations dans le conteneur
       MathJax.typeset([container]);
 
       // Ensuite, attacher les écouteurs d'événements
@@ -68,18 +62,35 @@
         });
       });
     }).catch(err => {
-      console.error("Erreur lors du rendu MathJax :", err);
+      console.error("Erreur MathJax :", err);
     });
   } else {
-    // Si MathJax n'est pas chargé, réessayer après un délai
-    setTimeout(() => {
-      renderLibrary(filterCategory, searchTerm);
-    }, 500);
+    // Si MathJax n'est pas chargé, réessayer
+    setTimeout(() => renderLibrary(filterCategory, searchTerm), 500);
   }
-};
-        }
-      }
-    };
+}
+
+function showProofView(lawId) {
+  const law = universalLaws[lawId];
+  if (!law) return;
+
+  document.getElementById('main-view').style.display = 'none';
+  document.getElementById('proof-view').style.display = 'block';
+
+  const html = marked.parse(law.full_explanation);
+  document.getElementById('proof-content').innerHTML = html;
+
+  // Réafficher les équations dans la preuve
+  if (window.MathJax) {
+    MathJax.typesetClear([document.getElementById('proof-content')]);
+    MathJax.typeset([document.getElementById('proof-content')]);
+  }
+}
+
+function showMainView() {
+  document.getElementById('main-view').style.display = 'block';
+  document.getElementById('proof-view').style.display = 'none';
+}
   </script>
 <!-- Polyfill fiable -->
 <script src="https://cdn.jsdelivr.net/npm/polyfill-io@3.0.1/dist/polyfill.min.js" defer></script>
