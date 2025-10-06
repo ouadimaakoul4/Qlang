@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>QLang — Library of Universal Laws</title>
 
-  <!-- MathJax 3 -->
+  <!-- MathJax 3 with proper configuration -->
   <script>
     window.MathJax = {
       tex: {
@@ -30,7 +30,6 @@
       }
     };
   </script>
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
   <!-- Marked.js for Markdown -->
@@ -223,6 +222,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      min-height: 80px;
     }
 
     .equation-clickable:hover {
@@ -231,11 +231,22 @@
       border-color: rgba(106, 90, 249, 0.3);
     }
 
+    .equation-content {
+      width: 100%;
+    }
+
     .law-description {
       font-size: 0.9rem;
       color: rgba(224, 224, 255, 0.7);
       margin-top: 10px;
       line-height: 1.5;
+    }
+
+    /* --- Loading State --- */
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: rgba(224, 224, 255, 0.5);
     }
 
     /* --- Proof View --- */
@@ -317,6 +328,14 @@
       font-size: 0.9rem;
     }
 
+    .no-results {
+      text-align: center;
+      padding: 3rem;
+      color: rgba(224, 224, 255, 0.5);
+      font-size: 1.1rem;
+      grid-column: 1 / -1;
+    }
+
     /* --- Responsive --- */
     @media (max-width: 768px) {
       .laws-grid {
@@ -362,7 +381,9 @@
     <!-- Main View: Library -->
     <div id="main-view">
       <p>Click on any equation to view its full explanation and derivation.</p>
-      <div class="laws-grid" id="laws-container"></div>
+      <div class="laws-grid" id="laws-container">
+        <div class="loading">Loading equations...</div>
+      </div>
     </div>
 
     <!-- Detailed View: Proof/Explanation -->
@@ -434,32 +455,6 @@ The cosmological constant $\\Lambda$ was added (then retracted, then revived) to
 `
       },
 
-      quantum_principles: {
-        name: "Principles of Quantum Mechanics",
-        category: "physics",
-        statement_latex: "\\text{State: } |\\psi\\rangle \\in \\mathcal{H}, \\quad \\text{Measurement: } P(a) = |\\langle a|\\psi\\rangle|^2",
-        description: "Quantum systems are described by state vectors in Hilbert space with probabilistic measurement outcomes.",
-        full_explanation: `
-## ⚛️ Historical Origin
-Developed between 1925–1930 by Heisenberg, Schrödinger, Born, Dirac, and von Neumann, quantum mechanics describes a probabilistic, non-local reality.
-
-## 📐 Core Postulates
-1. A system's state is a vector $|\\psi\\rangle$ in a Hilbert space $\\mathcal{H}$.
-2. Observables are Hermitian operators.
-3. Measuring observable $A$ yields eigenvalue $a$ with probability $P(a) = |\\langle a|\\psi\\rangle|^2$ (Born rule).
-4. After measurement, the state collapses to $|a\\rangle$.
-
-## 🧠 Key Assumptions
-- Unitary, linear time evolution (Schrödinger equation)
-- Completeness of the quantum state description
-
-## 💥 Implications
-- Quantum entanglement (EPR paradox, Bell's inequalities)
-- Fundamental uncertainty (Heisenberg)
-- Enables lasers, transistors, MRI, and quantum computing
-`
-      },
-
       mass_energy: {
         name: "Mass-Energy Equivalence",
         category: "physics",
@@ -490,211 +485,6 @@ Thus, a loss of energy $\\Delta E$ corresponds to a loss of mass $\\Delta m = \\
 
 > "The mass of a body is a measure of its energy content."  
 > — Albert Einstein, 1905
-`
-      },
-
-      heisenberg: {
-        name: "Heisenberg Uncertainty Principle",
-        category: "physics",
-        statement_latex: "\\sigma_x \\sigma_p \\geq \\frac{\\hbar}{2}",
-        description: "It's impossible to simultaneously know both position and momentum with arbitrary precision.",
-        full_explanation: `
-## 🔍 Historical Origin
-Werner Heisenberg formulated this principle in 1927 while analyzing the limits of simultaneously measuring a particle's position and momentum.
-
-## 📐 Mathematical Proof
-In quantum mechanics, $\\hat{x}$ and $\\hat{p}$ do not commute: $[\\hat{x}, \\hat{p}] = i\\hbar$. For any two non-commuting operators, Robertson's inequality gives:
-
-$$
-\\sigma_A \\sigma_B \\geq \\frac{1}{2} \\left| \\langle [\\hat{A}, \\hat{B}] \\rangle \\right|
-$$
-
-Applied to $x$ and $p$, this yields $\\sigma_x \\sigma_p \\geq \\hbar/2$.
-
-## 🧠 Interpretation
-This is not a technological limitation, but a **fundamental property of nature**: particles do not have definite trajectories.
-
-## 💥 Implications
-- Atomic stability (electrons don't spiral into the nucleus)
-- Quantum vacuum fluctuations
-- Fundamental limits in microscopy and metrology
-`
-      },
-
-      newton_laws: {
-        name: "Newton's Laws of Motion",
-        category: "physics",
-        statement_latex: "\\vec{F} = m\\vec{a} \\quad \\text{(2nd Law)}",
-        description: "The foundation of classical mechanics describing motion and forces.",
-        full_explanation: `
-## 🏛️ Historical Origin
-Published in 1687 in *Philosophiæ Naturalis Principia Mathematica*, Newton's three laws founded classical mechanics.
-
-## 📐 Statements
-1. **Inertia**: An object remains at rest or in uniform motion unless acted upon by a force.
-2. **Force**: $\\vec{F} = \\frac{d\\vec{p}}{dt} = m\\vec{a}$ (for constant mass).
-3. **Action-Reaction**: For every action, there is an equal and opposite reaction.
-
-## 🧠 Key Assumptions
-- Absolute space and time
-- Valid at low speeds ($v \\ll c$) and macroscopic scales (not quantum)
-
-## 💥 Implications
-- Predicts planetary orbits (combined with universal gravitation)
-- Basis of classical engineering
-- Superseded by relativity and quantum mechanics at extremes
-`
-      },
-
-      pauli_exclusion: {
-        name: "Pauli Exclusion Principle",
-        category: "physics",
-        statement_latex: "\\Psi(\\mathbf{r}_1, \\mathbf{r}_2) = -\\Psi(\\mathbf{r}_2, \\mathbf{r}_1) \\text{ for fermions}",
-        description: "No two identical fermions can occupy the same quantum state simultaneously.",
-        full_explanation: `
-## ⚛️ Historical Origin
-Wolfgang Pauli proposed this principle in 1925 to explain atomic structure and the periodic table.
-
-## 📐 Formulation
-No two fermions (half-integer spin particles, e.g., electrons) can occupy the same quantum state. This follows from the antisymmetry of the total wavefunction:
-
-$$
-\\Psi(\\mathbf{r}_1, s_1; \\mathbf{r}_2, s_2) = -\\Psi(\\mathbf{r}_2, s_2; \\mathbf{r}_1, s_1)
-$$
-
-If two electrons shared all quantum numbers, $\\Psi = -\\Psi \\Rightarrow \\Psi = 0$ (forbidden).
-
-## 🧠 Implications
-- Electron shell structure → chemistry
-- Degeneracy pressure (white dwarfs, neutron stars)
-- Conductivity in metals
-`
-      },
-
-      born_rule: {
-        name: "Born Rule",
-        category: "physics",
-        statement_latex: "P(x) = |\\psi(x)|^2",
-        description: "The probability of finding a particle at a location is proportional to the square of its wavefunction.",
-        full_explanation: `
-## 🎲 Historical Origin
-Max Born proposed in 1926 that the wavefunction $\\psi$ does not represent a physical wave, but a **probability amplitude**.
-
-## 📐 Formulation
-For a particle in 1D, the probability of finding it between $x$ and $x+dx$ is:
-
-$$
-P(x)\\,dx = |\\psi(x)|^2\\,dx
-$$
-
-Normalization: $\\int |\\psi(x)|^2\\,dx = 1$.
-
-## 🧠 Interpretation
-This bridges the deterministic evolution of $\\psi$ (via Schrödinger) and the random outcomes of measurements.
-
-## 💥 Implications
-- Foundation of the Copenhagen interpretation
-- Basis of all quantum predictions
-- Verified by countless experiments (interference, diffraction)
-`
-      },
-
-      conservation_energy: {
-        name: "Conservation of Energy",
-        category: "physics",
-        statement_latex: "\\frac{dE}{dt} = 0 \\quad \\text{(isolated system)}",
-        description: "Energy cannot be created or destroyed, only transformed from one form to another.",
-        full_explanation: `
-## 🔁 Historical Origin
-Formalized in the 19th century (Mayer, Joule, Helmholtz), this law states that **energy cannot be created or destroyed**, only transformed.
-
-## 📐 Theoretical Proof
-Noether's Theorem (1918): **every continuous symmetry implies a conservation law**. Time-translation symmetry ($\\partial \\mathcal{L}/\\partial t = 0$) ⇒ energy conservation.
-
-## 🧠 Validity
-- Holds in classical, relativistic, and quantum physics
-- In an expanding universe, global time symmetry is broken → energy is not conserved cosmologically
-
-## 💥 Implications
-- Perpetual motion machines are impossible
-- Energy accounting in chemical/nuclear reactions
-- Foundation of thermodynamics and engineering
-`
-      },
-
-      conservation_momentum: {
-        name: "Conservation of Momentum",
-        category: "physics",
-        statement_latex: "\\frac{d\\vec{p}}{dt} = 0 \\quad \\text{(isolated system)}",
-        description: "The total momentum of an isolated system remains constant in the absence of external forces.",
-        full_explanation: `
-## 🚀 Historical Origin
-Rooted in the work of Descartes and Newton, this law is central to mechanics.
-
-## 📐 Theoretical Proof
-Noether's Theorem: **spatial translation symmetry** ⇒ conservation of total momentum.
-
-## 🧠 Validity
-- Holds in classical, relativistic, and quantum physics
-- Even in inelastic collisions, total momentum is conserved
-
-## 💥 Applications
-- Rocket propulsion (momentum exchange)
-- Particle physics (collision analysis)
-- Stability of planetary systems
-`
-      },
-
-      maxwell_equations: {
-  name: "Maxwell's Equations",
-  category: "physics",
-  statement_latex: "\\nabla \\cdot \\mathbf{E} = \\frac{\\rho}{\\varepsilon_0}, \\quad \\nabla \\times \\mathbf{E} = -\\frac{\\partial \\mathbf{B}}{\\partial t}, \\quad \\nabla \\cdot \\mathbf{B} = 0, \\quad \\nabla \\times \\mathbf{B} = \\mu_0 \\mathbf{J} + \\mu_0\\varepsilon_0 \\frac{\\partial \\mathbf{E}}{\\partial t}",
-  description: "The fundamental equations describing electricity, magnetism, and electromagnetic waves.",
-  full_explanation:  `
-## ⚡ Historical Origin
-James Clerk Maxwell unified electricity and magnetism in 1865, showing that light is an electromagnetic wave.
-
-## 📐 The Four Equations (in differential form)
-1. Gauss's Law: Electric field divergence ∝ charge density
-2. Faraday's Law: Changing magnetic field induces electric field
-3. Gauss's Law for Magnetism: No magnetic monopoles
-4. Ampère-Maxwell Law: Currents and changing E-fields produce B-fields
-
-## 🧠 Key Insight
-The term $\\mu_0\\varepsilon_0 \\frac{\\partial \\mathbf{E}}{\\partial t}$ (displacement current) was Maxwell's addition—it predicts **self-sustaining EM waves** propagating at speed $c = 1/\\sqrt{\\mu_0\\varepsilon_0}$.
-
-## 💥 Implications
-- Prediction and understanding of radio, microwaves, light, X-rays
-- Foundation of all electrical engineering and telecommunications
-- Inspired Einstein's special relativity (constancy of $c$)
-`
-      },
-
-      special_relativity: {
-        name: "Special Relativity",
-        category: "physics",
-        statement_latex: "c = \\text{constant}, \\quad \\text{Lorentz transformations}",
-        description: "The laws of physics are the same in all inertial frames, and the speed of light is constant.",
-        full_explanation: `
-## 🚄 Historical Origin
-Einstein published special relativity in 1905 to resolve contradictions between Maxwell's electromagnetism and Newtonian mechanics.
-
-## 📐 Postulates
-1. **Principle of Relativity**: Laws of physics are identical in all inertial frames.
-2. **Invariance of $c$**: The speed of light in vacuum is constant for all observers.
-
-## 📐 Key Results
-- Time dilation: $\\Delta t = \\gamma \\Delta t_0$
-- Length contraction: $L = L_0 / \\gamma$
-- Relativistic momentum: $\\vec{p} = \\gamma m \\vec{v}$
-- $E^2 = (pc)^2 + (mc^2)^2$
-
-where $\\gamma = 1/\\sqrt{1 - v^2/c^2}$.
-
-## 💥 Implications
-- Unified space and time into spacetime
-- $E = mc^2$ as a special case
-- Essential for particle accelerators and GPS
 `
       },
 
@@ -733,43 +523,63 @@ where $\\hat{H} = -\\frac{\\hbar^2}{2m}\\nabla^2 + V$ is the **Hamiltonian opera
 - Predicts atomic energy levels (e.g., hydrogen)
 - Foundation of quantum chemistry and semiconductor physics
 - Probabilistic interpretation via Born rule ($P = |\\Psi|^2$)
-
-> "I don't like it, and I'm sorry I ever had anything to do with it."  
-> — Erwin Schrödinger (on the Copenhagen interpretation)
 `
       },
 
-      dirac_equation: {
-  name: "Dirac Equation",
-  category: "physics",
-  statement_latex: "(i\\hbar\\gamma^\\mu \\partial_\\mu - mc) \\psi = 0",
-  description: "The relativistic wave equation that predicted antimatter and electron spin.",
-  full_explanation:  `
-## 🌀 Historical Origin
-Paul Dirac derived this equation in 1928 to reconcile quantum mechanics with special relativity for electrons.
+      heisenberg: {
+        name: "Heisenberg Uncertainty Principle",
+        category: "physics",
+        statement_latex: "\\sigma_x \\sigma_p \\geq \\frac{\\hbar}{2}",
+        description: "It's impossible to simultaneously know both position and momentum with arbitrary precision.",
+        full_explanation: `
+## 🔍 Historical Origin
+Werner Heisenberg formulated this principle in 1927 while analyzing the limits of simultaneously measuring a particle's position and momentum.
 
-## 📐 Motivation and Form
-The Schrödinger equation is non-relativistic. The Klein-Gordon equation is relativistic but has negative probabilities. Dirac sought a **first-order** equation in time and space:
+## 📐 Mathematical Proof
+In quantum mechanics, $\\hat{x}$ and $\\hat{p}$ do not commute: $[\\hat{x}, \\hat{p}] = i\\hbar$. For any two non-commuting operators, Robertson's inequality gives:
 
 $$
-(i\\hbar\\gamma^\\mu \\partial_\\mu - mc) \\psi = 0
+\\sigma_A \\sigma_B \\geq \\frac{1}{2} \\left| \\langle [\\hat{A}, \\hat{B}] \\rangle \\right|
 $$
 
-where $\\gamma^\\mu$ are 4×4 matrices, and $\\psi$ is a 4-component **spinor**.
+Applied to $x$ and $p$, this yields $\\sigma_x \\sigma_p \\geq \\hbar/2$.
 
-## 🧠 Key Predictions
-- Electron spin emerges naturally (not added ad hoc)
-- Magnetic moment of the electron
-- **Antimatter**: negative-energy solutions → prediction of the positron (discovered 1932)
+## 🧠 Interpretation
+This is not a technological limitation, but a **fundamental property of nature**: particles do not have definite trajectories.
 
 ## 💥 Implications
-- Foundation of quantum electrodynamics (QED)
-- First successful unification of relativity and quantum theory
-- Confirmed to extraordinary precision (e.g., g-factor)
+- Atomic stability (electrons don't spiral into the nucleus)
+- Quantum vacuum fluctuations
+- Fundamental limits in microscopy and metrology
 `
       },
 
-      // 🌌 COSMOLOGY (4)
+      maxwell_equations: {
+        name: "Maxwell's Equations",
+        category: "physics",
+        statement_latex: "\\begin{aligned} \\nabla \\cdot \\mathbf{E} &= \\frac{\\rho}{\\varepsilon_0} \\\\ \\nabla \\times \\mathbf{E} &= -\\frac{\\partial \\mathbf{B}}{\\partial t} \\\\ \\nabla \\cdot \\mathbf{B} &= 0 \\\\ \\nabla \\times \\mathbf{B} &= \\mu_0 \\mathbf{J} + \\mu_0\\varepsilon_0 \\frac{\\partial \\mathbf{E}}{\\partial t} \\end{aligned}",
+        description: "The fundamental equations describing electricity, magnetism, and electromagnetic waves.",
+        full_explanation: `
+## ⚡ Historical Origin
+James Clerk Maxwell unified electricity and magnetism in 1865, showing that light is an electromagnetic wave.
+
+## 📐 The Four Equations (in differential form)
+1. Gauss's Law: Electric field divergence ∝ charge density
+2. Faraday's Law: Changing magnetic field induces electric field
+3. Gauss's Law for Magnetism: No magnetic monopoles
+4. Ampère-Maxwell Law: Currents and changing E-fields produce B-fields
+
+## 🧠 Key Insight
+The term $\\mu_0\\varepsilon_0 \\frac{\\partial \\mathbf{E}}{\\partial t}$ (displacement current) was Maxwell's addition—it predicts **self-sustaining EM waves** propagating at speed $c = 1/\\sqrt{\\mu_0\\varepsilon_0}$.
+
+## 💥 Implications
+- Prediction and understanding of radio, microwaves, light, X-rays
+- Foundation of all electrical engineering and telecommunications
+- Inspired Einstein's special relativity (constancy of $c$)
+`
+      },
+
+      // 🌌 COSMOLOGY
       hubble_lemaitre: {
         name: "Hubble-Lemaître Law",
         category: "cosmology",
@@ -798,151 +608,11 @@ This is **not** motion through space, but **expansion of space itself** (metric 
 `
       },
 
-      dark_energy: {
-        name: "Dark Energy Dominance",
-        category: "cosmology",
-        statement_latex: "\\Omega_\\Lambda \\approx 0.69",
-        description: "The universe's expansion is accelerating due to dark energy.",
-        full_explanation: `
-## 🌌 Historical Origin
-In 1998, two teams studying distant supernovae discovered that the universe's expansion is **accelerating**, not slowing down.
-
-## 📐 Evidence
-Type Ia supernovae are "standard candles." Their observed brightness was **fainter than expected**, implying greater distance → acceleration.
-
-This requires a repulsive component: **dark energy**, modeled as a cosmological constant $\\Lambda$.
-
-## 🧠 Properties
-- Smooth, non-clumping energy filling space
-- Negative pressure: $p = -\\rho c^2$
-- Constitutes ~69% of the universe's energy density ($\\Omega_\\Lambda \\approx 0.69$)
-
-## 💥 Implications
-- Fate of the universe: "Big Freeze" or "Big Rip"
-- Greatest unsolved problem in physics: Why is $\\Lambda$ so small but non-zero?
-- Challenges quantum field theory predictions (120 orders of magnitude off!)
-`
-      },
-
-      cosmological_principle: {
-        name: "Cosmological Principle",
-        category: "cosmology",
-        statement_latex: "\\text{Homogeneous \\& isotropic on large scales}",
-        description: "The universe looks the same in all directions and locations when viewed on large scales.",
-        full_explanation: `
-## 🌍 Historical Origin
-Assumed since Copernicus, formalized in modern cosmology by Einstein and Friedmann.
-
-## 📐 Statement
-On sufficiently large scales (>100 Mpc), the universe is:
-- **Homogeneous**: same at every point
-- **Isotropic**: same in every direction
-
-This is supported by:
-- Cosmic Microwave Background (CMB) uniformity (1 part in 100,000)
-- Galaxy surveys (e.g., SDSS)
-
-## 🧠 Role in Cosmology
-This principle justifies the **Friedmann-Lemaître-Robertson-Walker (FLRW) metric**, the foundation of Big Bang cosmology.
-
-## 💥 Caveats
-- Not valid at small scales (galaxies, clusters)
-- Tensions exist (e.g., "Hubble tension," large-scale structures like the "Hercules-Corona Borealis Great Wall")
-`
-      },
-
-      cosmic_inflation: {
-        name: "Cosmic Inflation",
-        category: "cosmology",
-        statement_latex: "a(t) \\propto e^{H t}, \\quad H \\approx \\text{constant}",
-        description: "The universe underwent exponential expansion in its earliest moments.",
-        full_explanation: `
-## 💥 Historical Origin
-Proposed by Alan Guth (1980) to solve horizon, flatness, and monopole problems in Big Bang cosmology.
-
-## 📐 Mechanism
-A scalar "inflaton" field dominated the early universe (~$10^{-36}$ s after Big Bang), causing **exponential expansion**:
-
-$$
-a(t) \\propto e^{H t}
-$$
-
-where $a(t)$ is the scale factor, and $H$ is nearly constant.
-
-## 🧠 Solved Problems
-- **Horizon problem**: Why is CMB so uniform? → regions were in causal contact before inflation.
-- **Flatness problem**: Why is space so flat? → inflation stretched curvature to near zero.
-- **Monopole problem**: Why no magnetic monopoles? → diluted to undetectable levels.
-
-## 💥 Evidence
-- CMB fluctuations match inflationary predictions (scale-invariant, Gaussian, adiabatic)
-- Observed flatness ($\\Omega_{\\text{total}} \\approx 1$)
-
-> Inflation is not yet directly proven, but it's the leading paradigm.
-`
-      },
-
-      // 💻 INFORMATION THEORY (4)
-      bekenstein_bound: {
-        name: "Bekenstein Bound",
-        category: "information",
-        statement_latex: "S \\leq \\frac{2\\pi k_B R E}{\\hbar c}",
-        description: "The maximum information content of a region is proportional to its surface area.",
-        full_explanation: `
-## 🔐 Historical Origin
-Jacob Bekenstein (1981) showed that **the entropy (information content) of any finite region of space is bounded** by its surface area, not volume.
-
-## 📐 Formula
-For a system of energy $E$ and radius $R$:
-
-$$
-S \\leq \\frac{2\\pi k_B R E}{\\hbar c}
-$$
-
-In natural units ($k_B = \\hbar = c = 1$): $S \\leq 2\\pi R E$.
-
-## 🧠 Connection to Black Holes
-For a black hole, equality holds: $S_{\\text{BH}} = \\frac{k_B A}{4\\ell_P^2}$, where $A$ is horizon area. This led to the **holographic principle**.
-
-## 💥 Implications
-- Information in a region is encoded on its boundary
-- Fundamental limit on data storage (e.g., a 1 cm sphere can store ~$10^{66}$ bits)
-- Deep link between gravity, quantum mechanics, and information
-`
-      },
-
-      landauer_principle: {
-        name: "Landauer's Principle",
-        category: "information",
-        statement_latex: "E_{\\text{min}} = k_B T \\ln 2",
-        description: "Erasing information has a fundamental energy cost.",
-        full_explanation: `
-## 💡 Historical Origin
-Rolf Landauer (1961) established a fundamental link between **information theory and thermodynamics**.
-
-## 📐 Statement
-Erasing **one bit** of information in a computational system at temperature $T$ **must dissipate at least**:
-
-$$
-E_{\\text{min}} = k_B T \\ln 2
-$$
-
-This is not about measurement, but **irreversible erasure** (e.g., resetting a bit to 0).
-
-## 🧠 Why?
-Erasure reduces phase-space volume, decreasing entropy. To satisfy the Second Law, heat must be dumped into the environment.
-
-## 💥 Implications
-- Sets ultimate energy limit for computation
-- Reversible computing can (in theory) avoid this cost
-- Connects abstract information to physical reality
-`
-      },
-
+      // 💻 INFORMATION THEORY
       shannon_entropy: {
         name: "Shannon's Information Entropy",
         category: "information",
-        statement_latex: "H(X) = -\\sum_i p(x_i) \\log_2 p(x_i)",
+        statement_latex: "H(X) = -\\sum_{i} p(x_i) \\log_2 p(x_i)",
         description: "A measure of uncertainty or information content in a random variable.",
         full_explanation: `
 ## 📡 Historical Origin
@@ -970,32 +640,7 @@ Units: **bits** (if log base 2).
 `
       },
 
-      church_turing: {
-        name: "Church-Turing Thesis",
-        category: "information",
-        statement_latex: "\\text{Computable} \\iff \\text{Turing-computable}",
-        description: "Any function that can be computed by an algorithm can be computed by a Turing machine.",
-        full_explanation: `
-## 🤖 Historical Origin
-Alonzo Church (lambda calculus) and Alan Turing (Turing machines) independently defined computability in 1936. Their models were equivalent.
-
-## 📐 Thesis Statement
-> "Every effectively calculable function is computable by a Turing machine."
-
-This is a **thesis**, not a theorem—it cannot be proven, but no counterexample has ever been found.
-
-## 🧠 Implications
-- Defines the **limits of computation**
-- All modern computers are Turing-equivalent (same computational power)
-- Undecidable problems exist (e.g., Halting Problem)
-
-## 💥 Modern View
-- Quantum computers are still Turing-computable (they compute the same functions, possibly faster)
-- Hypercomputation (beyond Turing) remains speculative
-`
-      },
-
-      // 🧬 BIOLOGY (1)
+      // 🧬 BIOLOGY
       natural_selection: {
         name: "Natural Selection",
         category: "biology",
@@ -1030,11 +675,11 @@ Combined with genetics (1930s–1950s), natural selection explains:
 `
       },
 
-      // 📐 MATHEMATICS (2)
+      // 📐 MATHEMATICS
       bayes_theorem: {
         name: "Bayes' Theorem",
         category: "mathematics",
-        statement_latex: "P(H|E) = \\frac{P(E|H) P(H)}{P(E)}",
+        statement_latex: "P(H|E) = \\frac{P(E|H) \\, P(H)}{P(E)}",
         description: "A formula for updating the probability of a hypothesis based on evidence.",
         full_explanation: `
 ## 🎯 Historical Origin
@@ -1062,35 +707,11 @@ Bayes' theorem is the foundation of **probabilistic reasoning** and **learning f
 `
       },
 
-      goedel_incompleteness: {
-        name: "Gödel's Incompleteness Theorems",
-        category: "mathematics",
-        statement_latex: "\\text{Any consistent formal system rich enough for arithmetic is incomplete.}",
-        description: "There are true mathematical statements that cannot be proven within the system.",
-        full_explanation: `
-## 🧩 Historical Origin
-Kurt Gödel proved these theorems in 1931, shattering Hilbert's dream of a complete, consistent foundation for mathematics.
-
-## 📐 The Two Theorems
-1. **First Incompleteness Theorem**: In any consistent formal system capable of expressing basic arithmetic, there are **true statements that cannot be proven** within the system.
-2. **Second Incompleteness Theorem**: Such a system cannot prove its own consistency.
-
-## 🧠 Key Insight
-Gödel encoded statements about the system **within the system itself** (Gödel numbering), constructing a self-referential sentence: "This statement is not provable."
-
-## 💥 Implications
-- Limits of formal reasoning
-- No "final" foundation for mathematics
-- Influenced computer science (undecidability, halting problem)
-- Philosophical impact on truth, proof, and knowledge
-`
-      },
-
-      // ⚗️ CHEMISTRY (1)
+      // ⚗️ CHEMISTRY
       periodic_law: {
         name: "Periodic Law",
         category: "chemistry",
-        statement_latex: "\\text{Properties are periodic functions of atomic number } Z",
+        statement_latex: "\\text{Properties} = f(Z)",
         description: "The properties of elements recur periodically when arranged by atomic number.",
         full_explanation: `
 ## 🧪 Historical Origin
@@ -1118,10 +739,11 @@ Electron shell structure (from Schrödinger equation) explains periodicity:
     // Display Functions
     // ----------------------------
 
+    let mathJaxReady = false;
+
     function renderLibrary(filterCategory = 'all', searchTerm = '') {
       const container = document.getElementById('laws-container');
-      container.innerHTML = '';
-
+      
       let lawsToShow = Object.entries(universalLaws);
       
       // Apply category filter
@@ -1134,8 +756,7 @@ Electron shell structure (from Schrödinger equation) explains periodicity:
         const term = searchTerm.toLowerCase();
         lawsToShow = lawsToShow.filter(([id, law]) => 
           law.name.toLowerCase().includes(term) || 
-          law.description.toLowerCase().includes(term) ||
-          law.statement_latex.toLowerCase().includes(term)
+          law.description.toLowerCase().includes(term)
         );
       }
 
@@ -1144,29 +765,31 @@ Electron shell structure (from Schrödinger equation) explains periodicity:
         return;
       }
 
-      for (const [id, law] of lawsToShow) {
-        const card = document.createElement('div');
-        card.className = 'law-card';
-        card.innerHTML = `
+      // Create HTML with proper MathJax delimiters
+      container.innerHTML = lawsToShow.map(([id, law]) => `
+        <div class="law-card">
           <span class="category-tag ${law.category}">${law.category.charAt(0).toUpperCase() + law.category.slice(1)}</span>
           <h3>${law.name}</h3>
           <div class="equation-clickable" data-law-id="${id}">
-            $$${law.statement_latex}$$
+            <div class="equation-content">\\[${law.statement_latex}\\]</div>
           </div>
           <p class="law-description">${law.description}</p>
-        `;
-        container.appendChild(card);
+        </div>
+      `).join('');
+
+      // If MathJax is ready, render equations
+      if (mathJaxReady && window.MathJax) {
+        MathJax.typesetClear([container]);
+        MathJax.typesetPromise([container]).catch(console.error);
       }
 
-      // Attach click listeners after MathJax renders
-      setTimeout(() => {
-        document.querySelectorAll('.equation-clickable').forEach(el => {
-          el.addEventListener('click', () => {
-            window.location.hash = `proof/${el.dataset.lawId}`;
-            showProofView(el.dataset.lawId);
-          });
+      // Attach click listeners
+      document.querySelectorAll('.equation-clickable').forEach(el => {
+        el.addEventListener('click', () => {
+          window.location.hash = `proof/${el.dataset.lawId}`;
+          showProofView(el.dataset.lawId);
         });
-      }, 100);
+      });
     }
 
     function showProofView(lawId) {
@@ -1176,13 +799,22 @@ Electron shell structure (from Schrödinger equation) explains periodicity:
       document.getElementById('main-view').style.display = 'none';
       document.getElementById('proof-view').style.display = 'block';
 
-      const html = marked.parse(law.full_explanation);
+      // Process the markdown content and wrap equations in proper delimiters
+      let processedContent = law.full_explanation;
+      
+      // Convert inline equations: $...$ to \(...\)
+      processedContent = processedContent.replace(/\$(.*?)\$/g, '\\\\($1\\\\)');
+      
+      // Convert display equations: $$...$$ to \[...\]
+      processedContent = processedContent.replace(/\$\$(.*?)\$\$/g, '\\\\[$1\\\\]');
+      
+      const html = marked.parse(processedContent);
       document.getElementById('proof-content').innerHTML = html;
 
       // Re-render MathJax in the new content
       if (window.MathJax) {
         MathJax.typesetClear([document.getElementById('proof-content')]);
-        MathJax.typeset([document.getElementById('proof-content')]);
+        MathJax.typesetPromise([document.getElementById('proof-content')]).catch(console.error);
       }
     }
 
@@ -1194,6 +826,15 @@ Electron shell structure (from Schrödinger equation) explains periodicity:
     // ----------------------------
     // Navigation & Filtering
     // ----------------------------
+
+    // Wait for MathJax to be fully loaded
+    if (window.MathJax) {
+      window.MathJax.startup.promise.then(() => {
+        mathJaxReady = true;
+        console.log('MathJax is fully loaded');
+        renderLibrary();
+      }).catch(console.error);
+    }
 
     // Category filter buttons
     document.querySelectorAll('.category-btn').forEach(btn => {
@@ -1231,9 +872,10 @@ Electron shell structure (from Schrödinger equation) explains periodicity:
       }
     }
 
+    // Initialize
     window.addEventListener('load', () => {
       handleHash();
-      renderLibrary();
+      // Initial render will happen when MathJax is ready
     });
     
     window.addEventListener('hashchange', handleHash);
