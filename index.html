@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QLang — Interrogez l’Univers</title>
+    <title>QLang — Interrogez l'Univers</title>
     <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -16,31 +16,36 @@
 </head>
 <body>
     <h1>QLang v1.2 — Traducteur Cosmique</h1>
-    <p>Posez une question à l’univers, et obtenez une réponse fondée sur ses lois fondamentales.</p>
-    <input type="text" id="question" placeholder="Ex: L’information est-elle plus fondamentale que la matière ?">
-    <button onclick="askQLang()">Interroger l’Univers</button>
+    <p>Posez une question à l'univers, et obtenez une réponse fondée sur ses lois fondamentales.</p>
+    <input type="text" id="question" placeholder="Ex: L'information est-elle plus fondamentale que la matière ?">
+    <button onclick="askQLang()">Interroger l'Univers</button>
     <div id="response"></div>
 
     <script>
         let pyodide;
-        async function loadPyodideAndPackages() {
-            pyodide = await loadPyodide();
-            await pyodide.loadPackage('sympy');
-            return pyodide;
-        }
+        let pyodideLoading = false;
+        let pyodideLoaded = false;
 
-        async function askQLang() {
-            if (!pyodide) {
-                pyodide = await loadPyodideAndPackages();
-                // Charge le code QLang une fois
+        async function loadPyodideAndPackages() {
+            pyodideLoading = true;
+            try {
+                pyodide = await loadPyodide();
+                await pyodide.loadPackage('micropip');
+                // Charger les packages nécessaires
+                await pyodide.runPythonAsync(`
+                    import micropip
+                    await micropip.install('sympy')
+                `);
+                
+                // Charger le code QLang
                 await pyodide.runPython(`
 import sympy as sp
 
 lois = {
     "thermo_2": {
-        "nom": "2ᵉ loi de la thermodynamique",
+        "nom": "2e loi de la thermodynamique",
         "énoncé": "ΔS ≥ 0 dans un système isolé",
-        "énoncé_latex": r"\\Delta S \\geq 0",
+        "énoncé_latex": r"\\\\Delta S \\\\geq 0",
         "conséquences": ["flèche du temps", "augmentation de l'entropie", "limite à la complexité perpétuelle"],
         "domaine": ["thermodynamique", "entropie", "systèmes"],
         "sources": ["Carnot, Clausius, Boltzmann (19e siècle)"],
@@ -49,7 +54,7 @@ lois = {
     "bekenstein": {
         "nom": "Limite de Bekenstein",
         "énoncé": "Densité d'information maximale ~ A / (4 l_Pl²)",
-        "énoncé_latex": r"I \\leq \\frac{2 \\pi E R}{\\hbar c \\ln 2}",
+        "énoncé_latex": r"I \\\\leq \\\\frac{2 \\\\pi E R}{\\\\hbar c \\\\ln 2}",
         "conséquences": ["borne supérieure à l'information dans un volume", "lien gravité-information", "principe holographique"],
         "domaine": ["information", "gravité", "cosmologie"],
         "sources": ["Bekenstein, 1973"],
@@ -58,7 +63,7 @@ lois = {
     "landauer": {
         "nom": "Principe de Landauer",
         "énoncé": "Coût minimal de kT ln(2) par bit effacé",
-        "énoncé_latex": r"E \\geq k T \\ln 2",
+        "énoncé_latex": r"E \\\\geq k T \\\\ln 2",
         "conséquences": ["coût thermodynamique du calcul", "limite à la complexité computationnelle"],
         "domaine": ["information", "thermodynamique", "computation"],
         "sources": ["Landauer, 1961"],
@@ -67,7 +72,7 @@ lois = {
     "lcdm": {
         "nom": "Modèle ΛCDM",
         "énoncé": "Expansion accélérée de l'univers",
-        "énoncé_latex": r"\\Lambda > 0",  # Simplifié
+        "énoncé_latex": r"\\\\Lambda > 0",
         "conséquences": ["dilution des gradients d'énergie", "mort thermique finale"],
         "domaine": ["cosmologie", "expansion", "énergie"],
         "sources": ["Riess et al., 1998; Perlmutter et al., 1999"],
@@ -76,8 +81,8 @@ lois = {
     "dissipatifs": {
         "nom": "Théorie des systèmes dissipatifs (Prigogine)",
         "énoncé": "Émergence de complexité loin de l'équilibre",
-        "énoncé_latex": r"dS = d_e S + d_i S, \\, d_i S > 0",
-        "conséquences": ["auto-organisation", "structures stables temporaires", "fenêtre temporelle de complexité (ex: post-recombinaison à pré-mort thermique)"],
+        "énoncé_latex": r"dS = d_e S + d_i S, \\\\, d_i S > 0",
+        "conséquences": ["auto-organisation", "structures stables temporaires", "fenêtre temporelle de complexité"],
         "domaine": ["complexité", "émergence", "systèmes"],
         "sources": ["Nicolis & Prigogine, 1977"],
         "confiance_intrinsèque": 0.85
@@ -85,11 +90,11 @@ lois = {
     "selection_cosmique": {
         "nom": "Principe de sélection cosmique (Tegmark)",
         "énoncé": "Seules les structures mathématiquement cohérentes peuvent exister de façon stable",
-        "énoncé_latex": None,  # Pas d'équation spécifique
+        "énoncé_latex": None,
         "conséquences": ["élimination des incohérences par interférence destructive", "univers auto-sélectionnant"],
         "domaine": ["cosmologie", "mathématiques", "ontologie"],
         "sources": ["Tegmark, 1998"],
-        "confiance_intrinsèque": 0.75  # Plus spéculatif
+        "confiance_intrinsèque": 0.75
     }
 }
 
@@ -97,7 +102,7 @@ questions_types = {
     "fondamentalite_info": {
         "mots_cles": ["information", "fondamentale", "matière", "bit", "primitive"],
         "lois": ["bekenstein", "landauer", "selection_cosmique", "thermo_2"],
-        "synthese_template": "L’information et la matière sont intriquées, mais l’information semble **plus primitive** dans la hiérarchie cosmique. La matière sans information est un état indifférencié (entropie maximale). L’information sans matière est instable (coût énergétique). Cependant, dans les régimes extrêmes, l’information précède la géométrie (principe holographique). Ainsi, l’information définit **ce qui peut exister**, tandis que la matière fournit le cadre."
+        "synthese_template": "L'information et la matière sont intriquées, mais l'information semble **plus primitive** dans la hiérarchie cosmique. La matière sans information est un état indifférencié (entropie maximale). L'information sans matière est instable (coût énergétique). Cependant, dans les régimes extrêmes, l'information précède la géométrie (principe holographique). Ainsi, l'information définit **ce qui peut exister**, tandis que la matière fournit le cadre."
     },
     "origine_lois": {
         "mots_cles": ["lois", "chaos", "ordre", "pourquoi", "fondement"],
@@ -107,9 +112,8 @@ questions_types = {
     "direction_temps": {
         "mots_cles": ["temps", "direction", "sens", "flèche"],
         "lois": ["thermo_2"],
-        "synthese_template": "Le temps a une direction parce que l’entropie augmente. L’univers a commencé dans un état de basse entropie, et évolue vers le désordre maximal."
+        "synthese_template": "Le temps a une direction parce que l'entropie augmente. L'univers a commencé dans un état de basse entropie, et évolue vers le désordre maximal."
     }
-    # Ajoute d'autres types ici pour extensibilité
 }
 
 def mapper_question(question):
@@ -122,38 +126,100 @@ def mapper_question(question):
 def generer_reponse(question):
     type_question, lois_invoquees = mapper_question(question)
     if not lois_invoquees:
-        return "### 🔮 Réponse QLang v1.2\\n\\n**Question** : {} \\n\\n**Synthèse** : Aucune loi pertinente trouvée. Reformulez avec des termes comme “entropie”, “information”, “temps”, etc.\\n\\n**Confiance** : ★☆☆☆☆\\n**Lois invoquées** : []".format(question)
+        return "### 🔮 Réponse QLang v1.2\\\\n\\\\n**Question** : {} \\\\n\\\\n**Synthèse** : Aucune loi pertinente trouvée. Reformulez avec des termes comme 'entropie', 'information', 'temps', etc.\\\\n\\\\n**Confiance** : ★☆☆☆☆\\\\n**Lois invoquées** : []".format(question)
     
-    markdown = "### 🔮 Réponse QLang v1.2\\n\\n**Question** : {}\\n\\n**Synthèse** : \\n".format(question)
+    markdown = "### 🔮 Réponse QLang v1.2\\\\n\\\\n**Question** : {}\\\\n\\\\n**Synthèse** : \\\\n".format(question)
     
     if type_question in questions_types:
-        markdown += questions_types[type_question]["synthese_template"] + "\\n"
+        markdown += questions_types[type_question]["synthese_template"] + "\\\\n"
     else:
-        markdown += "Synthèse générique basée sur les lois invoquées.\\n"
+        markdown += "Synthèse générique basée sur les lois invoquées.\\\\n"
     
-    markdown += "Nuances : Ces lois interagissent pour limiter l'information sans substrat matériel, mais spéculent sur des régimes holographiques en débat.\\n"
+    markdown += "Nuances : Ces lois interagissent pour limiter l'information sans substrat matériel, mais spéculent sur des régimes holographiques en débat.\\\\n"
     
-    markdown += "\\n**Lois invoquées** :\\n"
+    markdown += "\\\\n**Lois invoquées** :\\\\n"
     confiance_moyenne = 0
     for loi_key in lois_invoquees:
         loi = lois[loi_key]
         equation_str = f" Équation : ${loi['énoncé_latex']}$." if loi['énoncé_latex'] else ""
-        markdown += f"- **{loi['nom']}** : {loi['énoncé']}. Conséquences: {', '.join(loi['conséquences'])}.{equation_str}\\n"
+        markdown += f"- **{loi['nom']}** : {loi['énoncé']}. Conséquences: {', '.join(loi['conséquences'])}.{equation_str}\\\\n"
         confiance_moyenne += loi["confiance_intrinsèque"]
     
     confiance_moyenne /= len(lois_invoquees)
     etoiles = "★" * int(confiance_moyenne * 5) + "☆" * (5 - int(confiance_moyenne * 5))
-    markdown += f"\\n**Confiance** : {etoiles} ({confiance_moyenne:.2f})"
+    markdown += f"\\\\n**Confiance** : {etoiles} ({confiance_moyenne:.2f})"
     
     return markdown
                 `);
+                pyodideLoaded = true;
+                console.log("Pyodide chargé avec succès !");
+            } catch (error) {
+                console.error("Erreur lors du chargement de Pyodide:", error);
+            } finally {
+                pyodideLoading = false;
+            }
+        }
+
+        async function askQLang() {
+            const question = document.getElementById('question').value;
+            const responseDiv = document.getElementById('response');
+            
+            if (!question) {
+                responseDiv.innerHTML = "<p>Veuillez poser une question.</p>";
+                return;
             }
 
-            const question = document.getElementById('question').value;
-            const response = await pyodide.runPython(`generer_reponse('${question.replace(/'/g, "\\'")}')`);
-            document.getElementById('response').innerHTML = marked.parse(response);
-            MathJax.typeset();  // Rend les équations LaTeX
+            // Afficher un message de chargement
+            responseDiv.innerHTML = "<p>🔮 L'univers réfléchit...</p>";
+
+            try {
+                // Charger Pyodide si nécessaire
+                if (!pyodideLoaded && !pyodideLoading) {
+                    await loadPyodideAndPackages();
+                } else if (pyodideLoading) {
+                    responseDiv.innerHTML = "<p>Chargement en cours... Veuillez patienter.</p>";
+                    // Attendre que le chargement soit terminé
+                    while (pyodideLoading) {
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                    }
+                }
+
+                if (!pyodide) {
+                    throw new Error("Pyodide n'a pas pu être chargé");
+                }
+
+                // Nettoyer la question pour éviter les problèmes d'échappement
+                const questionSafe = question.replace(/'/g, "\\\\'").replace(/"/g, '\\\\"');
+                
+                // Exécuter Python
+                const response = await pyodide.runPython(\`generer_reponse('\${questionSafe}')\`);
+                
+                // Convertir le markdown en HTML
+                const htmlResponse = marked.parse(response.replace(/\\\\n/g, '\n'));
+                responseDiv.innerHTML = htmlResponse;
+                
+                // Mettre à jour MathJax pour les équations
+                if (window.MathJax) {
+                    MathJax.typeset();
+                }
+                
+            } catch (error) {
+                console.error("Erreur:", error);
+                responseDiv.innerHTML = \`<p style="color: red;">Erreur: \${error.message}</p>\`;
+            }
         }
+
+        // Charger Pyodide au démarrage
+        window.addEventListener('load', function() {
+            loadPyodideAndPackages();
+        });
+
+        // Permettre d'utiliser la touche Entrée
+        document.getElementById('question').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                askQLang();
+            }
+        });
     </script>
 </body>
 </html>
