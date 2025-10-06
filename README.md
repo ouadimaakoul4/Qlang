@@ -1,46 +1,50 @@
-QLang v1.0 — Library of Universal Laws
+# QLang v1.0 — Library of Universal Laws
 
-    Explore cosmic knowledge through the fundamental laws that govern our universe
+> Explore cosmic knowledge through the fundamental laws that govern our universe
 
 QLang is an interactive web application that catalogs and explores the fundamental laws spanning physics, cosmology, information theory, biology, mathematics, and chemistry. It's a digital compendium of humanity's understanding of universal principles.
-🌟 Features
 
-    📚 Comprehensive Library: 27 universal laws across 6 scientific domains
+---
 
-    🔍 Intelligent Query System: Ask questions and get relevant laws
+## 🌟 Features
 
-    🎲 Random Discovery: Explore random universal laws
+- 📚 **Comprehensive Library**: 27 universal laws across 6 scientific domains  
+- 🔍 **Intelligent Query System**: Ask questions and get relevant laws  
+- 🎲 **Random Discovery**: Explore random universal laws  
+- 📊 **Mathematical Rendering**: Beautiful LaTeX formula display with MathJax  
+- 🎨 **Cosmic Design**: Space-themed UI with smooth animations  
+- 📱 **Responsive**: Works perfectly on desktop and mobile devices  
 
-    📊 Mathematical Rendering: Beautiful LaTeX formula display with MathJax
+---
 
-    🎨 Cosmic Design: Space-themed UI with smooth animations
+## 🗂️ Law Categories
 
-    📱 Responsive: Works perfectly on desktop and mobile devices
+| Category             | Laws Count | Description                                      |
+|----------------------|------------|--------------------------------------------------|
+| 🔬 Fundamental Physics | 15         | Relativity, quantum mechanics, thermodynamics, electromagnetism |
+| 🌌 Cosmology          | 4          | Universe expansion, dark energy, cosmic inflation |
+| 💻 Information        | 4          | Computation, entropy, information theory         |
+| 🧬 Biology            | 1          | Evolutionary principles                          |
+| 📐 Mathematics        | 2          | Probability, logic, incompleteness               |
+| ⚗️ Chemistry           | 1          | Periodic table and elements                      |
 
-🗂️ Law Categories
-Category	Laws Count	Description
-🔬 Fundamental Physics	15	Relativity, quantum mechanics, thermodynamics, electromagnetism
-🌌 Cosmology	4	Universe expansion, dark energy, cosmic inflation
-💻 Information	4	Computation, entropy, information theory
-🧬 Biology	1	Evolutionary principles
-📐 Mathematics	2	Probability, logic, incompleteness
-⚗️ Chemistry	1	Periodic table and elements
-🚀 Quick Start
-Online Demo
+> ℹ️ *Note: The term "law" is used broadly to include fundamental principles, theorems, and well-established scientific frameworks that govern or describe universal behavior.*
 
-Visit the live application: QLang Demo
-Local Installation
+---
 
-    Clone the repository:
+## 🚀 Quick Start
 
-bash
+### Online Demo
+Visit the live application: [QLang Demo](https://ouadimaakoul4.github.io/qlang/)
 
+### Local Installation
+```bash
+# Clone the repository
 git clone https://github.com/ouadimaakoul4/qlang.git
 cd qlang
 
-    Open index.html in your browser:
-
-bash
+# ⚠️ Important: For full functionality (especially MathJax), serve the app via a local server.
+# Double-clicking index.html may cause rendering issues in some browsers.
 
 # Using Python
 python -m http.server 8000
@@ -48,114 +52,85 @@ python -m http.server 8000
 # Using Node.js
 npx http-server
 
-# Or simply double-click index.html
+# Then open http://localhost:8000 in your browser
+```
 
-💡 Usage Examples
-Asking Questions
+---
 
+## 💡 Usage Examples
+
+### Asking Questions
 Type questions like:
+- "What governs the expansion of the universe?"
+- "Tell me about quantum mechanics"
+- "How does information relate to entropy?"
+- "What are the fundamental conservation laws?"
 
-    "What governs the expansion of the universe?"
+### Exploring the Library
+- Click **"View Library"** to see all laws organized by category  
+- Use **"Random Law"** for serendipitous discovery  
+- Browse mathematical formulations with proper LaTeX rendering  
 
-    "Tell me about quantum mechanics"
+---
 
-    "How does information relate to entropy?"
+## 🧩 Included Laws
 
-    "What are the fundamental conservation laws?"
+### 🔬 Fundamental Physics (15 laws)
+- Second Law of Thermodynamics  
+- General Relativity  
+- Principles of Quantum Mechanics  
+- Mass-Energy Equivalence  
+- Heisenberg Uncertainty Principle  
+- Newton's Laws of Motion  
+- Pauli Exclusion Principle  
+- Born Rule  
+- Conservation of Energy  
+- Conservation of Momentum  
+- Maxwell's Equations  
+- Special Relativity  
+- Schrödinger Equation  
+- Dirac Equation  
 
-Exploring the Library
+### 🌌 Cosmology (4 laws)
+- Hubble-Lemaître Law  
+- Dark Energy Dominance  
+- Cosmological Principle  
+- Cosmic Inflation  
 
-    Click "View Library" to see all laws organized by category
+### 💻 Information Theory (4 laws)
+- Bekenstein Bound  
+- Landauer's Principle  
+- Shannon's Information Entropy  
+- Church-Turing Thesis  
 
-    Use "Random Law" for serendipitous discovery
+### 🧬 Biology (1 law)
+- Natural Selection  
 
-    Browse mathematical formulations with proper LaTeX rendering
+### 📐 Mathematics (2 laws)
+- Bayes' Theorem  
+- Gödel's Incompleteness Theorems  
 
-🧩 Included Laws
-Fundamental Physics (15 laws)
+### ⚗️ Chemistry (1 law)
+- Periodic Law  
 
-    Second Law of Thermodynamics
+---
 
-    General Relativity
+## 🛠️ Technology Stack
 
-    Principles of Quantum Mechanics
+- **Frontend**: Pure HTML5, CSS3, JavaScript (ES6+)  
+- **Math Rendering**: MathJax 3.x  
+- **Markdown Processing**: Marked.js  
+- **Styling**: Custom CSS with CSS Variables  
+- **Icons**: Unicode emojis  
+- **Fonts**: System fonts (Segoe UI stack)  
 
-    Mass-Energy Equivalence
+---
 
-    Heisenberg Uncertainty Principle
+## 🔧 Customization
 
-    Newton's Laws of Motion
-
-    Pauli Exclusion Principle
-
-    Born Rule
-
-    Conservation of Energy
-
-    Conservation of Momentum
-
-    Maxwell's Equations
-
-    Special Relativity
-
-    Schrödinger Equation
-
-    Dirac Equation
-
-Cosmology (4 laws)
-
-    Hubble-Lemaître Law
-
-    Dark Energy Dominance
-
-    Cosmological Principle
-
-    Cosmic Inflation
-
-Information Theory (4 laws)
-
-    Bekenstein Bound
-
-    Landauer's Principle
-
-    Shannon's Information Entropy
-
-    Church-Turing Thesis
-
-Biology (1 law)
-
-    Natural Selection
-
-Mathematics (2 laws)
-
-    Bayes' Theorem
-
-    Gödel's Incompleteness Theorems
-
-Chemistry (1 law)
-
-    Periodic Law
-
-🛠️ Technology Stack
-
-    Frontend: Pure HTML5, CSS3, JavaScript (ES6+)
-
-    Math Rendering: MathJax 3.x
-
-    Markdown Processing: Marked.js
-
-    Styling: Custom CSS with CSS Variables
-
-    Icons: Unicode emojis
-
-    Fonts: System fonts (Segoe UI stack)
-
-🔧 Customization
-Adding New Laws
-
-Edit the universalLaws object in the JavaScript:
-javascript
-
+### Adding New Laws
+Edit the `universalLaws` object in the JavaScript:
+```javascript
 "your_law_id": {
     "name": "Law Name",
     "category": "category_name",
@@ -167,89 +142,95 @@ javascript
     "discovery_date": "Year",
     "discoverers": ["Discoverer Name"]
 }
+```
 
-Modifying Categories
+### Modifying Categories
+Update the `questionTypes` object to add new question categories and keyword mappings.
 
-Update the questionTypes object to add new question categories and keyword mappings.
-📊 Project Structure
-text
+---
 
+## 📊 Project Structure
+```
 qlang/
 ├── index.html          # Main application file
 ├── README.md           # This file
+├── LICENSE             # MIT License
 └── assets/             # (Optional) Additional assets
     ├── images/
     └── css/
+```
 
-🌐 Browser Compatibility
+---
 
-    Chrome 60+
+## 🌐 Browser Compatibility
 
-    Firefox 55+
+- Chrome 60+ (Desktop & Android)  
+- Firefox 55+  
+- Safari 12+ (macOS & iOS)  
+- Edge 79+  
+- Samsung Internet 12+  
 
-    Safari 12+
+---
 
-    Edge 79+
-
-🤝 Contributing
+## 🤝 Contributing
 
 We welcome contributions to expand the library of universal laws! Please ensure:
 
-    Laws are well-established scientific principles
+- Laws are well-established scientific principles  
+- Include proper mathematical formulations where applicable  
+- Provide accurate historical context and discoverers  
+- Maintain consistent data structure  
 
-    Include proper mathematical formulations where applicable
+---
 
-    Provide accurate historical context and discoverers
+## 📜 License
 
-    Maintain consistent data structure
+[MIT License](LICENSE) — feel free to use this project for educational and research purposes.
 
-📜 License
+---
 
-MIT License - feel free to use this project for educational and research purposes.
-🎯 Future Enhancements
+## 🎯 Future Enhancements
 
-    Law relationships and dependencies
+### Near-term (v1.1–v2.0):
+- Law relationships and dependencies  
+- Export functionality (PDF, JSON)  
+- Historical timeline visualization  
 
-    Historical timeline visualization
+### Long-term:
+- Interactive law comparisons  
+- User accounts and saved queries  
+- RESTful API for programmatic access  
+- Multilingual support (i18n)  
 
-    Interactive law comparisons
+---
 
-    Export functionality (PDF, JSON)
+## 📚 References & Further Reading
 
-    User accounts and saved queries
+- [Stanford Encyclopedia of Philosophy](https://plato.stanford.edu/)  
+- [Physics Today](https://physicstoday.scitation.org/)  
+- [Nature Physics](https://www.nature.com/nphys/)  
+- [Scientific American](https://www.scientificamerican.com/)  
 
-    API for programmatic access
+---
 
-    Multilingual support
+## 👨‍💻 Author
 
-📚 References & Further Reading
+Ouadi Maakoul  
+- GitHub: [@ouadimaakoul4](https://github.com/ouadimaakoul4)
 
-    Stanford Encyclopedia of Philosophy
+---
 
-    Physics Today
+## 🙏 Acknowledgments
 
-    Nature Physics
+- The scientific community for centuries of discovery  
+- MathJax team for beautiful mathematical rendering  
+- All contributors to human knowledge  
 
-    Scientific American
-
-👨‍💻 Author
-
-Your Name
-
-    GitHub: @ouadimaakoul4
-
-    Website: ------------
-
-🙏 Acknowledgments
-
-    The scientific community for centuries of discovery
-
-    MathJax team for beautiful mathematical rendering
-
-    All contributors to human knowledge
+---
 
 <div align="center">
 
-"The most beautiful thing we can experience is the mysterious. It is the source of all true art and science."
-— Albert Einstein
+> “The most beautiful thing we can experience is the mysterious. It is the source of all true art and science.”  
+> — Albert Einstein
+
 </div>
