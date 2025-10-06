@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QLang — Bibliothèque des Lois Universelles</title>
+    <title>QLang — Library of Universal Laws</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -108,182 +108,182 @@
 </head>
 <body>
     <div class="container">
-        <h1>🌌 QLang — Bibliothèque des Lois Universelles</h1>
-        <p>Explorez la connaissance cosmique à travers les lois fondamentales de l'univers.</p>
+        <h1>🌌 QLang — Library of Universal Laws</h1>
+        <p>Explore cosmic knowledge through the fundamental laws of the universe.</p>
         
-        <input type="text" id="question" placeholder="Posez votre question cosmique...">
-        <button onclick="askQLang()">✨ Interroger l'Univers</button>
-        <button onclick="showLibrary()">📚 Voir la Bibliothèque</button>
-        <button onclick="showRandomLaw()">🎲 Loi Aléatoire</button>
+        <input type="text" id="question" placeholder="Ask your cosmic question...">
+        <button onclick="askQLang()">✨ Query the Universe</button>
+        <button onclick="showLibrary()">📚 View Library</button>
+        <button onclick="showRandomLaw()">🎲 Random Law</button>
         
         <div id="response">
-            <p>La bibliothèque contient <span id="law-count">0</span> lois universelles.</p>
+            <p>The library contains <span id="law-count">0</span> universal laws.</p>
         </div>
     </div>
 
     <script>
-        // ==================== BIBLIOTHÈQUE DES LOIS UNIVERSELLES ====================
+        // ==================== LIBRARY OF UNIVERSAL LAWS ====================
 
-        const loisUniverselles = {
-            // === PHYSIQUE FONDAMENTALE ===
-            "thermodynamique_2": {
-                "nom": "Deuxième Loi de la Thermodynamique",
-                "categorie": "physique_fondamentale",
-                "domaines": ["thermodynamique", "entropie", "fleche_temps"],
-                "énoncé": "L'entropie d'un système isolé ne peut que croître ou rester constante",
-                "énoncé_latex": "\\\\Delta S \\\\geq 0",
-                "formulation": "Dans tout processus naturel, l'entropie totale de l'univers augmente",
+        const universalLaws = {
+            // === FUNDAMENTAL PHYSICS ===
+            "thermodynamics_2": {
+                "name": "Second Law of Thermodynamics",
+                "category": "fundamental_physics",
+                "domains": ["thermodynamics", "entropy", "time_arrow"],
+                "statement": "The entropy of an isolated system can only increase or remain constant",
+                "statement_latex": "\\\\Delta S \\\\geq 0",
+                "formulation": "In any natural process, the total entropy of the universe increases",
                 "implications": [
-                    "Flèche du temps irréversible",
-                    "Impossibilité du mouvement perpétuel", 
-                    "Mort thermique de l'univers comme état final"
+                    "Irreversible time arrow",
+                    "Impossibility of perpetual motion", 
+                    "Heat death of the universe as final state"
                 ],
-                "preuves": [
-                    "Expériences de calorimétrie",
-                    "Moteurs thermiques réels",
-                    "Fondements statistiques (Boltzmann)"
+                "proofs": [
+                    "Calorimetry experiments",
+                    "Real heat engines",
+                    "Statistical foundations (Boltzmann)"
                 ],
-                "limites": "Systèmes ouverts et loin de l'équilibre",
-                "confiance": 0.99,
-                "date_decouverte": "1850",
-                "decouvreurs": ["Rudolf Clausius", "William Thomson"],
-                "revolutions": ["thermodynamique", "cosmologie"]
+                "limitations": "Open systems and far from equilibrium",
+                "confidence": 0.99,
+                "discovery_date": "1850",
+                "discoverers": ["Rudolf Clausius", "William Thomson"],
+                "revolutions": ["thermodynamics", "cosmology"]
             },
 
-            "relativite_generale": {
-                "nom": "Relativité Générale", 
-                "categorie": "physique_fondamentale",
-                "domaines": ["gravitation", "espace_temps", "cosmologie"],
-                "énoncé": "La matière et l'énergie courbent l'espace-temps, et cette courbure dicte le mouvement",
-                "énoncé_latex": "G_{\\\\mu\\\\nu} = \\\\frac{8\\\\pi G}{c^4} T_{\\\\mu\\\\nu}",
-                "formulation": "Équation d'Einstein reliant géométrie et contenu matériel",
+            "general_relativity": {
+                "name": "General Relativity", 
+                "category": "fundamental_physics",
+                "domains": ["gravitation", "space_time", "cosmology"],
+                "statement": "Matter and energy curve spacetime, and this curvature dictates motion",
+                "statement_latex": "G_{\\\\mu\\\\nu} = \\\\frac{8\\\\pi G}{c^4} T_{\\\\mu\\\\nu}",
+                "formulation": "Einstein's equation relating geometry and material content",
                 "implications": [
-                    "Déflexion de la lumière par les masses",
-                    "Ondes gravitationnelles",
-                    "Expansion de l'univers", 
-                    "Trous noirs"
+                    "Light deflection by masses",
+                    "Gravitational waves",
+                    "Expansion of the universe", 
+                    "Black holes"
                 ],
-                "preuves": [
-                    "Déflexion stellaire lors des éclipses (1919)",
-                    "Décalage vers le rouge gravitationnel", 
-                    "Ondes gravitationnelles (LIGO 2015)"
+                "proofs": [
+                    "Stellar deflection during eclipses (1919)",
+                    "Gravitational redshift", 
+                    "Gravitational waves (LIGO 2015)"
                 ],
-                "confiance": 0.98,
-                "date_decouverte": "1915",
-                "decouvreurs": ["Albert Einstein"],
-                "revolutions": ["gravitation", "cosmologie"]
+                "confidence": 0.98,
+                "discovery_date": "1915",
+                "discoverers": ["Albert Einstein"],
+                "revolutions": ["gravitation", "cosmology"]
             },
 
-            "mecanique_quantique": {
-                "nom": "Principes de la Mécanique Quantique",
-                "categorie": "physique_fondamentale", 
-                "domaines": ["quantique", "incertitude", "superposition"],
-                "énoncé": "Système décrit par une fonction d'onde, évolution unitaire, mesure probabiliste",
-                "énoncé_latex": "i\\\\hbar\\\\frac{\\\\partial}{\\\\partial t}\\\\Psi = \\\\hat{H}\\\\Psi",
-                "formulation": "Équation de Schrödinger décrivant l'évolution temporelle",
+            "quantum_mechanics": {
+                "name": "Principles of Quantum Mechanics",
+                "category": "fundamental_physics", 
+                "domains": ["quantum", "uncertainty", "superposition"],
+                "statement": "System described by a wave function, unitary evolution, probabilistic measurement",
+                "statement_latex": "i\\\\hbar\\\\frac{\\\\partial}{\\\\partial t}\\\\Psi = \\\\hat{H}\\\\Psi",
+                "formulation": "Schrödinger equation describing temporal evolution",
                 "implications": [
-                    "Dualité onde-particule",
-                    "Intrication quantique", 
-                    "Principe d'incertitude",
-                    "Effet tunnel"
+                    "Wave-particle duality",
+                    "Quantum entanglement", 
+                    "Uncertainty principle",
+                    "Tunnel effect"
                 ],
-                "preuves": [
-                    "Expérience de Stern-Gerlach",
-                    "Interférences avec particules individuelles",
-                    "Calculateurs quantiques"
+                "proofs": [
+                    "Stern-Gerlach experiment",
+                    "Interferences with individual particles",
+                    "Quantum computers"
                 ],
-                "confiance": 0.99,
-                "date_decouverte": "1925-1927", 
-                "decouvreurs": ["Heisenberg", "Schrödinger", "Dirac", "Bohr"]
+                "confidence": 0.99,
+                "discovery_date": "1925-1927", 
+                "discoverers": ["Heisenberg", "Schrödinger", "Dirac", "Bohr"]
             },
 
-            // === COSMOLOGIE ===
-            "expansion_hubble": {
-                "nom": "Loi de Hubble-Lemaître",
-                "categorie": "cosmologie",
-                "domaines": ["expansion", "cosmologie"], 
-                "énoncé": "Les galaxies s'éloignent à une vitesse proportionnelle à leur distance",
-                "énoncé_latex": "v = H_0 d",
+            // === COSMOLOGY ===
+            "hubble_expansion": {
+                "name": "Hubble-Lemaître Law",
+                "category": "cosmology",
+                "domains": ["expansion", "cosmology"], 
+                "statement": "Galaxies recede at a speed proportional to their distance",
+                "statement_latex": "v = H_0 d",
                 "implications": [
-                    "Univers en expansion",
-                    "Big Bang comme origine", 
-                    "Âge fini de l'univers"
+                    "Expanding universe",
+                    "Big Bang as origin", 
+                    "Finite age of the universe"
                 ],
-                "confiance": 0.95,
-                "date_decouverte": "1927-1929",
-                "decouvreurs": ["Georges Lemaître", "Edwin Hubble"]
+                "confidence": 0.95,
+                "discovery_date": "1927-1929",
+                "discoverers": ["Georges Lemaître", "Edwin Hubble"]
             },
 
-            // === INFORMATION ET COMPLEXITÉ ===  
+            // === INFORMATION AND COMPLEXITY ===  
             "bekenstein": {
-                "nom": "Limite de Bekenstein",
-                "categorie": "information",
-                "domaines": ["information", "gravité", "holographie"],
-                "énoncé": "Quantité maximale d'information contenue dans une région d'espace",
-                "énoncé_latex": "I \\\\leq \\\\frac{2\\\\pi R E}{\\\\hbar c \\\\ln 2}",
+                "name": "Bekenstein Bound",
+                "category": "information",
+                "domains": ["information", "gravity", "holography"],
+                "statement": "Maximum amount of information contained in a region of space",
+                "statement_latex": "I \\\\leq \\\\frac{2\\\\pi R E}{\\\\hbar c \\\\ln 2}",
                 "implications": [
-                    "Principe holographique", 
-                    "Entropie des trous noirs",
-                    "Limites computationnelles fondamentales"
+                    "Holographic principle", 
+                    "Black hole entropy",
+                    "Fundamental computational limits"
                 ],
-                "confiance": 0.90,
-                "date_decouverte": "1973",
-                "decouvreurs": ["Jacob Bekenstein"]
+                "confidence": 0.90,
+                "discovery_date": "1973",
+                "discoverers": ["Jacob Bekenstein"]
             },
 
             "landauer": {
-                "nom": "Principe de Landauer", 
-                "categorie": "information",
-                "domaines": ["information", "thermodynamique", "computation"],
-                "énoncé": "Effacement d'un bit d'information dissipe au moins kT ln(2) d'énergie", 
-                "énoncé_latex": "E \\\\geq kT \\\\ln 2",
+                "name": "Landauer's Principle", 
+                "category": "information",
+                "domains": ["information", "thermodynamics", "computation"],
+                "statement": "Erasing one bit of information dissipates at least kT ln(2) of energy", 
+                "statement_latex": "E \\\\geq kT \\\\ln 2",
                 "implications": [
-                    "Lien information/entropie",
-                    "Limites énergétiques du calcul", 
-                    "Ordinateurs réversibles"
+                    "Information/entropy link",
+                    "Energy limits of computation", 
+                    "Reversible computers"
                 ],
-                "confiance": 0.85,
-                "date_decouverte": "1961",
-                "decouvreurs": ["Rolf Landauer"]
+                "confidence": 0.85,
+                "discovery_date": "1961",
+                "discoverers": ["Rolf Landauer"]
             },
 
-            // === AUTRES LOIS IMPORTANTES ===
-            "equivalence_masse_energie": {
-                "nom": "Équivalence Masse-Énergie",
-                "categorie": "physique_fondamentale",
-                "domaines": ["relativite", "energie", "masse"],
-                "énoncé": "La masse et l'énergie sont équivalentes et convertibles",
-                "énoncé_latex": "E = mc^2", 
+            // === OTHER IMPORTANT LAWS ===
+            "mass_energy_equivalence": {
+                "name": "Mass-Energy Equivalence",
+                "category": "fundamental_physics",
+                "domains": ["relativity", "energy", "mass"],
+                "statement": "Mass and energy are equivalent and convertible",
+                "statement_latex": "E = mc^2", 
                 "implications": [
-                    "Énergie nucléaire",
-                    "Création et annihilation de particules",
-                    "Courbure de l'espace-temps par l'énergie"
+                    "Nuclear energy",
+                    "Particle creation and annihilation",
+                    "Spacetime curvature by energy"
                 ],
-                "confiance": 0.99,
-                "date_decouverte": "1905",
-                "decouvreurs": ["Albert Einstein"]
+                "confidence": 0.99,
+                "discovery_date": "1905",
+                "discoverers": ["Albert Einstein"]
             },
 
-            "incertitude_heisenberg": {
-                "nom": "Principe d'Incertitude de Heisenberg",
-                "categorie": "physique_fondamentale", 
-                "domaines": ["quantique", "incertitude", "mesure"],
-                "énoncé": "Impossibilité de connaître simultanément avec précision certaines paires de propriétés",
-                "énoncé_latex": "\\\\Delta x \\\\Delta p \\\\geq \\\\frac{\\\\hbar}{2}",
+            "heisenberg_uncertainty": {
+                "name": "Heisenberg Uncertainty Principle",
+                "category": "fundamental_physics", 
+                "domains": ["quantum", "uncertainty", "measurement"],
+                "statement": "Impossibility of simultaneously knowing with precision certain pairs of properties",
+                "statement_latex": "\\\\Delta x \\\\Delta p \\\\geq \\\\frac{\\\\hbar}{2}",
                 "implications": [
-                    "Limites fondamentales de la mesure",
-                    "Nature probabiliste de la réalité quantique",
-                    "Énergie du point zéro"
+                    "Fundamental measurement limits",
+                    "Probabilistic nature of quantum reality",
+                    "Zero-point energy"
                 ],
-                "confiance": 0.98,
-                "date_decouverte": "1927",
-                "decouvreurs": ["Werner Heisenberg"]
+                "confidence": 0.98,
+                "discovery_date": "1927",
+                "discoverers": ["Werner Heisenberg"]
             }
         };
 
-        // ==================== FONCTIONS POUR MATHJAX ====================
+        // ==================== MATHJAX FUNCTIONS ====================
 
-        // Configuration de MathJax
+        // MathJax Configuration
         window.MathJax = {
             tex: {
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
@@ -304,7 +304,7 @@
 
         function formatLatex(latexString) {
             if (!latexString) return '';
-            // Nettoyer et formater le LaTeX pour MathJax
+            // Clean and format LaTeX for MathJax
             return latexString.replace(/\\\\/g, '\\');
         }
 
@@ -314,130 +314,130 @@
             return isDisplay ? `$$${formatted}$$` : `$${formatted}$`;
         }
 
-        // ==================== FONCTIONS PRINCIPALES ====================
+        // ==================== MAIN FUNCTIONS ====================
 
-        function getLoisAleatoires(n) {
-            const cles = Object.keys(loisUniverselles);
-            const resultat = [];
+        function getRandomLaws(n) {
+            const keys = Object.keys(universalLaws);
+            const result = [];
             const usedKeys = new Set();
             
-            while (resultat.length < n && resultat.length < cles.length) {
-                const cleAleatoire = cles[Math.floor(Math.random() * cles.length)];
-                if (!usedKeys.has(cleAleatoire)) {
-                    usedKeys.add(cleAleatoire);
-                    resultat.push(loisUniverselles[cleAleatoire]);
+            while (result.length < n && result.length < keys.length) {
+                const randomKey = keys[Math.floor(Math.random() * keys.length)];
+                if (!usedKeys.has(randomKey)) {
+                    usedKeys.add(randomKey);
+                    result.push(universalLaws[randomKey]);
                 }
             }
-            return resultat;
+            return result;
         }
 
-        function mapperQuestion(question) {
+        function mapQuestion(question) {
             const questionLower = question.toLowerCase();
-            let meilleurScore = 0;
-            let meilleurType = null;
+            let bestScore = 0;
+            let bestType = null;
 
-            const questionsTypes = {
-                "fondamentalite_info": {
-                    "mots_cles": ["information", "fondamentale", "matière", "bit", "primitif"],
-                    "lois": ["bekenstein", "landauer", "thermodynamique_2"],
-                    "synthese_template": "L'information apparaît comme une entité fondamentale, peut-être plus primitive que la matière elle-même."
+            const questionTypes = {
+                "fundamentality_info": {
+                    "keywords": ["information", "fundamental", "matter", "bit", "primitive"],
+                    "laws": ["bekenstein", "landauer", "thermodynamics_2"],
+                    "synthesis_template": "Information appears as a fundamental entity, perhaps more primitive than matter itself."
                 },
-                "relativite": {
-                    "mots_cles": ["relativité", "einstein", "espace-temps", "gravitation"],
-                    "lois": ["relativite_generale", "equivalence_masse_energie"],
-                    "synthese_template": "La relativité révolutionne notre compréhension de l'espace, du temps et de la gravitation."
+                "relativity": {
+                    "keywords": ["relativity", "einstein", "space-time", "gravitation"],
+                    "laws": ["general_relativity", "mass_energy_equivalence"],
+                    "synthesis_template": "Relativity revolutionizes our understanding of space, time, and gravitation."
                 },
-                "quantique": {
-                    "mots_cles": ["quantique", "incertitude", "schrödinger", "heisenberg"],
-                    "lois": ["mecanique_quantique", "incertitude_heisenberg"],
-                    "synthese_template": "Le monde quantique révèle une réalité probabiliste et contre-intuitive."
+                "quantum": {
+                    "keywords": ["quantum", "uncertainty", "schrödinger", "heisenberg"],
+                    "laws": ["quantum_mechanics", "heisenberg_uncertainty"],
+                    "synthesis_template": "The quantum world reveals a probabilistic and counter-intuitive reality."
                 },
-                "thermodynamique": {
-                    "mots_cles": ["entropie", "thermodynamique", "désordre", "ordre"],
-                    "lois": ["thermodynamique_2", "landauer"],
-                    "synthese_template": "La thermodynamique gouverne les transformations énergétiques et définit la flèche du temps."
+                "thermodynamics": {
+                    "keywords": ["entropy", "thermodynamics", "disorder", "order"],
+                    "laws": ["thermodynamics_2", "landauer"],
+                    "synthesis_template": "Thermodynamics governs energy transformations and defines the arrow of time."
                 },
-                "cosmologie": {
-                    "mots_cles": ["univers", "expansion", "big bang", "cosmologie"],
-                    "lois": ["expansion_hubble", "relativite_generale"],
-                    "synthese_template": "La cosmologie moderne révèle un univers en expansion, né d'un état primordial extrême."
+                "cosmology": {
+                    "keywords": ["universe", "expansion", "big bang", "cosmology"],
+                    "laws": ["hubble_expansion", "general_relativity"],
+                    "synthesis_template": "Modern cosmology reveals an expanding universe, born from an extreme primordial state."
                 }
             };
 
-            for (const [type, data] of Object.entries(questionsTypes)) {
-                const score = data.mots_cles.filter(mot => 
-                    questionLower.includes(mot)
+            for (const [type, data] of Object.entries(questionTypes)) {
+                const score = data.keywords.filter(word => 
+                    questionLower.includes(word)
                 ).length;
                 
-                if (score > meilleurScore) {
-                    meilleurScore = score;
-                    meilleurType = type;
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestType = type;
                 }
             }
 
-            return meilleurType ? questionsTypes[meilleurType] : null;
+            return bestType ? questionTypes[bestType] : null;
         }
 
-        function genererReponse(question) {
-            const typeQuestion = mapperQuestion(question);
+        function generateResponse(question) {
+            const questionType = mapQuestion(question);
             
-            if (!typeQuestion) {
-                const loisAleatoires = getLoisAleatoires(3);
-                return `### 🔍 Aucune Correspondance Directe
+            if (!questionType) {
+                const randomLaws = getRandomLaws(3);
+                return `### 🔍 No Direct Match
 
 **Question** : "${question}"
 
-Aucune catégorie spécifique n'a été identifiée. Voici quelques lois universelles pertinentes :
+No specific category was identified. Here are some relevant universal laws:
 
-${loisAleatoires.map(loi => 
-    `- **${loi.nom}** : ${loi.énoncé}`
+${randomLaws.map(law => 
+    `- **${law.name}** : ${law.statement}`
 ).join('\n')}
 
-**Suggestions** : Reformulez en utilisant des termes comme "information", "relativité", "quantique", "expansion", etc.`;
+**Suggestions** : Rephrase using terms like "information", "relativity", "quantum", "expansion", etc.`;
             }
 
-            const loisInvoquees = typeQuestion.lois.map(cle => loisUniverselles[cle]);
-            const confianceMoyenne = loisInvoquees.reduce((sum, loi) => sum + loi.confiance, 0) / loisInvoquees.length;
+            const invokedLaws = questionType.laws.map(key => universalLaws[key]);
+            const averageConfidence = invokedLaws.reduce((sum, law) => sum + law.confidence, 0) / invokedLaws.length;
 
-            let markdown = `### 🌟 Analyse par QLang
+            let markdown = `### 🌟 QLang Analysis
 
 **Question** : "${question}"
 
-**Catégorie identifiée** : ${typeQuestion.mots_cles.join(', ')}
+**Identified category** : ${questionType.keywords.join(', ')}
 
-**Synthèse** : ${typeQuestion.synthese_template}
+**Synthesis** : ${questionType.synthesis_template}
 
 ---
 
-## 📜 Lois Universelles Invoquées
+## 📜 Invoked Universal Laws
 
 `;
 
-            loisInvoquees.forEach(loi => {
-                const formuleHTML = loi.énoncé_latex ? createFormulaHTML(loi.énoncé_latex, true) : '';
+            invokedLaws.forEach(law => {
+                const formulaHTML = law.statement_latex ? createFormulaHTML(law.statement_latex, true) : '';
                 
-                markdown += `### ${loi.nom}
+                markdown += `### ${law.name}
 
-**Domaine** : ${loi.domaines.map(d => `\`${d}\``).join(', ')}
+**Domain** : ${law.domains.map(d => `\`${d}\``).join(', ')}
 
-**Énoncé** : ${loi.énoncé}
+**Statement** : ${law.statement}
 
-${formuleHTML ? `**Formulation mathématique** : 
+${formulaHTML ? `**Mathematical formulation** : 
 
-${formuleHTML}
+${formulaHTML}
 
 ` : ''}
 
-**Implications** : ${loi.implications.join('; ')}
+**Implications** : ${law.implications.join('; ')}
 
-**Niveau de confiance** : ${(loi.confiance * 100).toFixed(0)}%
+**Confidence level** : ${(law.confidence * 100).toFixed(0)}%
 
 ---
 `;
             });
 
-            markdown += `**Confiance globale** : ${(confianceMoyenne * 100).toFixed(1)}%
-**Nombre de lois invoquées** : ${loisInvoquees.length}`;
+            markdown += `**Global confidence** : ${(averageConfidence * 100).toFixed(1)}%
+**Number of invoked laws** : ${invokedLaws.length}`;
 
             return markdown;
         }
@@ -445,33 +445,33 @@ ${formuleHTML}
         function showLibrary() {
             const categories = {};
             
-            Object.values(loisUniverselles).forEach(loi => {
-                if (!categories[loi.categorie]) {
-                    categories[loi.categorie] = [];
+            Object.values(universalLaws).forEach(law => {
+                if (!categories[law.category]) {
+                    categories[law.category] = [];
                 }
-                categories[loi.categorie].push(loi);
+                categories[law.category].push(law);
             });
 
-            let html = `<h2>📚 Bibliothèque des Lois Universelles</h2>
-                       <p><strong>${Object.keys(loisUniverselles).length} lois cataloguées</strong></p>`;
+            let html = `<h2>📚 Library of Universal Laws</h2>
+                       <p><strong>${Object.keys(universalLaws).length} laws cataloged</strong></p>`;
 
-            for (const [categorie, lois] of Object.entries(categories)) {
+            for (const [category, laws] of Object.entries(categories)) {
                 html += `<div class="library-section">
-                        <h3>${categorie.replace(/_/g, ' ').toUpperCase()} (${lois.length} lois)</h3>`;
+                        <h3>${category.replace(/_/g, ' ').toUpperCase()} (${laws.length} laws)</h3>`;
                 
-                lois.forEach(loi => {
-                    const formule = loi.énoncé_latex ? 
-                        `<div class="latex-container">${createFormulaHTML(loi.énoncé_latex, true)}</div>` : '';
+                laws.forEach(law => {
+                    const formula = law.statement_latex ? 
+                        `<div class="latex-container">${createFormulaHTML(law.statement_latex, true)}</div>` : '';
                     
                     html += `<div class="law-card">
-                            <h4>${loi.nom}</h4>
-                            <p><strong>Énoncé :</strong> ${loi.énoncé}</p>
-                            ${formule}
-                            <div>${loi.domaines.map(d => `<span class="domain-tag">${d}</span>`).join('')}</div>
+                            <h4>${law.name}</h4>
+                            <p><strong>Statement :</strong> ${law.statement}</p>
+                            ${formula}
+                            <div>${law.domains.map(d => `<span class="domain-tag">${d}</span>`).join('')}</div>
                             <div class="confidence-bar">
-                                <div class="confidence-fill" style="width: ${loi.confiance * 100}%"></div>
+                                <div class="confidence-fill" style="width: ${law.confidence * 100}%"></div>
                             </div>
-                            <small>Confiance: ${(loi.confiance * 100).toFixed(0)}% | ${loi.date_decouverte} | ${Array.isArray(loi.decouvreurs) ? loi.decouvreurs.join(', ') : loi.decouvreurs}</small>
+                            <small>Confidence: ${(law.confidence * 100).toFixed(0)}% | ${law.discovery_date} | ${Array.isArray(law.discoverers) ? law.discoverers.join(', ') : law.discoverers}</small>
                         </div>`;
                 });
                 
@@ -479,84 +479,84 @@ ${formuleHTML}
             }
 
             document.getElementById('response').innerHTML = html;
-            // Forcer le rendu MathJax après l'insertion du HTML
+            // Force MathJax rendering after HTML insertion
             setTimeout(renderMathJax, 100);
         }
 
         function showRandomLaw() {
-            const lois = Object.values(loisUniverselles);
-            const loiAleatoire = lois[Math.floor(Math.random() * lois.length)];
-            const formule = loiAleatoire.énoncé_latex ? 
-                `<div class="latex-container">${createFormulaHTML(loiAleatoire.énoncé_latex, true)}</div>` : '';
+            const laws = Object.values(universalLaws);
+            const randomLaw = laws[Math.floor(Math.random() * laws.length)];
+            const formula = randomLaw.statement_latex ? 
+                `<div class="latex-container">${createFormulaHTML(randomLaw.statement_latex, true)}</div>` : '';
             
             const html = `<div class="law-card">
-                <h3>🎲 Loi Aléatoire</h3>
-                <h4>${loiAleatoire.nom}</h4>
-                <p><strong>Énoncé :</strong> ${loiAleatoire.énoncé}</p>
-                ${formule}
-                <p><strong>Domaine :</strong> ${loiAleatoire.domaines.join(', ')}</p>
-                <p><strong>Implications :</strong> ${loiAleatoire.implications.join('; ')}</p>
-                <p><strong>Découvreurs :</strong> ${Array.isArray(loiAleatoire.decouvreurs) ? loiAleatoire.decouvreurs.join(', ') : loiAleatoire.decouvreurs}</p>
-                <p><strong>Date :</strong> ${loiAleatoire.date_decouverte}</p>
+                <h3>🎲 Random Law</h3>
+                <h4>${randomLaw.name}</h4>
+                <p><strong>Statement :</strong> ${randomLaw.statement}</p>
+                ${formula}
+                <p><strong>Domain :</strong> ${randomLaw.domains.join(', ')}</p>
+                <p><strong>Implications :</strong> ${randomLaw.implications.join('; ')}</p>
+                <p><strong>Discoverers :</strong> ${Array.isArray(randomLaw.discoverers) ? randomLaw.discoverers.join(', ') : randomLaw.discoverers}</p>
+                <p><strong>Date :</strong> ${randomLaw.discovery_date}</p>
                 <div class="confidence-bar">
-                    <div class="confidence-fill" style="width: ${loiAleatoire.confiance * 100}%"></div>
+                    <div class="confidence-fill" style="width: ${randomLaw.confidence * 100}%"></div>
                 </div>
-                <small>Niveau de confiance: ${(loiAleatoire.confiance * 100).toFixed(0)}%</small>
+                <small>Confidence level: ${(randomLaw.confidence * 100).toFixed(0)}%</small>
             </div>`;
             
             document.getElementById('response').innerHTML = html;
             setTimeout(renderMathJax, 100);
         }
 
-        // ==================== INTERFACE UTILISATEUR ====================
+        // ==================== USER INTERFACE FUNCTIONS ====================
 
         async function askQLang() {
             const question = document.getElementById('question').value.trim();
             const responseDiv = document.getElementById('response');
 
             if (!question) {
-                responseDiv.innerHTML = "<p>🌠 Veuillez poser une question cosmique.</p>";
+                responseDiv.innerHTML = "<p>🌠 Please ask a cosmic question.</p>";
                 return;
             }
 
-            responseDiv.innerHTML = "<p>🌀 Consultation des archives universelles...</p>";
+            responseDiv.innerHTML = "<p>🌀 Consulting universal archives...</p>";
 
             await new Promise(resolve => setTimeout(resolve, 1000));
 
             try {
-                const reponseMarkdown = genererReponse(question);
-                const reponseHTML = marked.parse(reponseMarkdown);
-                responseDiv.innerHTML = reponseHTML;
-                // Forcer le rendu MathJax après l'insertion du HTML
+                const responseMarkdown = generateResponse(question);
+                const responseHTML = marked.parse(responseMarkdown);
+                responseDiv.innerHTML = responseHTML;
+                // Force MathJax rendering after HTML insertion
                 setTimeout(renderMathJax, 100);
             } catch (error) {
-                responseDiv.innerHTML = `<p>❌ Erreur dans le continuum espace-temps: ${error.message}</p>`;
+                responseDiv.innerHTML = `<p>❌ Error in the space-time continuum: ${error.message}</p>`;
             }
         }
 
-        // ==================== INITIALISATION ====================
+        // ==================== INITIALIZATION ====================
 
         function init() {
-            // Mettre à jour le compteur de lois
-            document.getElementById('law-count').textContent = Object.keys(loisUniverselles).length;
+            // Update law counter
+            document.getElementById('law-count').textContent = Object.keys(universalLaws).length;
             
-            // Afficher la bibliothèque au démarrage
+            // Display library on startup
             showLibrary();
             
-            console.log('QLang initialisé avec', Object.keys(loisUniverselles).length, 'lois universelles');
+            console.log('QLang initialized with', Object.keys(universalLaws).length, 'universal laws');
         }
 
-        // Initialisation au chargement de la page
+        // Initialization on page load
         document.addEventListener('DOMContentLoaded', init);
 
-        // Permettre d'utiliser la touche Entrée
+        // Allow using Enter key
         document.getElementById('question').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 askQLang();
             }
         });
 
-        // Focus sur le champ de question
+        // Focus on question field
         document.getElementById('question').focus();
     </script>
 </body>
