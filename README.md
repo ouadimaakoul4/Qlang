@@ -35,7 +35,7 @@ QLang is an interactive web application that catalogs and explores the fundament
 ## 🚀 Quick Start
 
 ### Online Demo
-Visit the live application: [QLang Demo](https://ouadimaakoul4.github.io/qlang/)
+Visit the live application: [QLang Demo](https://ouadimaakoul4.github.io/Qlang/)
 
 ### Local Installation
 ```bash
