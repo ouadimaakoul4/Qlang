@@ -7,84 +7,18 @@
   <title>QLang — Library of Universal Laws</title>
 
   <!-- MathJax 3 -->
-  <script>
+    <script>
     window.MathJax = {
-  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-  svg: { fontCache: 'global' },
-  startup: {
-    ready() {
-      MathJax.startup.defaultReady();
-      renderLibrary();
-    }
-  }
-};
-// ----------------------------
-// Display Functions
-// ----------------------------
-function renderLibrary(filterCategory = 'all', searchTerm = '') {
-  const container = document.getElementById('laws-container');
-  container.innerHTML = '';
-  let lawsToShow = Object.entries(universalLaws);
-  // Apply category filter
-  if (filterCategory !== 'all') {
-    lawsToShow = lawsToShow.filter(([id, law]) => law.category === filterCategory);
-  }
-  // Apply search filter
-  if (searchTerm) {
-    const term = searchTerm.toLowerCase();
-    lawsToShow = lawsToShow.filter(([id, law]) => 
-      law.name.toLowerCase().includes(term) || 
-      law.description.toLowerCase().includes(term) ||
-      law.statement_latex.toLowerCase().includes(term)
-    );
-  }
-  if (lawsToShow.length === 0) {
-    container.innerHTML = '<p class="no-results">No laws match your search criteria.</p>';
-    return;
-  }
-
-  for (const [id, law] of lawsToShow) {
-    const card = document.createElement('div');
-    card.className = 'law-card';
-    card.innerHTML = `
-      <span class="category-tag ${law.category}">${law.category.charAt(0).toUpperCase() + law.category.slice(1)}</span>
-      <h3>${law.name}</h3>
-      <div class="equation-clickable" data-law-id="${id}">
-        $$${law.statement_latex}$$
-      </div>
-      <p class="law-description">${law.description}</p>
-    `;
-    container.appendChild(card);
-  }
-
-  // 👇 Nouvelle solution : Attendez que MathJax soit prêt, puis rendu
-  // Cette méthode est plus fiable que setTimeout
-  if (window.MathJax && window.MathJax.startup) {
-    window.MathJax.startup.promise.then(() => {
-      // Rendre toutes les équations dans le conteneur
-      MathJax.typeset([container]);
-
-      // Maintenant, on peut attacher les écouteurs
-      document.querySelectorAll('.equation-clickable').forEach(el => {
-        el.addEventListener('click', () => {
-          window.location.hash = `proof/${el.dataset.lawId}`;
-          showProofView(el.dataset.lawId);
-        });
-      });
-    }).catch(err => {
-      console.error("Erreur lors du rendu de MathJax :", err);
-    });
-  } else {
-    // Si MathJax n'est pas chargé, attendez un peu et réessayez
-    setTimeout(() => {
-      if (window.MathJax) {
-        renderLibrary(filterCategory, searchTerm); // Appel récursif pour relancer le rendu
-      } else {
-        console.warn("MathJax n'est pas chargé après le délai.");
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' },
+      startup: {
+        ready() {
+          MathJax.startup.defaultReady();
+          // Once MathJax is ready, render the library
+          renderLibrary();
+        }
       }
-    }, 500);
-  }
-}
+    };
   </script>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
