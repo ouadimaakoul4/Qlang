@@ -4,215 +4,240 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QLang — Interrogez l'Univers</title>
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        input { width: 100%; padding: 10px; margin-bottom: 10px; }
-        button { padding: 10px 20px; }
-        #response { border: 1px solid #ddd; padding: 20px; margin-top: 20px; }
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        input { 
+            width: 100%; 
+            padding: 15px; 
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        button { 
+            padding: 15px 30px; 
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #ff5252;
+        }
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        #response { 
+            background: white;
+            color: #333;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 25px;
+            min-height: 100px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .loading {
+            text-align: center;
+            font-style: italic;
+        }
+        .error {
+            color: #ff6b6b;
+            background: #fff5f5;
+            border: 1px solid #ff6b6b;
+        }
     </style>
 </head>
 <body>
-    <h1>QLang v1.2 — Traducteur Cosmique</h1>
-    <p>Posez une question à l'univers, et obtenez une réponse fondée sur ses lois fondamentales.</p>
-    <input type="text" id="question" placeholder="Ex: L'information est-elle plus fondamentale que la matière ?">
-    <button onclick="askQLang()">Interroger l'Univers</button>
-    <div id="response"></div>
+    <div class="container">
+        <h1>🌌 QLang v1.2 — Traducteur Cosmique</h1>
+        <p>Posez une question à l'univers, et obtenez une réponse fondée sur ses lois fondamentales.</p>
+        
+        <input type="text" id="question" placeholder="Ex: L'information est-elle plus fondamentale que la matière ?">
+        <button onclick="askQLang()">✨ Interroger l'Univers</button>
+        
+        <div id="response">
+            <p>Prêt à recevoir votre question cosmique...</p>
+        </div>
+    </div>
 
     <script>
-        let pyodide;
-        let pyodideLoading = false;
-        let pyodideLoaded = false;
-
-        async function loadPyodideAndPackages() {
-            pyodideLoading = true;
-            try {
-                pyodide = await loadPyodide();
-                await pyodide.loadPackage('micropip');
-                // Charger les packages nécessaires
-                await pyodide.runPythonAsync(`
-                    import micropip
-                    await micropip.install('sympy')
-                `);
-                
-                // Charger le code QLang
-                await pyodide.runPython(`
-import sympy as sp
-
-lois = {
-    "thermo_2": {
-        "nom": "2e loi de la thermodynamique",
-        "énoncé": "ΔS ≥ 0 dans un système isolé",
-        "énoncé_latex": r"\\\\Delta S \\\\geq 0",
-        "conséquences": ["flèche du temps", "augmentation de l'entropie", "limite à la complexité perpétuelle"],
-        "domaine": ["thermodynamique", "entropie", "systèmes"],
-        "sources": ["Carnot, Clausius, Boltzmann (19e siècle)"],
-        "confiance_intrinsèque": 1.0
-    },
-    "bekenstein": {
-        "nom": "Limite de Bekenstein",
-        "énoncé": "Densité d'information maximale ~ A / (4 l_Pl²)",
-        "énoncé_latex": r"I \\\\leq \\\\frac{2 \\\\pi E R}{\\\\hbar c \\\\ln 2}",
-        "conséquences": ["borne supérieure à l'information dans un volume", "lien gravité-information", "principe holographique"],
-        "domaine": ["information", "gravité", "cosmologie"],
-        "sources": ["Bekenstein, 1973"],
-        "confiance_intrinsèque": 0.95
-    },
-    "landauer": {
-        "nom": "Principe de Landauer",
-        "énoncé": "Coût minimal de kT ln(2) par bit effacé",
-        "énoncé_latex": r"E \\\\geq k T \\\\ln 2",
-        "conséquences": ["coût thermodynamique du calcul", "limite à la complexité computationnelle"],
-        "domaine": ["information", "thermodynamique", "computation"],
-        "sources": ["Landauer, 1961"],
-        "confiance_intrinsèque": 0.98
-    },
-    "lcdm": {
-        "nom": "Modèle ΛCDM",
-        "énoncé": "Expansion accélérée de l'univers",
-        "énoncé_latex": r"\\\\Lambda > 0",
-        "conséquences": ["dilution des gradients d'énergie", "mort thermique finale"],
-        "domaine": ["cosmologie", "expansion", "énergie"],
-        "sources": ["Riess et al., 1998; Perlmutter et al., 1999"],
-        "confiance_intrinsèque": 0.92
-    },
-    "dissipatifs": {
-        "nom": "Théorie des systèmes dissipatifs (Prigogine)",
-        "énoncé": "Émergence de complexité loin de l'équilibre",
-        "énoncé_latex": r"dS = d_e S + d_i S, \\\\, d_i S > 0",
-        "conséquences": ["auto-organisation", "structures stables temporaires", "fenêtre temporelle de complexité"],
-        "domaine": ["complexité", "émergence", "systèmes"],
-        "sources": ["Nicolis & Prigogine, 1977"],
-        "confiance_intrinsèque": 0.85
-    },
-    "selection_cosmique": {
-        "nom": "Principe de sélection cosmique (Tegmark)",
-        "énoncé": "Seules les structures mathématiquement cohérentes peuvent exister de façon stable",
-        "énoncé_latex": None,
-        "conséquences": ["élimination des incohérences par interférence destructive", "univers auto-sélectionnant"],
-        "domaine": ["cosmologie", "mathématiques", "ontologie"],
-        "sources": ["Tegmark, 1998"],
-        "confiance_intrinsèque": 0.75
-    }
-}
-
-questions_types = {
-    "fondamentalite_info": {
-        "mots_cles": ["information", "fondamentale", "matière", "bit", "primitive"],
-        "lois": ["bekenstein", "landauer", "selection_cosmique", "thermo_2"],
-        "synthese_template": "L'information et la matière sont intriquées, mais l'information semble **plus primitive** dans la hiérarchie cosmique. La matière sans information est un état indifférencié (entropie maximale). L'information sans matière est instable (coût énergétique). Cependant, dans les régimes extrêmes, l'information précède la géométrie (principe holographique). Ainsi, l'information définit **ce qui peut exister**, tandis que la matière fournit le cadre."
-    },
-    "origine_lois": {
-        "mots_cles": ["lois", "chaos", "ordre", "pourquoi", "fondement"],
-        "lois": ["dissipatifs", "thermo_2", "selection_cosmique"],
-        "synthese_template": "Le chaos absolu est instable. Les systèmes évoluent vers des états symétriques ou auto-organisés. Seules les structures cohérentes persistent. Les lois sont la trace de ce qui a survécu."
-    },
-    "direction_temps": {
-        "mots_cles": ["temps", "direction", "sens", "flèche"],
-        "lois": ["thermo_2"],
-        "synthese_template": "Le temps a une direction parce que l'entropie augmente. L'univers a commencé dans un état de basse entropie, et évolue vers le désordre maximal."
-    }
-}
-
-def mapper_question(question):
-    question_lower = question.lower()
-    for q_type, data in questions_types.items():
-        if any(mot in question_lower for mot in data["mots_cles"]):
-            return q_type, data["lois"]
-    return None, []
-
-def generer_reponse(question):
-    type_question, lois_invoquees = mapper_question(question)
-    if not lois_invoquees:
-        return "### 🔮 Réponse QLang v1.2\\\\n\\\\n**Question** : {} \\\\n\\\\n**Synthèse** : Aucune loi pertinente trouvée. Reformulez avec des termes comme 'entropie', 'information', 'temps', etc.\\\\n\\\\n**Confiance** : ★☆☆☆☆\\\\n**Lois invoquées** : []".format(question)
-    
-    markdown = "### 🔮 Réponse QLang v1.2\\\\n\\\\n**Question** : {}\\\\n\\\\n**Synthèse** : \\\\n".format(question)
-    
-    if type_question in questions_types:
-        markdown += questions_types[type_question]["synthese_template"] + "\\\\n"
-    else:
-        markdown += "Synthèse générique basée sur les lois invoquées.\\\\n"
-    
-    markdown += "Nuances : Ces lois interagissent pour limiter l'information sans substrat matériel, mais spéculent sur des régimes holographiques en débat.\\\\n"
-    
-    markdown += "\\\\n**Lois invoquées** :\\\\n"
-    confiance_moyenne = 0
-    for loi_key in lois_invoquees:
-        loi = lois[loi_key]
-        equation_str = f" Équation : ${loi['énoncé_latex']}$." if loi['énoncé_latex'] else ""
-        markdown += f"- **{loi['nom']}** : {loi['énoncé']}. Conséquences: {', '.join(loi['conséquences'])}.{equation_str}\\\\n"
-        confiance_moyenne += loi["confiance_intrinsèque"]
-    
-    confiance_moyenne /= len(lois_invoquees)
-    etoiles = "★" * int(confiance_moyenne * 5) + "☆" * (5 - int(confiance_moyenne * 5))
-    markdown += f"\\\\n**Confiance** : {etoiles} ({confiance_moyenne:.2f})"
-    
-    return markdown
-                `);
-                pyodideLoaded = true;
-                console.log("Pyodide chargé avec succès !");
-            } catch (error) {
-                console.error("Erreur lors du chargement de Pyodide:", error);
-            } finally {
-                pyodideLoading = false;
+        // Base de connaissances des lois cosmiques
+        const lois = {
+            "thermo_2": {
+                "nom": "2e loi de la thermodynamique",
+                "énoncé": "ΔS ≥ 0 dans un système isolé",
+                "conséquences": ["flèche du temps", "augmentation de l'entropie", "limite à la complexité perpétuelle"],
+                "domaine": ["thermodynamique", "entropie", "systèmes"],
+                "confiance_intrinsèque": 1.0
+            },
+            "bekenstein": {
+                "nom": "Limite de Bekenstein",
+                "énoncé": "Densité d'information maximale ~ A / (4 l_Pl²)",
+                "conséquences": ["borne supérieure à l'information dans un volume", "lien gravité-information", "principe holographique"],
+                "domaine": ["information", "gravité", "cosmologie"],
+                "confiance_intrinsèque": 0.95
+            },
+            "landauer": {
+                "nom": "Principe de Landauer",
+                "énoncé": "Coût minimal de kT ln(2) par bit effacé",
+                "conséquences": ["coût thermodynamique du calcul", "limite à la complexité computationnelle"],
+                "domaine": ["information", "thermodynamique", "computation"],
+                "confiance_intrinsèque": 0.98
             }
+        };
+
+        // Types de questions reconnues
+        const questionsTypes = {
+            "fondamentalite_info": {
+                "mots_cles": ["information", "fondamentale", "matière", "bit", "primitive", "plus fondamentale"],
+                "lois": ["bekenstein", "landauer", "thermo_2"],
+                "synthese_template": "L'information et la matière sont intriquées, mais l'information semble **plus primitive** dans la hiérarchie cosmique. La matière sans information est un état indifférencié (entropie maximale). L'information sans matière est instable (coût énergétique). Cependant, dans les régimes extrêmes, l'information précède la géométrie (principe holographique). Ainsi, l'information définit **ce qui peut exister**, tandis que la matière fournit le cadre."
+            },
+            "origine_lois": {
+                "mots_cles": ["lois", "chaos", "ordre", "pourquoi", "fondement", "origine"],
+                "lois": ["thermo_2"],
+                "synthese_template": "Le chaos absolu est instable. Les systèmes évoluent vers des états symétriques ou auto-organisés. Seules les structures cohérentes persistent. Les lois sont la trace de ce qui a survécu à travers l'évolution cosmique."
+            },
+            "direction_temps": {
+                "mots_cles": ["temps", "direction", "sens", "flèche", "pourquoi le temps"],
+                "lois": ["thermo_2"],
+                "synthese_template": "Le temps a une direction parce que l'entropie augmente. L'univers a commencé dans un état de basse entropie, et évolue vers le désordre maximal selon la deuxième loi de la thermodynamique."
+            },
+            "entropie": {
+                "mots_cles": ["entropie", "désordre", "ordre", "complexité"],
+                "lois": ["thermo_2", "landauer"],
+                "synthese_template": "L'entropie mesure le désordre et augmente inévitablement dans les systèmes isolés. Cependant, des îlots de complexité peuvent émerger localement au prix d'une augmentation globale de l'entropie."
+            }
+        };
+
+        function mapperQuestion(question) {
+            const questionLower = question.toLowerCase();
+            
+            for (const [qType, data] of Object.entries(questionsTypes)) {
+                if (data.mots_cles.some(mot => questionLower.includes(mot))) {
+                    return {
+                        type: qType,
+                        lois: data.lois
+                    };
+                }
+            }
+            
+            return {
+                type: null,
+                lois: []
+            };
+        }
+
+        function genererReponse(question) {
+            const { type, lois: loisInvoquees } = mapperQuestion(question);
+            
+            if (!loisInvoquees.length) {
+                return `### 🔮 Réponse QLang v1.2
+
+**Question** : ${question}
+
+**Synthèse** : Aucune loi cosmique pertinente n'a été identifiée pour votre question.
+
+**Suggestions** : Reformulez avec des termes comme :
+- "entropie", "information", "temps"
+- "matière", "énergie", "complexité"
+- "lois fondamentales", "origine"
+
+**Confiance** : ★☆☆☆☆
+**Lois invoquées** : Aucune`;
+            }
+
+            let markdown = `### 🔮 Réponse QLang v1.2
+
+**Question** : ${question}
+
+**Synthèse** : `;
+
+            // Ajouter le template de synthèse
+            if (type && questionsTypes[type]) {
+                markdown += questionsTypes[type].synthese_template + "\n";
+            } else {
+                markdown += "Synthèse basée sur l'analyse des lois cosmiques fondamentales.\n";
+            }
+
+            // Ajouter les lois invoquées
+            markdown += "\n**Lois cosmiques invoquées** :\n";
+            let confianceMoyenne = 0;
+            
+            loisInvoquees.forEach(loiKey => {
+                const loi = lois[loiKey];
+                markdown += `- **${loi.nom}** : ${loi.énoncé}. \n  Conséquences: ${loi.conséquences.join(", ")}.\n`;
+                confianceMoyenne += loi.confiance_intrinsèque;
+            });
+
+            // Calculer la confiance
+            confianceMoyenne /= loisInvoquees.length;
+            const etoiles = "★".repeat(Math.round(confianceMoyenne * 5)) + 
+                           "☆".repeat(5 - Math.round(confianceMoyenne * 5));
+            
+            markdown += `\n**Niveau de confiance** : ${etoiles} (${confianceMoyenne.toFixed(2)})\n`;
+            markdown += `\n*Basé sur l'analyse des lois fondamentales de l'univers*`;
+
+            return markdown;
         }
 
         async function askQLang() {
-            const question = document.getElementById('question').value;
+            const questionInput = document.getElementById('question');
             const responseDiv = document.getElementById('response');
+            const button = document.querySelector('button');
+            
+            const question = questionInput.value.trim();
             
             if (!question) {
-                responseDiv.innerHTML = "<p>Veuillez poser une question.</p>";
+                responseDiv.innerHTML = "<p class='error'>🌠 Veuillez poser une question à l'univers.</p>";
                 return;
             }
 
+            // Désactiver le bouton pendant le traitement
+            button.disabled = true;
+            button.textContent = "🌌 L'univers réfléchit...";
+
             // Afficher un message de chargement
-            responseDiv.innerHTML = "<p>🔮 L'univers réfléchit...</p>";
+            responseDiv.innerHTML = "<p class='loading'>🌀 Consultation des lois cosmiques...</p>";
+
+            // Simuler un temps de traitement (comme si on interrogeait l'univers !)
+            await new Promise(resolve => setTimeout(resolve, 1500));
 
             try {
-                // Charger Pyodide si nécessaire
-                if (!pyodideLoaded && !pyodideLoading) {
-                    await loadPyodideAndPackages();
-                } else if (pyodideLoading) {
-                    responseDiv.innerHTML = "<p>Chargement en cours... Veuillez patienter.</p>";
-                    // Attendre que le chargement soit terminé
-                    while (pyodideLoading) {
-                        await new Promise(resolve => setTimeout(resolve, 100));
-                    }
-                }
-
-                if (!pyodide) {
-                    throw new Error("Pyodide n'a pas pu être chargé");
-                }
-
-                // Nettoyer la question pour éviter les problèmes d'échappement
-                const questionSafe = question.replace(/'/g, "\\\\'").replace(/"/g, '\\\\"');
-                
-                // Exécuter Python
-                const response = await pyodide.runPython(\`generer_reponse('\${questionSafe}')\`);
+                // Générer la réponse
+                const reponseMarkdown = genererReponse(question);
                 
                 // Convertir le markdown en HTML
-                const htmlResponse = marked.parse(response.replace(/\\\\n/g, '\n'));
-                responseDiv.innerHTML = htmlResponse;
-                
-                // Mettre à jour MathJax pour les équations
-                if (window.MathJax) {
-                    MathJax.typeset();
-                }
+                const reponseHTML = marked.parse(reponseMarkdown);
+                responseDiv.innerHTML = reponseHTML;
                 
             } catch (error) {
                 console.error("Erreur:", error);
-                responseDiv.innerHTML = \`<p style="color: red;">Erreur: \${error.message}</p>\`;
+                responseDiv.innerHTML = `<p class='error'>❌ Une anomalie cosmique s'est produite: ${error.message}</p>`;
+            } finally {
+                // Réactiver le bouton
+                button.disabled = false;
+                button.textContent = "✨ Interroger l'Univers";
             }
         }
-
-        // Charger Pyodide au démarrage
-        window.addEventListener('load', function() {
-            loadPyodideAndPackages();
-        });
 
         // Permettre d'utiliser la touche Entrée
         document.getElementById('question').addEventListener('keypress', function(e) {
@@ -220,6 +245,9 @@ def generer_reponse(question):
                 askQLang();
             }
         });
+
+        // Focus sur le champ de question au chargement
+        document.getElementById('question').focus();
     </script>
 </body>
 </html>
