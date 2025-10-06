@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QLang — Interrogez l’Univers</title>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        input { width: 100%; padding: 10px; margin-bottom: 10px; }
+        button { padding: 10px 20px; }
+        #response { border: 1px solid #ddd; padding: 20px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>QLang v1.2 — Traducteur Cosmique</h1>
+    <p>Posez une question à l’univers, et obtenez une réponse fondée sur ses lois fondamentales.</p>
+    <input type="text" id="question" placeholder="Ex: L’information est-elle plus fondamentale que la matière ?">
+    <button onclick="askQLang()">Interroger l’Univers</button>
+    <div id="response"></div>
+
+    <script>
+        let pyodide;
+        async function loadPyodideAndPackages() {
+            pyodide = await loadPyodide();
+            await pyodide.loadPackage('sympy');
+            return pyodide;
+        }
+
+        async function askQLang() {
+            if (!pyodide) {
+                pyodide = await loadPyodideAndPackages();
+                // Charge le code QLang une fois
+                await pyodide.runPython(`
+import sympy as sp
+
+lois = {
+    "thermo_2": {
+        "nom": "2ᵉ loi de la thermodynamique",
+        "énoncé": "ΔS ≥ 0 dans un système isolé",
+        "énoncé_latex": r"\\Delta S \\geq 0",
+        "conséquences": ["flèche du temps", "augmentation de l'entropie", "limite à la complexité perpétuelle"],
+        "domaine": ["thermodynamique", "entropie", "systèmes"],
+        "sources": ["Carnot, Clausius, Boltzmann (19e siècle)"],
+        "confiance_intrinsèque": 1.0
+    },
+    "bekenstein": {
+        "nom": "Limite de Bekenstein",
+        "énoncé": "Densité d'information maximale ~ A / (4 l_Pl²)",
+        "énoncé_latex": r"I \\leq \\frac{2 \\pi E R}{\\hbar c \\ln 2}",
+        "conséquences": ["borne supérieure à l'information dans un volume", "lien gravité-information", "principe holographique"],
+        "domaine": ["information", "gravité", "cosmologie"],
+        "sources": ["Bekenstein, 1973"],
+        "confiance_intrinsèque": 0.95
+    },
+    "landauer": {
+        "nom": "Principe de Landauer",
+        "énoncé": "Coût minimal de kT ln(2) par bit effacé",
+        "énoncé_latex": r"E \\geq k T \\ln 2",
+        "conséquences": ["coût thermodynamique du calcul", "limite à la complexité computationnelle"],
+        "domaine": ["information", "thermodynamique", "computation"],
+        "sources": ["Landauer, 1961"],
+        "confiance_intrinsèque": 0.98
+    },
+    "lcdm": {
+        "nom": "Modèle ΛCDM",
+        "énoncé": "Expansion accélérée de l'univers",
+        "énoncé_latex": r"\\Lambda > 0",  # Simplifié
+        "conséquences": ["dilution des gradients d'énergie", "mort thermique finale"],
+        "domaine": ["cosmologie", "expansion", "énergie"],
+        "sources": ["Riess et al., 1998; Perlmutter et al., 1999"],
+        "confiance_intrinsèque": 0.92
+    },
+    "dissipatifs": {
+        "nom": "Théorie des systèmes dissipatifs (Prigogine)",
+        "énoncé": "Émergence de complexité loin de l'équilibre",
+        "énoncé_latex": r"dS = d_e S + d_i S, \\, d_i S > 0",
+        "conséquences": ["auto-organisation", "structures stables temporaires", "fenêtre temporelle de complexité (ex: post-recombinaison à pré-mort thermique)"],
+        "domaine": ["complexité", "émergence", "systèmes"],
+        "sources": ["Nicolis & Prigogine, 1977"],
+        "confiance_intrinsèque": 0.85
+    },
+    "selection_cosmique": {
+        "nom": "Principe de sélection cosmique (Tegmark)",
+        "énoncé": "Seules les structures mathématiquement cohérentes peuvent exister de façon stable",
+        "énoncé_latex": None,  # Pas d'équation spécifique
+        "conséquences": ["élimination des incohérences par interférence destructive", "univers auto-sélectionnant"],
+        "domaine": ["cosmologie", "mathématiques", "ontologie"],
+        "sources": ["Tegmark, 1998"],
+        "confiance_intrinsèque": 0.75  # Plus spéculatif
+    }
+}
+
+questions_types = {
+    "fondamentalite_info": {
+        "mots_cles": ["information", "fondamentale", "matière", "bit", "primitive"],
+        "lois": ["bekenstein", "landauer", "selection_cosmique", "thermo_2"],
+        "synthese_template": "L’information et la matière sont intriquées, mais l’information semble **plus primitive** dans la hiérarchie cosmique. La matière sans information est un état indifférencié (entropie maximale). L’information sans matière est instable (coût énergétique). Cependant, dans les régimes extrêmes, l’information précède la géométrie (principe holographique). Ainsi, l’information définit **ce qui peut exister**, tandis que la matière fournit le cadre."
+    },
+    "origine_lois": {
+        "mots_cles": ["lois", "chaos", "ordre", "pourquoi", "fondement"],
+        "lois": ["dissipatifs", "thermo_2", "selection_cosmique"],
+        "synthese_template": "Le chaos absolu est instable. Les systèmes évoluent vers des états symétriques ou auto-organisés. Seules les structures cohérentes persistent. Les lois sont la trace de ce qui a survécu."
+    },
+    "direction_temps": {
+        "mots_cles": ["temps", "direction", "sens", "flèche"],
+        "lois": ["thermo_2"],
+        "synthese_template": "Le temps a une direction parce que l’entropie augmente. L’univers a commencé dans un état de basse entropie, et évolue vers le désordre maximal."
+    }
+    # Ajoute d'autres types ici pour extensibilité
+}
+
+def mapper_question(question):
+    question_lower = question.lower()
+    for q_type, data in questions_types.items():
+        if any(mot in question_lower for mot in data["mots_cles"]):
+            return q_type, data["lois"]
+    return None, []
+
+def generer_reponse(question):
+    type_question, lois_invoquees = mapper_question(question)
+    if not lois_invoquees:
+        return "### 🔮 Réponse QLang v1.2\\n\\n**Question** : {} \\n\\n**Synthèse** : Aucune loi pertinente trouvée. Reformulez avec des termes comme “entropie”, “information”, “temps”, etc.\\n\\n**Confiance** : ★☆☆☆☆\\n**Lois invoquées** : []".format(question)
+    
+    markdown = "### 🔮 Réponse QLang v1.2\\n\\n**Question** : {}\\n\\n**Synthèse** : \\n".format(question)
+    
+    if type_question in questions_types:
+        markdown += questions_types[type_question]["synthese_template"] + "\\n"
+    else:
+        markdown += "Synthèse générique basée sur les lois invoquées.\\n"
+    
+    markdown += "Nuances : Ces lois interagissent pour limiter l'information sans substrat matériel, mais spéculent sur des régimes holographiques en débat.\\n"
+    
+    markdown += "\\n**Lois invoquées** :\\n"
+    confiance_moyenne = 0
+    for loi_key in lois_invoquees:
+        loi = lois[loi_key]
+        equation_str = f" Équation : ${loi['énoncé_latex']}$." if loi['énoncé_latex'] else ""
+        markdown += f"- **{loi['nom']}** : {loi['énoncé']}. Conséquences: {', '.join(loi['conséquences'])}.{equation_str}\\n"
+        confiance_moyenne += loi["confiance_intrinsèque"]
+    
+    confiance_moyenne /= len(lois_invoquees)
+    etoiles = "★" * int(confiance_moyenne * 5) + "☆" * (5 - int(confiance_moyenne * 5))
+    markdown += f"\\n**Confiance** : {etoiles} ({confiance_moyenne:.2f})"
+    
+    return markdown
+                `);
+            }
+
+            const question = document.getElementById('question').value;
+            const response = await pyodide.runPython(`generer_reponse('${question.replace(/'/g, "\\'")}')`);
+            document.getElementById('response').innerHTML = marked.parse(response);
+            MathJax.typeset();  // Rend les équations LaTeX
+        }
+    </script>
+</body>
+</html>
